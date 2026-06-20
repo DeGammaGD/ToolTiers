@@ -10,10 +10,8 @@ import draylar.tiered.api.ModifierUtils;
 import elocindev.tierify.Tierify;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -23,9 +21,9 @@ public class ItemMixin {
     // onCraft in ItemStack class does get called too and get called in CraftingResultSlot
     // but is air at onTakeItem in CraftingResultSlot when quick crafting is used
     @Inject(method = "onCraft", at = @At("TAIL"))
-    private void onCraftMixin(ItemStack stack, World world, PlayerEntity player, CallbackInfo info) {
+    private void onCraftMixin(ItemStack stack, World world, CallbackInfo info) {
         if (!world.isClient() && !stack.isEmpty() && Tierify.CONFIG.craftingModifier) {
-            ModifierUtils.setItemStackAttribute(player, stack, false);
+            ModifierUtils.setItemStackAttribute(null, stack, false);
         }
     }
 

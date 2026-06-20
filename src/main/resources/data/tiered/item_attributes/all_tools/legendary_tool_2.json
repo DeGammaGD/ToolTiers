@@ -42,15 +42,6 @@
             ]
         },
         {
-            "type": "reach-entity-attributes:reach",
-            "modifier": {
-                "name": "tiered:legendary_tool_2",
-                "operation": "ADDITION",
-                "amount": 2
-            },
-            "optional_equipment_slots": [
-                "MAINHAND"
-            ]
         }
     ]
 }

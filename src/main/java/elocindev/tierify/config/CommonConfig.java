@@ -25,8 +25,6 @@ public class CommonConfig {
     public boolean merchantModifier = true;
     @Comment("Decreases the biggest weights by this modifier")
     public float reforgeModifier = 0.9F;
-    @Comment("Modify the biggest weights by this modifier per smithing level")
-    public float levelzReforgeModifier = 0.01F;
     @Comment("Modify the biggest weights by this modifier per luck")
     public float luckReforgeModifier = 0.02F;
 

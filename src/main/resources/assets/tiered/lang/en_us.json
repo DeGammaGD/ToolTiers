@@ -247,7 +247,6 @@
   "text.autoconfig.tiered-client.option.craftingModifier": "Crafting Modifier",
   "text.autoconfig.tiered-client.option.merchantModifier": "Merchant Modifier",
   "text.autoconfig.tiered-client.option.reforgeModifier": "Reforge Modifier",
-  "text.autoconfig.tiered-client.option.levelzReforgeModifier": "LevelZ Reforge Modifier",
   "text.autoconfig.tiered-client.option.luckReforgeModifier": "Luck Reforge Modifier",
   "text.autoconfig.tiered-client.option.mythicReforge": "Mythic Reforge",
   "text.autoconfig.tiered-client.option.showReforgingTab": "Show Reforging Tab",
@@ -261,9 +260,6 @@
   "screen.tiered.reforging_screen": "Reforge Gear",
   "screen.tiered.reforge_ingredient": "Requires Ingredient",
   "screen.tiered.reforge_damaged": "Requires Full Durability",
-
-  "text.tiered.smithing_info_1_1": "Each skill point increases luck",
-  "text.tiered.smithing_info_1_2": "of reforging by %d%%",
 
   "tiered.attribute.modifier.plus.0": "%s %s %s",
   "tiered.attribute.modifier.plus.1": "%s %s %s",

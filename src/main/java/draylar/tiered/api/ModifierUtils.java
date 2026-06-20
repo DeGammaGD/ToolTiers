@@ -1,7 +1,5 @@
 package draylar.tiered.api;
 
-import net.levelz.access.PlayerStatsManagerAccess;
-import net.levelz.stats.Skill;
 import net.libz.util.SortList;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.NbtComponent;
@@ -64,16 +62,6 @@ public class ModifierUtils {
             for (int i = 0; i < attributeWeights.size(); i++) {
                 if (attributeWeights.get(i) > maxWeight / 2) {
                     attributeWeights.set(i, (int) (attributeWeights.get(i) * Tierify.CONFIG.reforgeModifier));
-                }
-            }
-        }
-        // LevelZ
-        if (Tierify.isLevelZLoaded && playerEntity != null) {
-            int newMaxWeight = Collections.max(attributeWeights);
-            for (int i = 0; i < attributeWeights.size(); i++) {
-                if (attributeWeights.get(i) > newMaxWeight / 3) {
-                    attributeWeights.set(i, (int) (attributeWeights.get(i)
-                            * (1.0f - Tierify.CONFIG.levelzReforgeModifier * ((PlayerStatsManagerAccess) playerEntity).getPlayerStatsManager().getSkillLevel(Skill.SMITHING))));
                 }
             }
         }

@@ -2,7 +2,9 @@ package elocindev.tierify.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import net.minecraft.util.hit.EntityHitResult;
 
 import elocindev.tierify.util.AttributeHelper;
 import net.minecraft.entity.EntityType;
@@ -19,11 +21,10 @@ public abstract class TridentEntityMixin extends PersistentProjectileEntity {
         super(entityType, world);
     }
 
-    @ModifyVariable(method = "onEntityHit", at = @At(value = "INVOKE_ASSIGN", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getAttackDamage(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EntityGroup;)F"), ordinal = 0)
-    private float onEntityHitMixin(float original) {
+    @Inject(method = "onEntityHit", at = @At("HEAD"))
+    private void onEntityHitMixin(EntityHitResult hitResult, CallbackInfo info) {
         if (this.getOwner() instanceof ServerPlayerEntity) {
-            return AttributeHelper.getExtraRangeDamage((PlayerEntity) this.getOwner(), original);
+            this.setDamage(AttributeHelper.getExtraRangeDamage((PlayerEntity) this.getOwner(), (float) this.getDamage()));
         }
-        return original;
     }
 }

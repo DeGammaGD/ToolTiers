@@ -61,8 +61,6 @@ public class Tierify implements ModInitializer {
     public static CommonConfig CONFIG = new CommonConfig();
     public static ClientConfig CLIENT_CONFIG = new ClientConfig();
 
-    public static final boolean isLevelZLoaded = FabricLoader.getInstance().isModLoaded("levelz");
-
     /**
      * Attribute Data Loader instance which handles loading attribute .json files from "data/modid/item_attributes".
      * <p>

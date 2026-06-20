@@ -3,26 +3,24 @@ package elocindev.tierify.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import elocindev.tierify.util.AttributeHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
-import net.minecraft.item.ArrowItem;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.CrossbowItem;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
 
 @Mixin(CrossbowItem.class)
 public class CrossbowItemMixin {
 
-    @Inject(method = "createArrow", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;setCritical(Z)V"), locals = LocalCapture.CAPTURE_FAILSOFT)
-    private static void createArrowMixin(World world, LivingEntity entity, ItemStack crossbow, ItemStack arrow, CallbackInfoReturnable<PersistentProjectileEntity> info, ArrowItem arrowItem,
-            PersistentProjectileEntity persistentProjectileEntity) {
-        persistentProjectileEntity.setDamage(
-                persistentProjectileEntity.getDamage() + AttributeHelper.getExtraCritDamage((PlayerEntity) persistentProjectileEntity.getOwner(), (float) persistentProjectileEntity.getDamage()));
+    @Inject(method = "shoot", at = @At("TAIL"))
+    private void shootMixin(LivingEntity shooter, ProjectileEntity projectile, int index, float speed, float divergence, float velocity, LivingEntity target, CallbackInfo info) {
+        if (projectile instanceof PersistentProjectileEntity persistentProjectileEntity && shooter instanceof PlayerEntity player) {
+            persistentProjectileEntity.setDamage(persistentProjectileEntity.getDamage() + AttributeHelper.getExtraCritDamage(player, (float) persistentProjectileEntity.getDamage()));
+        }
     }
 
 }

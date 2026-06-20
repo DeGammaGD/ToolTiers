@@ -21,8 +21,8 @@ public abstract class ArrowEntityMixin extends PersistentProjectileEntity {
         super(entityType, world);
     }
 
-    @Inject(method = "initFromStack", at = @At("HEAD"))
-    private void initFromStack(ItemStack stack, CallbackInfo info) {
+    @Inject(method = "setStack", at = @At("TAIL"))
+    private void setStackMixin(ItemStack stack, CallbackInfo info) {
         if (this.getOwner() instanceof ServerPlayerEntity) {
             this.setDamage(AttributeHelper.getExtraRangeDamage((PlayerEntity) this.getOwner(), (float) this.getDamage()));
         }

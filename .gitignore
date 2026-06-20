@@ -1,9 +1,13 @@
 # gradle
 
+
 .gradle/
+.gradle-user/
+.gradle-proj-cache/
 build/
 out/
 classes/
+run/
 
 # eclipse
 
