@@ -1,4 +1,4 @@
-# Tierify (Port to 1.21.1)
+# Tierify (Port to 1.21.1) work in progress! build is not stable and some core functions still missing
 
 **Tierify** is a flavor of **Tiered** made with the purpose of fitting my own personal vision, and to fix some issues it had. It is a fork of **TieredZ** by **Globox_Z**, which is an MIT licensed **Tiered** fork.
 
