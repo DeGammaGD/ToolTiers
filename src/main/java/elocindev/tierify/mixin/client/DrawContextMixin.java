@@ -29,7 +29,7 @@ import net.minecraft.world.item.component.CustomData;
 @Mixin(GuiGraphics.class)
 public class DrawContextMixin {
 
-    @Inject(method = {"renderTooltip", "drawItemTooltip"}, at = @At("HEAD"), cancellable = true, require = 0)
+    @Inject(method = "renderTooltip(Lnet/minecraft/client/gui/Font;Lnet/minecraft/world/item/ItemStack;II)V", at = @At("HEAD"), cancellable = true)
     private void drawItemTooltipMixin(Font textRenderer, ItemStack stack, int x, int y, CallbackInfo info) {
 
         CustomData component = stack.get(DataComponents.CUSTOM_DATA);
