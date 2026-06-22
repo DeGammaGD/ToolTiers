@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # ToolTiers
 
 ToolTiers is a Minecraft 26.1.2 Fabric port and continuation of the Tiered concept, focused on standalone tier-based item progression.
