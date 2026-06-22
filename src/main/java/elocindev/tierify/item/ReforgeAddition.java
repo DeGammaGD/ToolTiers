@@ -9,6 +9,9 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+
+import java.util.function.Consumer;
 import elocindev.tierify.Tierify;
 
 public class ReforgeAddition extends Item {
@@ -24,7 +27,7 @@ public class ReforgeAddition extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag type) {
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, TooltipDisplay display, Consumer<Component> tooltip, TooltipFlag type) {
         ArrayList<String> qualities = new ArrayList<String>();
 
         switch(getTier()) {
@@ -42,11 +45,11 @@ public class ReforgeAddition extends Item {
         if (qualities.size() == 0) return;
         
         
-        tooltip.add(Component.literal("Reforging Qualities:").setStyle(Style.EMPTY.withColor(ChatFormatting.GRAY)));
+        tooltip.accept(Component.literal("Reforging Qualities:").setStyle(Style.EMPTY.withColor(ChatFormatting.GRAY)));
         for (String quality : qualities) {
             MutableComponent separator = Component.literal(" - ").setStyle(Style.EMPTY.withColor(ChatFormatting.GRAY));
 
-            tooltip.add(separator.append(Component.literal(quality).setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY))));
+            tooltip.accept(separator.append(Component.literal(quality).setStyle(Style.EMPTY.withColor(ChatFormatting.DARK_GRAY))));
         }
     }
 }

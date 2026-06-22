@@ -1,45 +1,49 @@
-# ToolTiers Migration Status: Minecraft 26.1.2 (Fabric)
+# ToolTiers Migration Status: Minecraft 26.1.2 (Fabric, Mojmap)
 
-This repository is currently stable on the 1.21.1 Yarn mapping line.
+## Current State
 
-## Current Blocker
+- Baseline stability was previously confirmed on Minecraft 1.21.1.
+- Migration configuration was updated to target 26.1.2:
+   - `minecraft_version=26.1.2`
+   - `loader_version=0.19.3`
+   - `fabric_version=0.152.1+26.1.2`
+   - `cloth_config_version=26.1.154`
+   - `mod_menu_version=20.0.0-beta.3`
+   - Java toolchain switched to JDK 25 (required by 26.1.2)
 
-- `minecraft` 26.1.2 exists in Fabric Meta.
-- `fabric-loader` has stable 0.19.3.
-- `fabric-api` and common ecosystem libs have 26.x-era releases.
-- **`yarn` for `26.1.2` is not published yet** (`https://meta.fabricmc.net/v2/versions/yarn/26.1.2` currently returns `[]`).
+## Active Blocker (Hard Stop Before Compilation)
 
-Because this codebase is written against Yarn-named APIs, a direct compile migration to 26.1.2 cannot be completed until a matching Yarn mapping is available.
+Build currently fails during Minecraft setup with:
 
-## Why This Blocks Code Migration
+> Failed to setup Minecraft, java.lang.RuntimeException: Failed to find official mojang mappings for 26.1.2
 
-- This project imports Yarn-named Minecraft classes and methods throughout gameplay, tooltips, mixins, networking, and data loading paths.
-- Switching to non-Yarn mappings would require a broad source remap/rewrite and violates the current minimal-risk API-only migration goal.
+Verified metadata status:
 
-## Safe Next Step (When Yarn Is Published)
+- Fabric game list includes `26.1.2` as stable.
+- Yarn endpoint for 26.1.2 returns empty:
+   - `https://meta.fabricmc.net/v2/versions/yarn/26.1.2` -> `[]`
+- Loom in this workspace resolves to `1.17.12` from `1.17-SNAPSHOT` and still cannot resolve official mappings for `26.1.2`.
 
-1. Set `minecraft_version=26.1.2` in `gradle.properties`.
-2. Set `yarn_mappings=26.1.2+build.X` (published build number).
-3. Set `loader_version=0.19.3` (or current stable for 26.1.2).
-4. Update Fabric API / Cloth / Mod Menu to the 26.1.x compatible lines.
-5. Run:
-   - `gradlew.bat clean build --no-daemon`
-   - `gradlew.bat runClient --no-daemon`
-6. Fix only compile/runtime API breaks introduced by the version jump.
+## Why Migration Cannot Continue Yet
 
-## Validation Checklist (Post-Unblock)
+The requested port path is Mojmap/Fabric compatibility updates. That requires resolvable named mappings for the target game version. For `26.1.2`, neither of the usable named mapping paths is currently available in this environment:
 
-- Game launches.
-- Mod appears in Mod Menu.
-- Crafted tools and armor get tiers.
-- Chest loot gets tiers.
-- Mob drops get tiers.
-- Tier name + tooltip text render.
-- Attribute modifiers apply and display correctly.
-- Reforge UI opens.
-- Optional integrations remain disabled.
+- Official Mojang mappings: not resolvable by Loom for `26.1.2`.
+- Yarn mappings: not published for `26.1.2`.
 
-## Rebrand Prep
+Without one of those mapping sets, the project cannot reach Java compilation, so API/mixin migration steps cannot start.
 
-- Keep internal behavior unchanged for now.
-- Add small TODO markers while touching files to prepare `Tierify -> ToolTiers` renaming in a dedicated future pass.
+## Unblock Conditions
+
+Migration can proceed immediately when either condition is true:
+
+1. Official mappings for `26.1.2` become resolvable via Loom.
+2. Yarn mappings for `26.1.2` are published.
+
+Once unblocked, next sequence remains:
+
+1. `gradlew.bat clean build --no-daemon`
+2. Fix compile errors using 26.1.2 API replacements only.
+3. Fix mixin targets/descriptors without disabling core mixins.
+4. `gradlew.bat runClient --no-daemon`
+5. Validate startup, Mod Menu, world load, and unchanged behavior.

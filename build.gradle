@@ -1,47 +1,40 @@
 plugins {
-	id 'fabric-loom' version '1.7-SNAPSHOT'
+	id 'net.fabricmc.fabric-loom' version '1.17.12'
 	id 'maven-publish'
 }
 
-archivesBaseName = project.archives_base_name
+base {
+	archivesName = project.archives_base_name
+}
 version = project.mod_version
 group = project.maven_group
 
 repositories {
 	maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/" }
-	maven { url "https://maven.jamieswhiteshirt.com/libs-release/" }
 	maven { url "https://api.modrinth.com/maven" }
 }
 
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings loom.officialMojangMappings()
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-	// Necronomicon
-	modImplementation "maven.modrinth:necronomicon:${project.necronomicon_version}-fabric"
-	
-	modImplementation include ('com.fasterxml.jackson.core:jackson-core:2.15.2')
-	modImplementation include ('com.fasterxml.jackson.core:jackson-databind:2.15.2')
-	modImplementation include ('com.fasterxml.jackson.core:jackson-annotations:2.15.2')
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	// ModMenu
-    modCompileOnly modRuntimeOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
+	compileOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
+		exclude(group: "net.fabricmc.fabric-api")
+	}
+	runtimeOnly("com.terraformersmc:modmenu:${project.mod_menu_version}") {
         exclude(group: "net.fabricmc.fabric-api")
     }
 	// Config
-	modImplementation ("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
+	implementation ("me.shedaniel.cloth:cloth-config-fabric:${project.cloth_config_version}") {
     	exclude(group: "net.fabricmc.fabric-api")
   	}
-    // LibZ
-		modImplementation include ('maven.modrinth:libz:1.0.3+1.21.1') {
-		exclude(group: "net.fabricmc.fabric-api")
-	}
 }
 
 processResources {
@@ -53,8 +46,7 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	// Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-	it.options.release = 17
+	it.options.release = 25
 }
 
 java {
@@ -63,8 +55,8 @@ java {
 	// If you remove this line, sources will not be generated.
 	withSourcesJar()
 	
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
 }
 
 sourceSets {
@@ -90,6 +82,6 @@ sourceSets {
 
 jar {
 	from("LICENSE") {
-		rename { "${it}_${project.archivesBaseName}"}
+		rename { "${it}_${base.archivesName.get()}"}
 	}
 }

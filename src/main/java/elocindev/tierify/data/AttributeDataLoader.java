@@ -8,6 +8,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 
 import draylar.tiered.api.PotentialAttribute;
 import elocindev.tierify.gson.EntityAttributeModifierDeserializer;
@@ -18,22 +19,21 @@ import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
-import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Optional;
 
-public class AttributeDataLoader extends SimpleJsonResourceReloadListener implements SimpleSynchronousResourceReloadListener {
+public class AttributeDataLoader implements SimpleSynchronousResourceReloadListener {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping()
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierDeserializer())
             .registerTypeAdapter(AttributeModifier.class, new EntityAttributeModifierSerializer())
@@ -86,23 +86,34 @@ public class AttributeDataLoader extends SimpleJsonResourceReloadListener implem
     private static final String PARSING_ERROR_MESSAGE = "Parsing error loading recipe {}";
     private static final Logger LOGGER = LogManager.getLogger();
 
-    private Map<ResourceLocation, PotentialAttribute> itemAttributes = new HashMap<>();
+    private Map<Identifier, PotentialAttribute> itemAttributes = new HashMap<>();
 
     public AttributeDataLoader() {
-        super(GSON, "item_attributes");
     }
 
     @Override
-    protected void apply(Map<ResourceLocation, JsonElement> loader, ResourceManager manager, ProfilerFiller profiler) {
-        LOGGER.info("Loading {} attribute definitions", loader.size());
-        Map<ResourceLocation, PotentialAttribute> readItemAttributes = Maps.newHashMap();
+    public void onResourceManagerReload(ResourceManager resourceManager) {
+        Map<Identifier, JsonElement> loader = Maps.newHashMap();
+        resourceManager.listResources("item_attributes", id -> id.getPath().endsWith(".json")).forEach((id, resourceRef) -> {
+            try (InputStream stream = resourceRef.open(); InputStreamReader reader = new InputStreamReader(stream)) {
+                JsonElement element = JsonParser.parseReader(reader);
+                String path = id.getPath();
+                String trimmed = path.substring("item_attributes/".length(), path.length() - ".json".length());
+                loader.put(Identifier.fromNamespaceAndPath(id.getNamespace(), trimmed), element);
+            } catch (Exception exception) {
+                LOGGER.error(PARSING_ERROR_MESSAGE, id, exception);
+            }
+        });
 
-        for (Map.Entry<ResourceLocation, JsonElement> entry : loader.entrySet()) {
-            ResourceLocation identifier = entry.getKey();
+        LOGGER.info("Loading {} attribute definitions", loader.size());
+        Map<Identifier, PotentialAttribute> readItemAttributes = Maps.newHashMap();
+
+        for (Map.Entry<Identifier, JsonElement> entry : loader.entrySet()) {
+            Identifier identifier = entry.getKey();
 
             try {
                 PotentialAttribute itemAttribute = GSON.fromJson(entry.getValue(), PotentialAttribute.class);
-                readItemAttributes.put(ResourceLocation.parse(itemAttribute.getID()), itemAttribute);
+                readItemAttributes.put(Identifier.parse(itemAttribute.getID()), itemAttribute);
             } catch (IllegalArgumentException | JsonParseException exception) {
                 LOGGER.error(PARSING_ERROR_MESSAGE, identifier, exception);
             }
@@ -112,17 +123,13 @@ public class AttributeDataLoader extends SimpleJsonResourceReloadListener implem
         LOGGER.info("Loaded {} attribute definitions", readItemAttributes.size());
     }
 
-    public Map<ResourceLocation, PotentialAttribute> getItemAttributes() {
+    public Map<Identifier, PotentialAttribute> getItemAttributes() {
         return itemAttributes;
     }
 
     @Override
-    public ResourceLocation getFabricId() {
-        return ResourceLocation.fromNamespaceAndPath("tiered", "item_attributes");
-    }
-
-    @Override
-    public void onResourceManagerReload(ResourceManager resourceManager) {
+    public Identifier getFabricId() {
+        return Identifier.fromNamespaceAndPath("tiered", "item_attributes");
     }
 
 }

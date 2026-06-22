@@ -14,7 +14,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
-import net.minecraft.world.level.Level;
 
 @Mixin(Item.class)
 public class ItemMixin {
@@ -22,9 +21,9 @@ public class ItemMixin {
     // onCraft in ItemStack class does get called too and get called in CraftingResultSlot
     // but is air at onTakeItem in CraftingResultSlot when quick crafting is used
     @Inject(method = "onCraftedBy", at = @At("TAIL"), require = 0)
-    private void onCraftMixin(ItemStack stack, Level world, Player player, CallbackInfo info) {
+    private void onCraftMixin(ItemStack stack, Player player, CallbackInfo info) {
         Tierify.LOGGER.info("ItemStack created via onCraft for {}", net.minecraft.core.registries.BuiltInRegistries.ITEM.getKey(stack.getItem()));
-        if (!world.isClientSide() && !stack.isEmpty() && Tierify.CONFIG.craftingModifier) {
+        if (!player.level().isClientSide() && !stack.isEmpty() && Tierify.CONFIG.craftingModifier) {
             ModifierUtils.applyTierToItem(stack);
             ModifierUtils.logTierDebug("crafting", stack);
         }

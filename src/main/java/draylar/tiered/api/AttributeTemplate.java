@@ -7,7 +7,7 @@ import elocindev.tierify.Tierify;
 import java.util.Optional;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -67,10 +67,10 @@ public class AttributeTemplate {
      * @param slot
      */
     public void realize(Multimap<Holder<Attribute>, AttributeModifier> multimap, EquipmentSlot slot) {
-        ResourceLocation modifierId = ResourceLocation.fromNamespaceAndPath(entityAttributeModifier.id().getNamespace(), entityAttributeModifier.id().getPath() + "_" + slot.getName());
+        Identifier modifierId = Identifier.fromNamespaceAndPath(entityAttributeModifier.id().getNamespace(), entityAttributeModifier.id().getPath() + "_" + slot.getName());
         AttributeModifier cloneModifier = new AttributeModifier(modifierId, entityAttributeModifier.amount(), entityAttributeModifier.operation());
 
-        var key = BuiltInRegistries.ATTRIBUTE.getHolder(ResourceLocation.parse(attributeTypeID));
+        var key = BuiltInRegistries.ATTRIBUTE.get(Identifier.parse(attributeTypeID));
         if (key.isEmpty()) {
             Tierify.LOGGER.warn(String.format("%s was referenced as an attribute type, but it does not exist! A data file in /tiered/item_attributes/ has an invalid type property.", attributeTypeID));
         } else {

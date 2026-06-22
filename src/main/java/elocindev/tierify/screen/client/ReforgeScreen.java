@@ -2,37 +2,33 @@ package elocindev.tierify.screen.client;
 
 import java.util.*;
 
-import com.mojang.blaze3d.systems.RenderSystem;
-
 import draylar.tiered.api.TieredItemTags;
 import elocindev.tierify.Tierify;
 import elocindev.tierify.network.TieredClientPacket;
 import elocindev.tierify.screen.ReforgeScreenHandler;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.libz.api.Tab;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
-import net.minecraft.client.gui.screens.inventory.AnvilScreen;
 import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerListener;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.enchantment.Repairable;
 
 @Environment(EnvType.CLIENT)
-public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler> implements ContainerListener, Tab {
+public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler> implements ContainerListener {
 
-    public static final ResourceLocation TEXTURE = ResourceLocation.fromNamespaceAndPath("tiered", "textures/gui/reforging_screen.png");
+    public static final Identifier TEXTURE = Identifier.fromNamespaceAndPath("tiered", "textures/gui/reforging_screen.png");
     public ReforgeScreen.ReforgeButton reforgeButton;
     private ItemStack last;
     private List<Item> baseItems;
@@ -62,12 +58,8 @@ public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler>
     }
 
     @Override
-    public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        RenderSystem.disableBlend();
-
-        this.renderTooltip(context, mouseX, mouseY);
+    public void extractRenderState(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
+        super.extractRenderState(context, mouseX, mouseY, delta);
 
         if (this.isHovering(79, 56, 18, 18, (double) mouseX, (double) mouseY)) {
             ItemStack itemStack = this.getMenu().getSlot(1).getItem();
@@ -80,21 +72,18 @@ public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler>
                     List<Item> items = Tierify.REFORGE_DATA_LOADER.getReforgeBaseItems(itemStack.getItem());
                     if (!items.isEmpty()) {
                         baseItems.addAll(items);
-                    } else if (itemStack.getItem() instanceof TieredItem toolItem) {
-                        toolItem.getTier().getRepairIngredient().getItems();
-                        for (int i = 0; i < toolItem.getTier().getRepairIngredient().getItems().length; i++) {
-                            baseItems.add(toolItem.getTier().getRepairIngredient().getItems()[i].getItem());
-                        }
-                    } else if (itemStack.getItem() instanceof ArmorItem armorItem) {
-                        var repairIngredient = armorItem.getMaterial().value().repairIngredient().get();
-                        if (repairIngredient != null) {
-                            for (int i = 0; i < repairIngredient.getItems().length; i++) {
-                                baseItems.add(repairIngredient.getItems()[i].getItem());
-                            }
-                        }
                     } else {
-                        for (Holder<Item> itemRegistryEntry : BuiltInRegistries.ITEM.getOrCreateTag(TieredItemTags.REFORGE_BASE_ITEM)) {
-                            baseItems.add(itemRegistryEntry.value());
+                        Repairable repairable = itemStack.get(DataComponents.REPAIRABLE);
+                        if (repairable != null) {
+                            for (Holder<Item> holder : repairable.items()) {
+                                baseItems.add(holder.value());
+                            }
+                        } else {
+                            for (Item taggedItem : BuiltInRegistries.ITEM) {
+                                if (taggedItem.getDefaultInstance().is(TieredItemTags.REFORGE_BASE_ITEM)) {
+                                    baseItems.add(taggedItem);
+                                }
+                            }
                         }
                     }
                 }
@@ -106,7 +95,7 @@ public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler>
                 } else {
                     tooltip.add(Component.translatable("screen.tiered.reforge_ingredient"));
                     for (Item item : baseItems) {
-                        tooltip.add(item.getDescription());
+                        tooltip.add(item.getName(item.getDefaultInstance()));
                     }
                 }
             }
@@ -114,7 +103,7 @@ public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler>
                 tooltip.add(Component.translatable("screen.tiered.reforge_damaged"));
             }
             if (!tooltip.isEmpty()) {
-                context.renderComponentTooltip(this.font, tooltip, mouseX, mouseY);
+                context.setComponentTooltipForNextFrame(this.font, tooltip, mouseX, mouseY);
             }
         }
         // if (!Tierify.CONFIG.mythicReforge && !this.getScreenHandler().getSlot(1).getStack().isEmpty() && ModifierUtils.getAttributeID(this.getScreenHandler().getSlot(1).getStack()) != null
@@ -124,10 +113,11 @@ public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler>
     }
 
     @Override
-    protected void renderBg(GuiGraphics context, float delta, int mouseX, int mouseY) {
+    public void extractContents(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
         int i = (this.width - this.imageWidth) / 2;
         int j = (this.height - this.imageHeight) / 2;
-        context.blit(TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        context.blit(TEXTURE, i, j, this.imageWidth, this.imageHeight, 0.0f, 0.0f, this.imageWidth / 256.0f, this.imageHeight / 256.0f);
+        super.extractContents(context, mouseX, mouseY, delta);
     }
 
     @Override
@@ -136,11 +126,6 @@ public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler>
 
     @Override
     public void slotChanged(AbstractContainerMenu handler, int slotId, ItemStack stack) {
-    }
-
-    @Override
-    public Class<?> getParentScreenClass() {
-        return AnvilScreen.class;
     }
 
     public class ReforgeButton extends Button {
@@ -152,18 +137,14 @@ public class ReforgeScreen extends AbstractContainerScreen<ReforgeScreenHandler>
         }
 
         @Override
-        protected void renderWidget(GuiGraphics context, int mouseX, int mouseY, float delta) {
-            RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.enableDepthTest();
+        protected void extractContents(GuiGraphicsExtractor context, int mouseX, int mouseY, float delta) {
             int j = 176;
             if (this.disabled) {
                 j += this.width * 2;
             } else if (this.isHovered()) {
                 j += this.width;
             }
-            context.blit(TEXTURE, this.getX(), this.getY(), j, 0, this.width, this.height);
+            context.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, this.getX(), this.getY(), (float) j, 0.0f, this.width, this.height, 256, 256);
         }
 
         public void setDisabled(boolean disable) {

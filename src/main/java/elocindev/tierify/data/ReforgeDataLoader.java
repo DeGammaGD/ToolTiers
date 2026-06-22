@@ -15,7 +15,7 @@ import com.google.gson.JsonParser;
 
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.item.Item;
 
@@ -23,12 +23,12 @@ public class ReforgeDataLoader implements SimpleSynchronousResourceReloadListene
 
     private static final Logger LOGGER = LogManager.getLogger("TieredZ");
 
-    private List<ResourceLocation> reforgeIdentifiers = new ArrayList<>();
-    private Map<ResourceLocation, List<Item>> reforgeBaseMap = new HashMap<>();
+    private List<Identifier> reforgeIdentifiers = new ArrayList<>();
+    private Map<Identifier, List<Item>> reforgeBaseMap = new HashMap<>();
 
     @Override
-    public ResourceLocation getFabricId() {
-        return ResourceLocation.fromNamespaceAndPath("tiered", "reforge_loader");
+    public Identifier getFabricId() {
+        return Identifier.fromNamespaceAndPath("tiered", "reforge_loader");
     }
 
     @Override
@@ -45,18 +45,18 @@ public class ReforgeDataLoader implements SimpleSynchronousResourceReloadListene
                     for (int u = 0; u < data.getAsJsonArray("items").size(); u++) {
                         List<Item> baseItems = new ArrayList<Item>();
                         for (int i = 0; i < data.getAsJsonArray("base").size(); i++) {
-                            if (BuiltInRegistries.ITEM.get(ResourceLocation.parse(data.getAsJsonArray("base").get(i).getAsString())).toString().equals("air")) {
+                            if (BuiltInRegistries.ITEM.getValue(Identifier.parse(data.getAsJsonArray("base").get(i).getAsString())).toString().equals("air")) {
                                 LOGGER.info("Resource {} was not loaded cause {} is not a valid item identifier", id.toString(), data.getAsJsonArray("base").get(i).getAsString());
                                 continue;
                             }
-                            baseItems.add(BuiltInRegistries.ITEM.get(ResourceLocation.parse(data.getAsJsonArray("base").get(i).getAsString())));
+                            baseItems.add(BuiltInRegistries.ITEM.getValue(Identifier.parse(data.getAsJsonArray("base").get(i).getAsString())));
                         }
-                        if (BuiltInRegistries.ITEM.get(ResourceLocation.parse(data.getAsJsonArray("items").get(u).getAsString())).toString().equals("air")) {
+                        if (BuiltInRegistries.ITEM.getValue(Identifier.parse(data.getAsJsonArray("items").get(u).getAsString())).toString().equals("air")) {
                             LOGGER.info("Resource {} was not loaded cause {} is not a valid item identifier", id.toString(), data.getAsJsonArray("items").get(u).getAsString());
                             continue;
                         }
-                        reforgeIdentifiers.add(ResourceLocation.parse(data.getAsJsonArray("items").get(u).getAsString()));
-                        reforgeBaseMap.put(ResourceLocation.parse(data.getAsJsonArray("items").get(u).getAsString()), baseItems);
+                        reforgeIdentifiers.add(Identifier.parse(data.getAsJsonArray("items").get(u).getAsString()));
+                        reforgeBaseMap.put(Identifier.parse(data.getAsJsonArray("items").get(u).getAsString()), baseItems);
                     }
                 }
             } catch (Exception e) {
@@ -74,7 +74,7 @@ public class ReforgeDataLoader implements SimpleSynchronousResourceReloadListene
         return list;
     }
 
-    public void putReforgeBaseItems(ResourceLocation id, List<Item> items) {
+    public void putReforgeBaseItems(Identifier id, List<Item> items) {
         reforgeBaseMap.put(id, items);
     }
 
@@ -82,7 +82,7 @@ public class ReforgeDataLoader implements SimpleSynchronousResourceReloadListene
         reforgeBaseMap.clear();
     }
 
-    public List<ResourceLocation> getReforgeIdentifiers() {
+    public List<Identifier> getReforgeIdentifiers() {
         return reforgeIdentifiers;
     }
 

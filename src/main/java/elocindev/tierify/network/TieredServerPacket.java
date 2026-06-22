@@ -4,13 +4,12 @@ import elocindev.tierify.access.AnvilScreenHandlerAccess;
 import elocindev.tierify.screen.ReforgeScreenHandler;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.libz.network.LibzServerPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.inventory.AnvilMenu;
@@ -18,10 +17,10 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 
 public class TieredServerPacket {
 
-        public static final CustomPacketPayload.Type<SetScreenPayload> SET_SCREEN_ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("tiered", "set_screen"));
-        public static final CustomPacketPayload.Type<ReforgeReadyPayload> REFORGE_READY_ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("tiered", "reforge_ready"));
-        public static final CustomPacketPayload.Type<ReforgePayload> REFORGE_ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("tiered", "reforge"));
-        public static final CustomPacketPayload.Type<HealthPayload> HEALTH_ID = new CustomPacketPayload.Type<>(ResourceLocation.fromNamespaceAndPath("tiered", "health"));
+        public static final CustomPacketPayload.Type<SetScreenPayload> SET_SCREEN_ID = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("tiered", "set_screen"));
+        public static final CustomPacketPayload.Type<ReforgeReadyPayload> REFORGE_READY_ID = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("tiered", "reforge_ready"));
+        public static final CustomPacketPayload.Type<ReforgePayload> REFORGE_ID = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("tiered", "reforge"));
+        public static final CustomPacketPayload.Type<HealthPayload> HEALTH_ID = new CustomPacketPayload.Type<>(Identifier.fromNamespaceAndPath("tiered", "health"));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, SetScreenPayload> SET_SCREEN_CODEC = StreamCodec.ofMember(
             (payload, buf) -> {
@@ -46,10 +45,10 @@ public class TieredServerPacket {
         );
 
     public static void init() {
-        PayloadTypeRegistry.playC2S().register(SetScreenPayload.ID, SET_SCREEN_CODEC);
-        PayloadTypeRegistry.playC2S().register(ReforgePayload.ID, REFORGE_CODEC);
-        PayloadTypeRegistry.playS2C().register(HealthPayload.ID, HEALTH_CODEC);
-        PayloadTypeRegistry.playS2C().register(ReforgeReadyPayload.ID, REFORGE_READY_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(SetScreenPayload.ID, SET_SCREEN_CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(ReforgePayload.ID, REFORGE_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(HealthPayload.ID, HEALTH_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ReforgeReadyPayload.ID, REFORGE_READY_CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(SetScreenPayload.ID, (payload, context) -> {
             ServerPlayer player = context.player();
@@ -69,7 +68,7 @@ public class TieredServerPacket {
                             return new AnvilMenu(syncId, playerInventory, ContainerLevelAccess.create(playerx.level(), pos));
                         }, Component.translatable("container.repair")));
 
-                    LibzServerPacket.writeS2CMousePositionPacket(player, mouseX, mouseY);
+                    // TODO(26.1): re-enable LibZ mouse-position sync after updating to a mappings-compatible LibZ build.
                 });
             }
         });

@@ -26,7 +26,7 @@ Tierify expands upon Tiered by changing various things, but keeps its mod id and
     Allows reforging tools to Rare, Epic, Legendary and Mythic qualities.
 
 ### Installation
-Tierify is a mod built for the [Fabric Loader](https://fabricmc.net/). It requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) & [Necronomicon API](https://www.curseforge.com/minecraft/mc-mods/necronomicon) (and [Synitra Connector](https://www.curseforge.com/minecraft/mc-mods/sinytra-connector) if on Forge/NeoForge) to be installed separately; all other dependencies are included inside the mod.
+Tierify is a mod built for the [Fabric Loader](https://fabricmc.net/). It requires [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api) to be installed separately; all other dependencies are included inside the mod.
 
 ### Customization
 

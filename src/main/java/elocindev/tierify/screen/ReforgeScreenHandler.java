@@ -4,7 +4,7 @@ import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -15,10 +15,10 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.enchantment.Repairable;
 import net.minecraft.world.level.block.LevelEvent;
 import draylar.tiered.api.ModifierUtils;
 import draylar.tiered.api.TieredItemTags;
@@ -87,12 +87,13 @@ public class ReforgeScreenHandler extends AbstractContainerMenu {
                 Tierify.LOGGER.info("[TierifyDebug][Reforge] input={} available_reforges={}", BuiltInRegistries.ITEM.getKey(item), items.stream().map(it -> BuiltInRegistries.ITEM.getKey(it).toString()).toList());
                 if (!items.isEmpty()) {
                     this.reforgeReady = items.stream().anyMatch(it -> it == baseItem.getItem());
-                } else if (item instanceof TieredItem toolItem) {
-                    this.reforgeReady = toolItem.getTier().getRepairIngredient().test(baseItem);
-                } else if (item instanceof ArmorItem armorItem) {
-                    this.reforgeReady = armorItem.getMaterial().value().repairIngredient().get().test(baseItem);
                 } else {
-                    this.reforgeReady = baseItem.is(TieredItemTags.REFORGE_BASE_ITEM);
+                    Repairable repairable = this.getSlot(1).getItem().get(DataComponents.REPAIRABLE);
+                    if (repairable != null) {
+                        this.reforgeReady = repairable.isValidRepairItem(baseItem);
+                    } else {
+                        this.reforgeReady = baseItem.is(TieredItemTags.REFORGE_BASE_ITEM);
+                    }
                 }
                 Tierify.LOGGER.info("Reforge check for {} with base {} -> {}", BuiltInRegistries.ITEM.getKey(item), BuiltInRegistries.ITEM.getKey(baseItem.getItem()), this.reforgeReady);
             } else {
@@ -143,11 +144,8 @@ public class ReforgeScreenHandler extends AbstractContainerMenu {
                 }
                 if (this.getSlot(1).hasItem()) {
                     Item item = this.getSlot(1).getItem().getItem();
-                    if (item instanceof TieredItem toolItem && toolItem.getTier().getRepairIngredient().test(itemStack) && !this.moveItemStackTo(itemStack2, 0, 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
-                    if (item instanceof ArmorItem armorItem && armorItem.getMaterial().value().repairIngredient().get().test(itemStack)
-                            && !this.moveItemStackTo(itemStack2, 0, 1, false)) {
+                    Repairable repairable = this.getSlot(1).getItem().get(DataComponents.REPAIRABLE);
+                    if (repairable != null && repairable.isValidRepairItem(itemStack) && !this.moveItemStackTo(itemStack2, 0, 1, false)) {
                         return ItemStack.EMPTY;
                     }
                     if (itemStack.is(TieredItemTags.REFORGE_BASE_ITEM) && !this.moveItemStackTo(itemStack2, 0, 1, false)) {
@@ -177,20 +175,21 @@ public class ReforgeScreenHandler extends AbstractContainerMenu {
 
     public void reforge() {
         ItemStack itemStack = this.getSlot(1).getItem();
-        ResourceLocation beforeTier = ModifierUtils.getAttributeID(itemStack);
+        Identifier beforeTier = ModifierUtils.getAttributeID(itemStack);
         Tierify.LOGGER.info("Applying reforge to {} using {}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), BuiltInRegistries.ITEM.getKey(this.getSlot(2).getItem().getItem()));
         Tierify.LOGGER.info("Reforge before data -> {}", itemStack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA));
         Tierify.LOGGER.info("[TierifyDebug][Reforge] input_item={} input_tier={} reforge_material={}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), beforeTier, BuiltInRegistries.ITEM.getKey(this.getSlot(2).getItem().getItem()));
         ModifierUtils.removeItemStackAttribute(itemStack);
         ModifierUtils.setItemStackAttribute(player, itemStack, true, this.getSlot(2).getItem());
-        ResourceLocation afterTier = ModifierUtils.getAttributeID(itemStack);
+        Identifier afterTier = ModifierUtils.getAttributeID(itemStack);
         Tierify.LOGGER.info("Reforge after data -> {}", itemStack.get(net.minecraft.core.component.DataComponents.CUSTOM_DATA));
         Tierify.LOGGER.info("[TierifyDebug][Reforge] result_item={} result_tier={}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), afterTier);
 
-        if (BuiltInRegistries.SOUND_EVENT.get(getReforgeSound(ModifierUtils.getAttributeID(itemStack))) !=null) {
-            SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(getReforgeSound(ModifierUtils.getAttributeID(itemStack)));
+        var soundHolder = BuiltInRegistries.SOUND_EVENT.get(getReforgeSound(ModifierUtils.getAttributeID(itemStack))).orElse(null);
+        if (soundHolder != null) {
+            SoundEvent soundEvent = soundHolder.value();
             this.context.execute((world, pos) -> {
-                if (!world.isClientSide) {
+                if (!world.isClientSide()) {
                     world.playSound(null, pos, soundEvent, SoundSource.BLOCKS, 1f, 1f);
                 }
             });
@@ -224,7 +223,7 @@ public class ReforgeScreenHandler extends AbstractContainerMenu {
         return stack.is(TieredItemTags.TIER_1_ITEM) || stack.is(TieredItemTags.TIER_2_ITEM) || stack.is(TieredItemTags.TIER_3_ITEM);
     }
 
-    public static ResourceLocation getReforgeSound(ResourceLocation identifier) {
+    public static Identifier getReforgeSound(Identifier identifier) {
         // plays the corresponding upgrade sound effect for the item tier
         String tier = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(identifier).getID();
         if (tier == null) return null;
@@ -233,7 +232,7 @@ public class ReforgeScreenHandler extends AbstractContainerMenu {
         String tierName = Component.translatable(tier + ".label").getString().toLowerCase();
         soundId = "reforge_sound_"+tierName;
 
-        return ResourceLocation.fromNamespaceAndPath("tiered",soundId);
+        return Identifier.fromNamespaceAndPath("tiered", soundId);
     }
 
 

@@ -14,7 +14,7 @@ import elocindev.tierify.Tierify;
 import elocindev.tierify.util.TieredTooltip;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -33,8 +33,8 @@ public abstract class HandledScreenMixin extends Screen {
         super(title);
     }
 
-    @Inject(method = "drawMouseoverTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;II)V"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-    protected void drawMouseoverTooltipMixin(GuiGraphics context, int x, int y, CallbackInfo info, ItemStack stack) {
+    @Inject(method = "drawMouseoverTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphicsExtractor;drawTooltip(Lnet/minecraft/client/font/TextRenderer;Ljava/util/List;Ljava/util/Optional;II)V"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
+    protected void drawMouseoverTooltipMixin(GuiGraphicsExtractor context, int x, int y, CallbackInfo info, ItemStack stack) {
         CustomData component = stack.get(DataComponents.CUSTOM_DATA);
         CompoundTag root = component != null ? component.copyTag() : new CompoundTag();
         if (Tierify.CLIENT_CONFIG.tieredTooltip && component != null && root.contains("Tiered")) {

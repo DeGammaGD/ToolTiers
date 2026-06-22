@@ -7,11 +7,11 @@ import me.shedaniel.autoconfig.serializer.JanksonConfigSerializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.loader.api.FabricLoader;
@@ -25,7 +25,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
@@ -34,7 +34,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.item.Equipable;
+import net.minecraft.world.item.equipment.Equippable;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ProjectileWeaponItem;
@@ -45,7 +45,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import draylar.tiered.api.*;
-import elocindev.necronomicon.api.config.v1.NecConfigAPI;
 import elocindev.tierify.command.CommandInit;
 import elocindev.tierify.config.ClientConfig;
 import elocindev.tierify.config.CommonConfig;
@@ -89,8 +88,8 @@ public class Tierify implements ModInitializer {
 
     public static final Logger LOGGER = LogManager.getLogger();
 
-    public static final ResourceLocation ATTRIBUTE_SYNC_PACKET = ResourceLocation.parse("attribute_sync");
-    public static final ResourceLocation REFORGE_ITEM_SYNC_PACKET = ResourceLocation.parse("reforge_item_sync");
+    public static final Identifier ATTRIBUTE_SYNC_PACKET = Identifier.parse("attribute_sync");
+    public static final Identifier REFORGE_ITEM_SYNC_PACKET = Identifier.parse("reforge_item_sync");
 
     public static final CustomPacketPayload.Type<AttributeSyncPayload> ATTRIBUTE_SYNC_PAYLOAD_ID = new CustomPacketPayload.Type<>(ATTRIBUTE_SYNC_PACKET);
     public static final CustomPacketPayload.Type<ReforgeItemSyncPayload> REFORGE_ITEM_SYNC_PAYLOAD_ID = new CustomPacketPayload.Type<>(REFORGE_ITEM_SYNC_PACKET);
@@ -99,15 +98,15 @@ public class Tierify implements ModInitializer {
             (payload, buf) -> {
                 buf.writeInt(payload.attributes().size());
                 payload.attributes().forEach((id, attributeJson) -> {
-                    buf.writeResourceLocation(id);
+                    buf.writeIdentifier(id);
                     buf.writeUtf(attributeJson);
                 });
             },
             buf -> {
-                Map<ResourceLocation, String> attributes = new HashMap<>();
+                Map<Identifier, String> attributes = new HashMap<>();
                 int size = buf.readInt();
                 for (int i = 0; i < size; i++) {
-                    attributes.put(buf.readResourceLocation(), buf.readUtf());
+                    attributes.put(buf.readIdentifier(), buf.readUtf());
                 }
                 return new AttributeSyncPayload(attributes);
             }
@@ -117,22 +116,22 @@ public class Tierify implements ModInitializer {
             (payload, buf) -> {
                 buf.writeInt(payload.reforgeItems().size());
                 payload.reforgeItems().forEach((targetItem, baseItems) -> {
-                    buf.writeResourceLocation(targetItem);
+                    buf.writeIdentifier(targetItem);
                     buf.writeInt(baseItems.size());
-                    for (ResourceLocation baseItem : baseItems) {
-                        buf.writeResourceLocation(baseItem);
+                    for (Identifier baseItem : baseItems) {
+                        buf.writeIdentifier(baseItem);
                     }
                 });
             },
             buf -> {
-                Map<ResourceLocation, List<ResourceLocation>> reforgeItems = new HashMap<>();
+                Map<Identifier, List<Identifier>> reforgeItems = new HashMap<>();
                 int size = buf.readInt();
                 for (int i = 0; i < size; i++) {
-                    ResourceLocation targetItem = buf.readResourceLocation();
+                    Identifier targetItem = buf.readIdentifier();
                     int baseItemCount = buf.readInt();
-                    List<ResourceLocation> baseItems = new ArrayList<>();
+                    List<Identifier> baseItems = new ArrayList<>();
                     for (int j = 0; j < baseItemCount; j++) {
-                        baseItems.add(buf.readResourceLocation());
+                        baseItems.add(buf.readIdentifier());
                     }
                     reforgeItems.put(targetItem, baseItems);
                 }
@@ -147,10 +146,10 @@ public class Tierify implements ModInitializer {
     @Override
     public void onInitialize() {
         
-        NecConfigAPI.registerConfig(CommonConfig.class);
+        AutoConfig.register(CommonConfig.class, JanksonConfigSerializer::new);
         AutoConfig.register(ClientConfig.class, JanksonConfigSerializer::new);
 
-        CONFIG = CommonConfig.INSTANCE;
+        CONFIG = AutoConfig.getConfigHolder(CommonConfig.class).getConfig();
         CLIENT_CONFIG = AutoConfig.getConfigHolder(ClientConfig.class).getConfig();
 
         TieredItemTags.init();
@@ -166,8 +165,8 @@ public class Tierify implements ModInitializer {
         REFORGE_SCREEN_HANDLER_TYPE = Registry.register(BuiltInRegistries.MENU, "tiered:reforge",
                 new MenuType<>((syncId, inventory) -> new ReforgeScreenHandler(syncId, inventory, ContainerLevelAccess.NULL), FeatureFlags.VANILLA_SET));
 
-        PayloadTypeRegistry.playS2C().register(ATTRIBUTE_SYNC_PAYLOAD_ID, ATTRIBUTE_SYNC_PAYLOAD_CODEC);
-        PayloadTypeRegistry.playS2C().register(REFORGE_ITEM_SYNC_PAYLOAD_ID, REFORGE_ITEM_SYNC_PAYLOAD_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(ATTRIBUTE_SYNC_PAYLOAD_ID, ATTRIBUTE_SYNC_PAYLOAD_CODEC);
+        PayloadTypeRegistry.clientboundPlay().register(REFORGE_ITEM_SYNC_PAYLOAD_ID, REFORGE_ITEM_SYNC_PAYLOAD_CODEC);
 
         TieredServerPacket.init();
         
@@ -176,10 +175,10 @@ public class Tierify implements ModInitializer {
             // setupModifierLabel();
         }
 
-        ItemGroupEvents.modifyEntriesEvent(ResourceKey.create(Registries.CREATIVE_MODE_TAB, ResourceLocation.parse("ingredients"))).register(content -> {
-            content.addAfter(Items.RAW_IRON, ItemRegistry.LIMESTONE_CHUNK);
-            content.addAfter(Items.ANCIENT_DEBRIS, ItemRegistry.RAW_PYRITE);
-            content.addAfter(Items.AMETHYST_SHARD, ItemRegistry.RAW_GALENA);
+        CreativeModeTabEvents.modifyOutputEvent(ResourceKey.create(Registries.CREATIVE_MODE_TAB, Identifier.parse("ingredients"))).register(output -> {
+            output.insertAfter(Items.RAW_IRON, ItemRegistry.LIMESTONE_CHUNK);
+            output.insertAfter(Items.ANCIENT_DEBRIS, ItemRegistry.RAW_PYRITE);
+            output.insertAfter(Items.AMETHYST_SHARD, ItemRegistry.RAW_GALENA);
         });
 
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, serverResourceManager, success) -> {
@@ -210,13 +209,13 @@ public class Tierify implements ModInitializer {
     }
 
     /**
-     * Returns an {@link ResourceLocation} namespaced with this mod's modid ("tiered").
+     * Returns an {@link Identifier} namespaced with this mod's modid ("tiered").
      *
      * @param path path of identifier (eg. apple in "minecraft:apple")
      * @return Identifier created with a namespace of this mod's modid ("tiered") and provided path
      */
-    public static ResourceLocation id(String path) {
-        return ResourceLocation.fromNamespaceAndPath("tiered", path);
+    public static Identifier id(String path) {
+        return Identifier.fromNamespaceAndPath("tiered", path);
     }
 
     /**
@@ -231,7 +230,11 @@ public class Tierify implements ModInitializer {
             // has tier
             if (customData != null && root.contains(NBT_SUBTAG_KEY)) {
                 // get tier
-                ResourceLocation tier = ResourceLocation.parse(root.getCompound(NBT_SUBTAG_KEY).getString(Tierify.NBT_SUBTAG_DATA_KEY));
+                CompoundTag tiered = root.getCompound(NBT_SUBTAG_KEY).orElse(null);
+                if (tiered == null) {
+                    return;
+                }
+                Identifier tier = Identifier.parse(tiered.getString(Tierify.NBT_SUBTAG_DATA_KEY).orElse(""));
 
                 // attempt to display attribute if it is valid
                 PotentialAttribute potentialAttribute = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
@@ -243,9 +246,9 @@ public class Tierify implements ModInitializer {
     }
 
     public static boolean isPreferredEquipmentSlot(ItemStack stack, EquipmentSlot slot) {
-        if (stack.getItem() instanceof Equipable) {
-            Equipable item = (Equipable) stack.getItem();
-            return item.getEquipmentSlot().equals(slot);
+        Equippable equippable = stack.get(DataComponents.EQUIPPABLE);
+        if (equippable != null) {
+            return equippable.slot().equals(slot);
         }
         if (stack.getItem() instanceof ShieldItem || stack.getItem() instanceof ProjectileWeaponItem || stack.is(TieredItemTags.MAIN_OFFHAND_ITEM)) {
             return slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.OFFHAND;
@@ -255,7 +258,7 @@ public class Tierify implements ModInitializer {
 
     public static void registerAttributeSyncer() {
         ServerPlayConnectionEvents.JOIN.register((network, packetSender, minecraftServer) -> {
-            Map<ResourceLocation, String> serializedAttributes = new HashMap<>();
+            Map<Identifier, String> serializedAttributes = new HashMap<>();
             ATTRIBUTE_DATA_LOADER.getItemAttributes().forEach((id, attribute) -> {
                 serializedAttributes.put(id, AttributeDataLoader.GSON.toJson(attribute));
             });
@@ -265,10 +268,10 @@ public class Tierify implements ModInitializer {
 
     public static void registerReforgeItemSyncer() {
         ServerPlayConnectionEvents.JOIN.register((network, packetSender, minecraftServer) -> {
-            Map<ResourceLocation, List<ResourceLocation>> reforgeItems = new HashMap<>();
+            Map<Identifier, List<Identifier>> reforgeItems = new HashMap<>();
             REFORGE_DATA_LOADER.getReforgeIdentifiers().forEach(id -> {
-                List<ResourceLocation> list = new ArrayList<>();
-                REFORGE_DATA_LOADER.getReforgeBaseItems(BuiltInRegistries.ITEM.get(id)).forEach(item -> {
+                List<Identifier> list = new ArrayList<>();
+                REFORGE_DATA_LOADER.getReforgeBaseItems(BuiltInRegistries.ITEM.getValue(id)).forEach(item -> {
                     list.add(BuiltInRegistries.ITEM.getKey(item));
                 });
                 reforgeItems.put(id, list);
@@ -292,10 +295,11 @@ public class Tierify implements ModInitializer {
                     }
 
                 });
-                ResourceLocation attributeID = null;
+                Identifier attributeID = null;
                 for (int i = 0; i < attributeIds.size(); i++) {
-                    if (root.getCompound(Tierify.NBT_SUBTAG_KEY).getAsString().contains(attributeIds.get(i))) {
-                        attributeID = ResourceLocation.parse(attributeIds.get(i));
+                    String tieredText = root.getCompound(Tierify.NBT_SUBTAG_KEY).map(CompoundTag::toString).orElse("");
+                    if (tieredText.contains(attributeIds.get(i))) {
+                        attributeID = Identifier.parse(attributeIds.get(i));
                         break;
                     } else if (i == attributeIds.size() - 1) {
                         ModifierUtils.removeItemStackAttribute(itemStack);
@@ -306,10 +310,10 @@ public class Tierify implements ModInitializer {
                 // found an ID
                 if (attributeID != null) {
 
-                    HashMap<String, Object> nbtMap = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(ResourceLocation.parse(attributeID.toString())).getNbtValues();
+                    HashMap<String, Object> nbtMap = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(attributeID.toString())).getNbtValues();
                     // update durability nbt
 
-                    List<AttributeTemplate> attributeList = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(ResourceLocation.parse(attributeID.toString())).getAttributes();
+                    List<AttributeTemplate> attributeList = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(attributeID.toString())).getAttributes();
                     for (int i = 0; i < attributeList.size(); i++) {
                         if (attributeList.get(i).getAttributeTypeID().equals("tiered:generic.durable")) {
                             if (nbtMap == null) {
@@ -359,14 +363,14 @@ public class Tierify implements ModInitializer {
         }
     }
 
-    public record AttributeSyncPayload(Map<ResourceLocation, String> attributes) implements CustomPacketPayload {
+    public record AttributeSyncPayload(Map<Identifier, String> attributes) implements CustomPacketPayload {
         @Override
         public CustomPacketPayload.Type<AttributeSyncPayload> type() {
             return ATTRIBUTE_SYNC_PAYLOAD_ID;
         }
     }
 
-    public record ReforgeItemSyncPayload(Map<ResourceLocation, List<ResourceLocation>> reforgeItems) implements CustomPacketPayload {
+    public record ReforgeItemSyncPayload(Map<Identifier, List<Identifier>> reforgeItems) implements CustomPacketPayload {
         @Override
         public CustomPacketPayload.Type<ReforgeItemSyncPayload> type() {
             return REFORGE_ITEM_SYNC_PAYLOAD_ID;

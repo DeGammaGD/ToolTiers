@@ -5,7 +5,7 @@ import java.util.List;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 
@@ -20,19 +20,19 @@ public class ItemVerifier {
     }
 
     /**
-     * Returns whether the given {@link ResourceLocation} is valid for this ItemVerifier, which may check direct against either a {@link ResourceLocation} or {@link Tag<Item>}.
+     * Returns whether the given {@link Identifier} is valid for this ItemVerifier, which may check direct against either a {@link Identifier} or {@link Tag<Item>}.
      * <p>
-     * The given {@link ResourceLocation} should be the ID of an {@link Item} in {@link Registry#ITEM}.
+     * The given {@link Identifier} should be the ID of an {@link Item} in {@link Registry#ITEM}.
      *
      * @param itemID item registry ID to check against this verifier
      * @return whether the check succeeded
      */
-    public boolean isValid(ResourceLocation itemID) {
+    public boolean isValid(Identifier itemID) {
         return isValid(itemID.toString());
     }
 
     /**
-     * Returns whether the given {@link String} is valid for this ItemVerifier, which may check direct against either a {@link ResourceLocation} or {@link Tag<Item>}.
+     * Returns whether the given {@link String} is valid for this ItemVerifier, which may check direct against either a {@link Identifier} or {@link Tag<Item>}.
      * <p>
      * The given {@link String} should be the ID of an {@link Item} in {@link Registry#ITEM}.
      *
@@ -44,7 +44,7 @@ public class ItemVerifier {
             return itemID.equals(id);
         } else if (tag != null) {
             List<TagKey<Item>> candidates = resolveCandidateTags(tag);
-            Holder<Item> itemEntry = BuiltInRegistries.ITEM.getHolder(ResourceLocation.parse(itemID)).orElse(null);
+            Holder<Item> itemEntry = BuiltInRegistries.ITEM.get(Identifier.parse(itemID)).orElse(null);
             if (itemEntry == null) {
                 return false;
             }
@@ -61,7 +61,7 @@ public class ItemVerifier {
 
     private static List<TagKey<Item>> resolveCandidateTags(String rawTag) {
         List<TagKey<Item>> candidates = new ArrayList<>();
-        candidates.add(TagKey.create(Registries.ITEM, ResourceLocation.parse(rawTag)));
+        candidates.add(TagKey.create(Registries.ITEM, Identifier.parse(rawTag)));
 
         if (!rawTag.startsWith("c:")) {
             return candidates;
@@ -125,7 +125,7 @@ public class ItemVerifier {
     }
 
     private static void addCandidate(List<TagKey<Item>> candidates, String rawTag) {
-        candidates.add(TagKey.create(Registries.ITEM, ResourceLocation.parse(rawTag)));
+        candidates.add(TagKey.create(Registries.ITEM, Identifier.parse(rawTag)));
     }
 
     public String getId() {
@@ -133,7 +133,7 @@ public class ItemVerifier {
     }
 
     public TagKey<Item> getTagKey() {
-        return TagKey.create(Registries.ITEM, ResourceLocation.parse(tag));
+        return TagKey.create(Registries.ITEM, Identifier.parse(tag));
     }
 
     @Override

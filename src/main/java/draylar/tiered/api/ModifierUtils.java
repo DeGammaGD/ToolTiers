@@ -2,12 +2,11 @@ package draylar.tiered.api;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import net.libz.util.SortList;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.Attribute;
@@ -19,6 +18,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.component.ItemAttributeModifiers;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -30,18 +30,41 @@ import elocindev.tierify.compat.ItemBordersCompat;
 
 public class ModifierUtils {
 
+    private static <T> void sortByWeight(List<Integer> weights, List<T> values) {
+        List<Integer> order = new ArrayList<>(weights.size());
+        for (int i = 0; i < weights.size(); i++) {
+            order.add(i);
+        }
+
+        order.sort(Comparator.comparingInt(weights::get));
+
+        List<Integer> sortedWeights = new ArrayList<>(weights.size());
+        List<T> sortedValues = new ArrayList<>(values.size());
+        for (int index : order) {
+            sortedWeights.add(weights.get(index));
+            sortedValues.add(values.get(index));
+        }
+
+        weights.clear();
+        weights.addAll(sortedWeights);
+        values.clear();
+        values.addAll(sortedValues);
+    }
+
     private static CompoundTag getCustomData(ItemStack stack) {
         CustomData component = stack.get(DataComponents.CUSTOM_DATA);
         CompoundTag result = component != null ? component.copyTag() : new CompoundTag();
         if (component != null && result.contains(Tierify.NBT_SUBTAG_KEY)) {
-            Tierify.LOGGER.info("Tier read from {} -> {}", BuiltInRegistries.ITEM.getKey(stack.getItem()), result.getCompound(Tierify.NBT_SUBTAG_KEY).getString(Tierify.NBT_SUBTAG_DATA_KEY));
+            String tierValue = result.getCompound(Tierify.NBT_SUBTAG_KEY).flatMap(t -> t.getString(Tierify.NBT_SUBTAG_DATA_KEY)).orElse("");
+            Tierify.LOGGER.info("Tier read from {} -> {}", BuiltInRegistries.ITEM.getKey(stack.getItem()), tierValue);
         }
         return result;
     }
 
     private static void setCustomData(ItemStack stack, CompoundTag compound) {
         if (compound.contains(Tierify.NBT_SUBTAG_KEY)) {
-            Tierify.LOGGER.info("Tier write to {} -> {}", BuiltInRegistries.ITEM.getKey(stack.getItem()), compound.getCompound(Tierify.NBT_SUBTAG_KEY).getString(Tierify.NBT_SUBTAG_DATA_KEY));
+            String tierValue = compound.getCompound(Tierify.NBT_SUBTAG_KEY).flatMap(t -> t.getString(Tierify.NBT_SUBTAG_DATA_KEY)).orElse("");
+            Tierify.LOGGER.info("Tier write to {} -> {}", BuiltInRegistries.ITEM.getKey(stack.getItem()), tierValue);
         } else {
             Tierify.LOGGER.info("Tier write cleared for {}", BuiltInRegistries.ITEM.getKey(stack.getItem()));
         }
@@ -57,7 +80,8 @@ public class ModifierUtils {
 
     public static boolean hasTierMarker(ItemStack stack) {
         CustomData component = stack.get(DataComponents.CUSTOM_DATA);
-        boolean hasMarker = component != null && component.copyTag().contains(Tierify.NBT_SUBTAG_MARKER_KEY) && component.copyTag().getBoolean(Tierify.NBT_SUBTAG_MARKER_KEY);
+        boolean hasMarker = component != null && component.copyTag().contains(Tierify.NBT_SUBTAG_MARKER_KEY)
+                && component.copyTag().getBoolean(Tierify.NBT_SUBTAG_MARKER_KEY).orElse(false);
         Tierify.LOGGER.info("Tier marker check for {} -> {}", BuiltInRegistries.ITEM.getKey(stack.getItem()), hasMarker);
         return hasMarker;
     }
@@ -70,27 +94,27 @@ public class ModifierUtils {
     }
 
     public static void logTierDebug(String source, ItemStack stack) {
-        ResourceLocation assignedTier = getAttributeID(stack);
+        Identifier assignedTier = getAttributeID(stack);
         Tierify.LOGGER.info("[TIER DEBUG] source: {} item: {} assigned tier: {}", source, BuiltInRegistries.ITEM.getKey(stack.getItem()), assignedTier);
     }
 
     /**
-     * Returns the ID of a random attribute that is valid for the given {@link Item} in {@link ResourceLocation} form.
+     * Returns the ID of a random attribute that is valid for the given {@link Item} in {@link Identifier} form.
      * <p>
      * If there is no valid attribute for the given {@link Item}, null is returned.
      *
      * @param item      {@link Item} to generate a random attribute for
-     * @return          id of random attribute for item in {@link ResourceLocation} form, or null if there are no valid options
+     * @return          id of random attribute for item in {@link Identifier} form, or null if there are no valid options
      */
     @Nullable
-    public static ResourceLocation getRandomAttributeIDFor(@Nullable Player playerEntity, Item item, boolean reforge) {
-        List<ResourceLocation> potentialAttributes = new ArrayList<>();
+    public static Identifier getRandomAttributeIDFor(@Nullable Player playerEntity, Item item, boolean reforge) {
+        List<Identifier> potentialAttributes = new ArrayList<>();
         List<Integer> attributeWeights = new ArrayList<>();
         // collect all valid attributes for the given item and their weights
 
         Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().forEach((id, attribute) -> {
             if (attribute.isValid(BuiltInRegistries.ITEM.getKey(item)) && (attribute.getWeight() > 0 || reforge)) {
-                potentialAttributes.add(ResourceLocation.parse(attribute.getID()));
+                potentialAttributes.add(Identifier.parse(attribute.getID()));
                 attributeWeights.add(reforge ? attribute.getWeight() + 1 : attribute.getWeight());
             }
         });
@@ -100,7 +124,7 @@ public class ModifierUtils {
         }
 
         if (reforge && attributeWeights.size() > 2) {
-            SortList.concurrentSort(attributeWeights, attributeWeights, potentialAttributes);
+            sortByWeight(attributeWeights, potentialAttributes);
             int maxWeight = attributeWeights.get(attributeWeights.size() - 1);
             for (int i = 0; i < attributeWeights.size(); i++) {
                 if (attributeWeights.get(i) > maxWeight / 2) {
@@ -124,7 +148,7 @@ public class ModifierUtils {
                 totalWeight += weight.intValue();
             }
             int randomChoice = new Random().nextInt(totalWeight);
-            SortList.concurrentSort(attributeWeights, attributeWeights, potentialAttributes);
+            sortByWeight(attributeWeights, potentialAttributes);
 
             for (int i = 0; i < attributeWeights.size(); i++) {
                 if (randomChoice < attributeWeights.get(i)) {
@@ -134,7 +158,7 @@ public class ModifierUtils {
                 randomChoice -= attributeWeights.get(i);
             }
             // If random choice didn't work
-            ResourceLocation fallback = potentialAttributes.get(new Random().nextInt(potentialAttributes.size()));
+            Identifier fallback = potentialAttributes.get(new Random().nextInt(potentialAttributes.size()));
             Tierify.LOGGER.info("Selected fallback tier {} for {} (reforge={})", fallback, BuiltInRegistries.ITEM.getKey(item), reforge);
             return fallback;
         } else
@@ -147,8 +171,8 @@ public class ModifierUtils {
      * @param quality       The quality substring to look for in the attribute identifiers (e.g., "mythic").
      * @return              List of attribute IDs that contain the specified quality substring.
      */
-    public static List<ResourceLocation> getAttributeIDsForQuality(String quality, Item item) {
-        List<ResourceLocation> matchingAttributes = new ArrayList<>();
+    public static List<Identifier> getAttributeIDsForQuality(String quality, Item item) {
+        List<Identifier> matchingAttributes = new ArrayList<>();
         
         // iterate over all attributes and add matching ones to the list
         Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().forEach((id, attribute) -> {
@@ -169,8 +193,8 @@ public class ModifierUtils {
      * 
      * @return A random attribute ID that contains one of the specified quality substrings, considering attribute weights, or null if none are found.
      */
-    public static ResourceLocation getRandomAttributeForQuality(List<String> qualities, Item item, boolean reforge) {
-        List<ResourceLocation> matchingAttributes = new ArrayList<>();
+    public static Identifier getRandomAttributeForQuality(List<String> qualities, Item item, boolean reforge) {
+        List<Identifier> matchingAttributes = new ArrayList<>();
         List<Integer> matchingAttributeWeights = new ArrayList<>();
 
         // Collect all matching attributes for the given qualities and their weights
@@ -202,11 +226,11 @@ public class ModifierUtils {
         return null;
     }
 
-    public static void setItemStackAttribute(ResourceLocation potentialAttributeID, ItemStack stack) {
+    public static void setItemStackAttribute(Identifier potentialAttributeID, ItemStack stack) {
         if (potentialAttributeID != null) {
             Tierify.LOGGER.info("Assigning tier {} to {}", potentialAttributeID, BuiltInRegistries.ITEM.getKey(stack.getItem()));
             CompoundTag root = getCustomData(stack);
-            PotentialAttribute assignedAttribute = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(ResourceLocation.parse(potentialAttributeID.toString()));
+            PotentialAttribute assignedAttribute = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(potentialAttributeID.toString()));
             if (assignedAttribute == null) {
                 Tierify.LOGGER.warn("Tier {} has no attribute template while assigning to {}", potentialAttributeID, BuiltInRegistries.ITEM.getKey(stack.getItem()));
                 return;
@@ -280,7 +304,7 @@ public class ModifierUtils {
             }
 
             if (qualities != null) {
-                ResourceLocation possibleAttribute = getRandomAttributeForQuality(qualities, stack.getItem(), reforge);
+                Identifier possibleAttribute = getRandomAttributeForQuality(qualities, stack.getItem(), reforge);
                 if (possibleAttribute != null) {
                     Tierify.LOGGER.info("Reforge material {} produced tier {} for {}", BuiltInRegistries.ITEM.getKey(reforgeMaterial.getItem()), possibleAttribute, BuiltInRegistries.ITEM.getKey(stack.getItem()));
                     setItemStackAttribute(possibleAttribute, stack);
@@ -295,7 +319,7 @@ public class ModifierUtils {
     public static void setItemStackAttribute(@Nullable Player playerEntity, ItemStack stack, boolean reforge) {
         CompoundTag customData = getCustomData(stack);
         boolean alreadyTiered = customData.contains(Tierify.NBT_SUBTAG_KEY);
-        boolean hasMarker = customData.contains(Tierify.NBT_SUBTAG_MARKER_KEY) && customData.getBoolean(Tierify.NBT_SUBTAG_MARKER_KEY);
+        boolean hasMarker = customData.contains(Tierify.NBT_SUBTAG_MARKER_KEY) && customData.getBoolean(Tierify.NBT_SUBTAG_MARKER_KEY).orElse(false);
         if (alreadyTiered || hasMarker) {
             Tierify.LOGGER.info("Skipping tier generation for {} (alreadyTiered={}, marker={}, reforge={})", BuiltInRegistries.ITEM.getKey(stack.getItem()), alreadyTiered, hasMarker, reforge);
             return;
@@ -309,8 +333,8 @@ public class ModifierUtils {
         CompoundTag root = getCustomData(itemStack);
         if (root.contains(Tierify.NBT_SUBTAG_KEY)) {
             Tierify.LOGGER.info("Removing tier from {}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()));
-            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY);
-            ResourceLocation tier = ResourceLocation.parse(tiered.getString(Tierify.NBT_SUBTAG_DATA_KEY));
+            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY).orElse(new CompoundTag());
+            Identifier tier = Identifier.parse(tiered.getString(Tierify.NBT_SUBTAG_DATA_KEY).orElse(""));
             if (Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier) != null) {
                 HashMap<String, Object> nbtMap = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier).getNbtValues();
                 List<String> nbtKeys = new ArrayList<>();
@@ -342,10 +366,11 @@ public class ModifierUtils {
     }
 
     @Nullable
-    public static ResourceLocation getAttributeID(ItemStack itemStack) {
+    public static Identifier getAttributeID(ItemStack itemStack) {
         CompoundTag root = getCustomData(itemStack);
         if (root.contains(Tierify.NBT_SUBTAG_KEY)) {
-            ResourceLocation tierId = ResourceLocation.parse(root.getCompound(Tierify.NBT_SUBTAG_KEY).getString(Tierify.NBT_SUBTAG_DATA_KEY));
+            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY).orElse(new CompoundTag());
+            Identifier tierId = Identifier.parse(tiered.getString(Tierify.NBT_SUBTAG_DATA_KEY).orElse(""));
             Tierify.LOGGER.info("Resolved tier id for {} -> {}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), tierId);
             return tierId;
         }
@@ -355,7 +380,7 @@ public class ModifierUtils {
 
     public static Multimap<Holder<Attribute>, AttributeModifier> buildTierAttributeMap(ItemStack itemStack, EquipmentSlot slot) {
         Multimap<Holder<Attribute>, AttributeModifier> modifiers = HashMultimap.create();
-        ResourceLocation tierId = getAttributeID(itemStack);
+        Identifier tierId = getAttributeID(itemStack);
         if (tierId == null) {
             Tierify.LOGGER.info("No tier data found while building modifiers for {} in {}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), slot.getName());
             return modifiers;
@@ -400,7 +425,7 @@ public class ModifierUtils {
     }
 
     public static void rebuildAttributeModifiersComponent(ItemStack itemStack) {
-        ItemAttributeModifiers baseComponent = new ItemStack(itemStack.getItemHolder(), itemStack.getCount())
+        ItemAttributeModifiers baseComponent = new ItemStack(itemStack.getItem().builtInRegistryHolder(), itemStack.getCount())
                 .getOrDefault(DataComponents.ATTRIBUTE_MODIFIERS, ItemAttributeModifiers.EMPTY);
 
         ItemAttributeModifiers.Builder builder = ItemAttributeModifiers.builder();
@@ -418,7 +443,7 @@ public class ModifierUtils {
             }
         }
 
-        ItemAttributeModifiers rebuilt = builder.build().withTooltip(baseComponent.showInTooltip());
+        ItemAttributeModifiers rebuilt = builder.build();
         itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, rebuilt);
         Tierify.LOGGER.info("Rebuilt attribute modifiers for {} -> {}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), rebuilt.modifiers());
     }

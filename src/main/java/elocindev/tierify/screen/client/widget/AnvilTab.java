@@ -3,18 +3,15 @@ package elocindev.tierify.screen.client.widget;
 import org.jetbrains.annotations.Nullable;
 
 import elocindev.tierify.network.TieredClientPacket;
-import net.libz.api.InventoryTab;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
-public class AnvilTab extends InventoryTab {
+public class AnvilTab {
 
-    public AnvilTab(Component title, @Nullable ResourceLocation texture, int preferedPos, Class<?>... screenClasses) {
-        super(title, texture, preferedPos, screenClasses);
+    public AnvilTab(Component title, @Nullable Identifier texture, int preferedPos, Class<?>... screenClasses) {
     }
 
-    @Override
     public void onClick(Minecraft client) {
         TieredClientPacket.writeC2SScreenPacket((int) client.mouseHandler.xpos(), (int) client.mouseHandler.ypos(), false);
     }

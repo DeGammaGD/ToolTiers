@@ -3,7 +3,7 @@ package elocindev.tierify.mixin;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import net.minecraft.core.Holder;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -27,7 +27,7 @@ public class ArmorItemMixin {
     @Final
     protected ArmorItem.Type type;
 
-    private static final ResourceLocation KNOCKBACK_RESISTANCE_ID = ResourceLocation.fromNamespaceAndPath("tiered", "armor_knockback_resistance");
+    private static final Identifier KNOCKBACK_RESISTANCE_ID = Identifier.fromNamespaceAndPath("tiered", "armor_knockback_resistance");
 
     @Inject(method = "getAttributeModifiers", at = @At("RETURN"), cancellable = true)
     private void getAttributeModifiersMixin(CallbackInfoReturnable<ItemAttributeModifiers> info) {

@@ -1,0 +1,5 @@
+Add-Type -AssemblyName System.IO.Compression.FileSystem
+$jar = ".gradle-user/caches/fabric-loom/26.1.2/minecraft-merged.jar"
+$zip = [System.IO.Compression.ZipFile]::OpenRead((Resolve-Path $jar))
+$zip.Entries | ForEach-Object { $_.FullName } | Where-Object { $_ -like "*world/entity*" -and ($_ -like "*Spawn*Type*.class" -or $_ -like "*SpawnReason*.class") } | Sort-Object -Unique
+$zip.Dispose()

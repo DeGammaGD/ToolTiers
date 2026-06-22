@@ -7,7 +7,7 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.world.item.Item;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ import elocindev.tierify.screen.client.ReforgeScreen;
 public class TierifyClient implements ClientModInitializer {
 
     // map for storing attributes before logging into a server
-    public static final Map<ResourceLocation, PotentialAttribute> CACHED_ATTRIBUTES = new HashMap<>();
+    public static final Map<Identifier, PotentialAttribute> CACHED_ATTRIBUTES = new HashMap<>();
 
     public static final List<BorderTemplate> BORDER_TEMPLATES = new ArrayList<BorderTemplate>();
     
@@ -57,8 +57,8 @@ public class TierifyClient implements ClientModInitializer {
                 Tierify.REFORGE_DATA_LOADER.clearReforgeBaseItems();
                 payload.reforgeItems().forEach((targetItem, baseItemIds) -> {
                     List<Item> items = new ArrayList<>();
-                    for (ResourceLocation id : baseItemIds) {
-                        items.add(BuiltInRegistries.ITEM.get(id));
+                    for (Identifier id : baseItemIds) {
+                        BuiltInRegistries.ITEM.get(id).ifPresent(holder -> items.add(holder.value()));
                     }
                     Tierify.REFORGE_DATA_LOADER.putReforgeBaseItems(targetItem, items);
                 });

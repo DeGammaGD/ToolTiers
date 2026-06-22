@@ -3,17 +3,12 @@ package elocindev.tierify.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import elocindev.necronomicon.api.config.v1.NecConfigAPI;
-import elocindev.necronomicon.config.Comment;
-import elocindev.necronomicon.config.NecConfig;
+import me.shedaniel.autoconfig.ConfigData;
+import me.shedaniel.autoconfig.annotation.Config;
+import me.shedaniel.cloth.clothconfig.shadowed.blue.endless.jankson.Comment;
 
-public class CommonConfig {
-    @NecConfig
-    public static CommonConfig INSTANCE;
-
-    public static String getFile() {
-        return NecConfigAPI.getFile("tierify-common.json5");
-    }
+@Config(name = "tierify-common")
+public class CommonConfig implements ConfigData {
 
     @Comment("Items in for example mineshaft chests get modifiers")
     public boolean lootContainerModifier = true;
@@ -28,8 +23,7 @@ public class CommonConfig {
     @Comment("Modify the biggest weights by this modifier per luck")
     public float luckReforgeModifier = 0.02F;
 
-    @Comment("Tier 1 of Reforging (Limestone)")
-    @Comment("Qualities here will be able to be reforged onto items while using the Tier 1 reforge material, Limestone by default. Can be changed via the item tag tiered:reforge_tier_1")
+    @Comment("Tier 1 of Reforging (Limestone). Qualities here will be able to be reforged onto items while using the Tier 1 reforge material, Limestone by default. Can be changed via the item tag tiered:reforge_tier_1")
     public ArrayList<String> tier_1_qualities = new ArrayList<>(
         List.of(
             "Common",
@@ -38,8 +32,7 @@ public class CommonConfig {
         )
     );
 
-    @Comment("Tier 2 of Reforging (Pyrite)")
-    @Comment("Qualities here will be able to be reforged onto items while using the Tier 2 reforge material, Pyrite by default. Can be changed via the item tag tiered:reforge_tier_2")
+    @Comment("Tier 2 of Reforging (Pyrite). Qualities here will be able to be reforged onto items while using the Tier 2 reforge material, Pyrite by default. Can be changed via the item tag tiered:reforge_tier_2")
     public ArrayList<String> tier_2_qualities = new ArrayList<>(
         List.of(
             "Uncommon",
@@ -49,8 +42,7 @@ public class CommonConfig {
         )
     );
 
-    @Comment("Tier 3 of Reforging (Galena)")
-    @Comment("Qualities here will be able to be reforged onto items while using the Tier 3 reforge material, Galena by default. Can be changed via the item tag tiered:reforge_tier_3")
+    @Comment("Tier 3 of Reforging (Galena). Qualities here will be able to be reforged onto items while using the Tier 3 reforge material, Galena by default. Can be changed via the item tag tiered:reforge_tier_3")
     public ArrayList<String> tier_3_qualities = new ArrayList<>(
         List.of(
             "Rare",

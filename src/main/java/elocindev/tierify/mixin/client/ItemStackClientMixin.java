@@ -12,7 +12,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -32,7 +32,11 @@ public abstract class ItemStackClientMixin {
         CustomData component = ((ItemStack) (Object) this).get(DataComponents.CUSTOM_DATA);
         CompoundTag root = component != null ? component.copyTag() : new CompoundTag();
         if (component != null && !root.contains("display") && root.contains(Tierify.NBT_SUBTAG_KEY)) {
-            ResourceLocation tier = ResourceLocation.parse(root.getCompound(Tierify.NBT_SUBTAG_KEY).getString(Tierify.NBT_SUBTAG_DATA_KEY));
+            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY).orElse(null);
+            if (tiered == null) {
+                return;
+            }
+            Identifier tier = Identifier.parse(tiered.getString(Tierify.NBT_SUBTAG_DATA_KEY).orElse(""));
             PotentialAttribute potentialAttribute = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
 
             if (potentialAttribute != null) {
@@ -57,7 +61,11 @@ public abstract class ItemStackClientMixin {
         CompoundTag root = component != null ? component.copyTag() : new CompoundTag();
 
         if (component != null && root.contains(Tierify.NBT_SUBTAG_KEY)) {
-            ResourceLocation tier = ResourceLocation.parse(root.getCompound(Tierify.NBT_SUBTAG_KEY).getString(Tierify.NBT_SUBTAG_DATA_KEY));
+            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY).orElse(null);
+            if (tiered == null) {
+                return;
+            }
+            Identifier tier = Identifier.parse(tiered.getString(Tierify.NBT_SUBTAG_DATA_KEY).orElse(""));
             PotentialAttribute potentialAttribute = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
 
             if (potentialAttribute != null) {

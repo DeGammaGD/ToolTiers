@@ -17,8 +17,9 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
@@ -29,7 +30,7 @@ public class CommandInit {
     public static void init() {
         CommandRegistrationCallback.EVENT.register((dispatcher, dedicated, environment) -> {
             dispatcher.register((Commands.literal("tiered").requires((serverCommandSource) -> {
-                return serverCommandSource.hasPermission(3);
+                return serverCommandSource.permissions().hasPermission(Permissions.COMMANDS_ADMIN);
             })).then(Commands.literal("tier").then(Commands.argument("targets", EntityArgument.players()).then(Commands.literal("common").executes((commandContext) -> {
                 return executeCommand(commandContext.getSource(), EntityArgument.getPlayers(commandContext, "targets"), 0);
             })).then(Commands.literal("uncommon").executes((commandContext) -> {
@@ -71,10 +72,10 @@ public class CommandInit {
                     source.sendSuccess(() -> Component.translatable("commands.tiered.untier_failed", itemStack.getHoverName().getString(), serverPlayerEntity.getDisplayName()), true);
                 }
             } else {
-                ArrayList<ResourceLocation> potentialAttributes = new ArrayList<ResourceLocation>();
+                ArrayList<Identifier> potentialAttributes = new ArrayList<Identifier>();
                 Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().forEach((id, attribute) -> {
                     if (attribute.isValid(BuiltInRegistries.ITEM.getKey(itemStack.getItem()))) {
-                        potentialAttributes.add(ResourceLocation.parse(attribute.getID()));
+                        potentialAttributes.add(Identifier.parse(attribute.getID()));
                     }
                 });
                 if (potentialAttributes.size() <= 0) {
@@ -82,7 +83,7 @@ public class CommandInit {
                     continue;
                 } else {
 
-                    List<ResourceLocation> potentialTier = new ArrayList<ResourceLocation>();
+                    List<Identifier> potentialTier = new ArrayList<Identifier>();
                     for (int i = 0; i < potentialAttributes.size(); i++) {
                         if (potentialAttributes.get(i).getPath().contains(TIER_LIST.get(tier))) {
                             if (TIER_LIST.get(tier).equals("common") && potentialAttributes.get(i).getPath().contains("uncommon")) {
@@ -99,18 +100,20 @@ public class CommandInit {
 
                         ModifierUtils.removeItemStackAttribute(itemStack);
 
-                        ResourceLocation attribute = potentialTier.get(serverPlayerEntity.level().getRandom().nextInt(potentialTier.size()));
+                        Identifier attribute = potentialTier.get(serverPlayerEntity.level().getRandom().nextInt(potentialTier.size()));
                         if (attribute != null) {
                             CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
                             CompoundTag root = customData != null ? customData.copyTag() : new CompoundTag();
                             root.put(Tierify.NBT_SUBTAG_KEY, new CompoundTag());
-                            root.getCompound(Tierify.NBT_SUBTAG_KEY).putString(Tierify.NBT_SUBTAG_DATA_KEY, attribute.toString());
+                            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY).orElse(new CompoundTag());
+                            tiered.putString(Tierify.NBT_SUBTAG_DATA_KEY, attribute.toString());
+                            root.put(Tierify.NBT_SUBTAG_KEY, tiered);
                             itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(root));
 
-                            HashMap<String, Object> nbtMap = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(ResourceLocation.parse(attribute.toString())).getNbtValues();
+                            HashMap<String, Object> nbtMap = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(attribute.toString())).getNbtValues();
 
                             // add durability nbt
-                            List<AttributeTemplate> attributeList = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(ResourceLocation.parse(attribute.toString())).getAttributes();
+                            List<AttributeTemplate> attributeList = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(attribute.toString())).getAttributes();
                             for (int i = 0; i < attributeList.size(); i++)
                                 if (attributeList.get(i).getAttributeTypeID().equals("tiered:generic.durable")) {
                                     if (nbtMap == null)

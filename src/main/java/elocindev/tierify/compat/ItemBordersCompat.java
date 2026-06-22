@@ -4,7 +4,7 @@ import elocindev.tierify.Tierify;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
 
@@ -13,7 +13,7 @@ public class ItemBordersCompat {
     public static void addBorder(ItemStack stack, String color) {
         CustomData component = stack.get(DataComponents.CUSTOM_DATA);
         CompoundTag root = component != null ? component.copyTag() : new CompoundTag();
-        CompoundTag nbt = root.contains("itemborders_colors") ? root.getCompound("itemborders_colors") : new CompoundTag();
+        CompoundTag nbt = root.contains("itemborders_colors") ? root.getCompound("itemborders_colors").orElse(new CompoundTag()) : new CompoundTag();
         nbt.putString("top", color);
         root.put("itemborders_colors", nbt);
         stack.set(DataComponents.CUSTOM_DATA, CustomData.of(root));
@@ -22,7 +22,7 @@ public class ItemBordersCompat {
     public static void addBorder(ItemStack stack, String topColor, String bottomColor) {
         CustomData component = stack.get(DataComponents.CUSTOM_DATA);
         CompoundTag root = component != null ? component.copyTag() : new CompoundTag();
-        CompoundTag nbt = root.contains("itemborders_colors") ? root.getCompound("itemborders_colors") : new CompoundTag();
+        CompoundTag nbt = root.contains("itemborders_colors") ? root.getCompound("itemborders_colors").orElse(new CompoundTag()) : new CompoundTag();
         nbt.putString("top", topColor);
         nbt.putString("bottom", bottomColor);
         root.put("itemborders_colors", nbt);
@@ -32,7 +32,7 @@ public class ItemBordersCompat {
     /*
      * Might return null if the identifier is not valid
      */
-    public static String getColorForIdentifier(ResourceLocation identifier) {
+    public static String getColorForIdentifier(Identifier identifier) {
         String tier = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(identifier).getID();
         if (tier == null) return null;
         
@@ -51,6 +51,6 @@ public class ItemBordersCompat {
                 return "0xb53f3f";
         }
 
-        return String.valueOf(Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(ResourceLocation.parse(identifier.toString())).getStyle().getColor().getValue());
+        return String.valueOf(Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(identifier.toString())).getStyle().getColor().getValue());
     }
 }
