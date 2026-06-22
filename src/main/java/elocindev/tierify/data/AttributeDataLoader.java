@@ -9,6 +9,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonArray;
 
 import draylar.tiered.api.PotentialAttribute;
 import elocindev.tierify.gson.EntityAttributeModifierDeserializer;
@@ -85,6 +86,8 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
 
     private static final String PARSING_ERROR_MESSAGE = "Parsing error loading recipe {}";
     private static final Logger LOGGER = LogManager.getLogger();
+    private static final String ITEM_ATTRIBUTES_ROOT = "item_attributes";
+    private static final String MODIFIER_POOLS_ROOT = "modifier_pools";
 
     private Map<Identifier, PotentialAttribute> itemAttributes = new HashMap<>();
 
@@ -94,16 +97,18 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
     @Override
     public void onResourceManagerReload(ResourceManager resourceManager) {
         Map<Identifier, JsonElement> loader = Maps.newHashMap();
-        resourceManager.listResources("item_attributes", id -> id.getPath().endsWith(".json")).forEach((id, resourceRef) -> {
+        resourceManager.listResources(ITEM_ATTRIBUTES_ROOT, id -> id.getPath().endsWith(".json")).forEach((id, resourceRef) -> {
             try (InputStream stream = resourceRef.open(); InputStreamReader reader = new InputStreamReader(stream)) {
                 JsonElement element = JsonParser.parseReader(reader);
                 String path = id.getPath();
-                String trimmed = path.substring("item_attributes/".length(), path.length() - ".json".length());
+                String trimmed = path.substring((ITEM_ATTRIBUTES_ROOT + "/").length(), path.length() - ".json".length());
                 loader.put(Identifier.fromNamespaceAndPath(id.getNamespace(), trimmed), element);
             } catch (Exception exception) {
                 LOGGER.error(PARSING_ERROR_MESSAGE, id, exception);
             }
         });
+
+        Map<Identifier, JsonArray> modifierPools = loadModifierPools(resourceManager);
 
         LOGGER.info("Loading {} attribute definitions", loader.size());
         Map<Identifier, PotentialAttribute> readItemAttributes = Maps.newHashMap();
@@ -112,7 +117,8 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
             Identifier identifier = entry.getKey();
 
             try {
-                PotentialAttribute itemAttribute = GSON.fromJson(entry.getValue(), PotentialAttribute.class);
+                JsonObject resolved = resolveModifierPool(entry.getValue(), identifier, modifierPools);
+                PotentialAttribute itemAttribute = GSON.fromJson(resolved, PotentialAttribute.class);
                 readItemAttributes.put(Identifier.parse(itemAttribute.getID()), itemAttribute);
             } catch (IllegalArgumentException | JsonParseException exception) {
                 LOGGER.error(PARSING_ERROR_MESSAGE, identifier, exception);
@@ -130,6 +136,65 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
     @Override
     public Identifier getFabricId() {
         return Identifier.fromNamespaceAndPath("tiered", "item_attributes");
+    }
+
+    private static Map<Identifier, JsonArray> loadModifierPools(ResourceManager resourceManager) {
+        Map<Identifier, JsonArray> pools = Maps.newHashMap();
+
+        resourceManager.listResources(MODIFIER_POOLS_ROOT, id -> id.getPath().endsWith(".json")).forEach((id, resourceRef) -> {
+            try (InputStream stream = resourceRef.open(); InputStreamReader reader = new InputStreamReader(stream)) {
+                JsonElement element = JsonParser.parseReader(reader);
+                String path = id.getPath();
+                String trimmed = path.substring((MODIFIER_POOLS_ROOT + "/").length(), path.length() - ".json".length());
+                Identifier poolId = Identifier.fromNamespaceAndPath(id.getNamespace(), trimmed);
+
+                JsonArray poolAttributes;
+                if (element.isJsonArray()) {
+                    poolAttributes = element.getAsJsonArray();
+                } else if (element.isJsonObject() && element.getAsJsonObject().has("attributes")
+                        && element.getAsJsonObject().get("attributes").isJsonArray()) {
+                    poolAttributes = element.getAsJsonObject().getAsJsonArray("attributes");
+                } else {
+                    LOGGER.error("Invalid modifier pool format for {}", poolId);
+                    return;
+                }
+
+                pools.put(poolId, poolAttributes);
+            } catch (Exception exception) {
+                LOGGER.error("Failed loading modifier pool {}", id, exception);
+            }
+        });
+
+        LOGGER.info("Loaded {} modifier pools", pools.size());
+        return pools;
+    }
+
+    private static JsonObject resolveModifierPool(JsonElement source,
+                                                  Identifier attributeId,
+                                                  Map<Identifier, JsonArray> modifierPools) {
+        JsonObject object = source.getAsJsonObject().deepCopy();
+        if (!object.has("modifier_pool")) {
+            return object;
+        }
+
+        String rawPoolId = object.get("modifier_pool").getAsString();
+        Identifier poolId = parsePoolIdentifier(rawPoolId, attributeId);
+        JsonArray poolAttributes = modifierPools.get(poolId);
+
+        if (poolAttributes == null) {
+            throw new JsonParseException("Unknown modifier_pool '" + rawPoolId + "' in attribute " + attributeId);
+        }
+
+        object.add("attributes", poolAttributes.deepCopy());
+        object.remove("modifier_pool");
+        return object;
+    }
+
+    private static Identifier parsePoolIdentifier(String rawPoolId, Identifier attributeId) {
+        if (rawPoolId.contains(":")) {
+            return Identifier.parse(rawPoolId);
+        }
+        return Identifier.fromNamespaceAndPath(attributeId.getNamespace(), rawPoolId);
     }
 
 }

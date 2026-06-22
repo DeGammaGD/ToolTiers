@@ -403,7 +403,11 @@ public class ModifierUtils {
         clearTierNbtKeys(root, tierId);
         applyTierNbtValues(root, assignedAttribute, tierId);
         setCustomData(stack, root);
-        return rebuildAttributeModifiersComponent(stack);
+        int appliedCount = rebuildAttributeModifiersComponent(stack);
+        if (appliedCount == 0) {
+            Tierify.LOGGER.warn("Tier {} generated zero modifiers for {}; item will remain tiered but has no generated tier attributes", tierId, BuiltInRegistries.ITEM.getKey(stack.getItem()));
+        }
+        return appliedCount;
     }
 
 
@@ -411,9 +415,28 @@ public class ModifierUtils {
         CompoundTag customData = getCustomData(stack);
         boolean alreadyTiered = customData.contains(Tierify.NBT_SUBTAG_KEY);
         boolean hasMarker = customData.contains(Tierify.NBT_SUBTAG_MARKER_KEY) && customData.getBoolean(Tierify.NBT_SUBTAG_MARKER_KEY).orElse(false);
-        if (alreadyTiered || hasMarker) {
-            Tierify.LOGGER.info("Skipping tier generation for {} (alreadyTiered={}, marker={}, reforge={})", BuiltInRegistries.ITEM.getKey(stack.getItem()), alreadyTiered, hasMarker, reforge);
-            return;
+
+        if (alreadyTiered) {
+            Identifier existingTier = getAttributeID(stack);
+            int generatedModifierCount = countGeneratedTierModifiers(stack);
+            if (existingTier != null && generatedModifierCount > 0) {
+                Tierify.LOGGER.info("Skipping tier generation for {} (alreadyTiered=true, marker={}, reforge={}, generatedModifierCount={})", BuiltInRegistries.ITEM.getKey(stack.getItem()), hasMarker, reforge, generatedModifierCount);
+                return;
+            }
+
+            Tierify.LOGGER.warn("Detected broken tiered item for {} (tier={}, generatedModifierCount={}); attempting repair before regeneration", BuiltInRegistries.ITEM.getKey(stack.getItem()), existingTier, generatedModifierCount);
+            int repairedCount = applyTierAttributes(stack);
+            if (repairedCount > 0) {
+                Tierify.LOGGER.info("Repaired tier attributes for {} (tier={}, generatedModifierCount={})", BuiltInRegistries.ITEM.getKey(stack.getItem()), existingTier, repairedCount);
+                return;
+            }
+
+            Tierify.LOGGER.warn("Repair failed for {} (tier={}); clearing tier data and regenerating", BuiltInRegistries.ITEM.getKey(stack.getItem()), existingTier);
+            removeItemStackAttribute(stack);
+        } else if (hasMarker) {
+            Tierify.LOGGER.warn("Found tier marker without tier data on {}; clearing marker and regenerating", BuiltInRegistries.ITEM.getKey(stack.getItem()));
+            customData.remove(Tierify.NBT_SUBTAG_MARKER_KEY);
+            setCustomData(stack, customData);
         }
 
         Tierify.LOGGER.info("Generating tier for {} (reforge={})", BuiltInRegistries.ITEM.getKey(stack.getItem()), reforge);
@@ -559,6 +582,21 @@ public class ModifierUtils {
         itemStack.set(DataComponents.ATTRIBUTE_MODIFIERS, rebuilt);
         Tierify.LOGGER.info("Rebuilt attribute modifiers for {} -> {} (appliedModifierCount={})", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), rebuilt.modifiers(), appliedModifierCount);
         return appliedModifierCount;
+    }
+
+    private static int countGeneratedTierModifiers(ItemStack itemStack) {
+        if (itemStack == null || itemStack.isEmpty()) {
+            return 0;
+        }
+
+        int generatedModifierCount = 0;
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (!Tierify.isPreferredEquipmentSlot(itemStack, slot)) {
+                continue;
+            }
+            generatedModifierCount += buildTierAttributeMap(itemStack, slot).size();
+        }
+        return generatedModifierCount;
     }
 
 }

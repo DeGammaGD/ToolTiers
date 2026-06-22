@@ -2,11 +2,9 @@ package elocindev.tierify.command;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-import draylar.tiered.api.AttributeTemplate;
 import draylar.tiered.api.ModifierUtils;
 import elocindev.tierify.Tierify;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -15,7 +13,6 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
@@ -102,48 +99,10 @@ public class CommandInit {
 
                         Identifier attribute = potentialTier.get(serverPlayerEntity.level().getRandom().nextInt(potentialTier.size()));
                         if (attribute != null) {
-                            CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
-                            CompoundTag root = customData != null ? customData.copyTag() : new CompoundTag();
-                            root.put(Tierify.NBT_SUBTAG_KEY, new CompoundTag());
-                            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY).orElse(new CompoundTag());
-                            tiered.putString(Tierify.NBT_SUBTAG_DATA_KEY, attribute.toString());
-                            root.put(Tierify.NBT_SUBTAG_KEY, tiered);
-                            itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(root));
-
-                            HashMap<String, Object> nbtMap = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(attribute.toString())).getNbtValues();
-
-                            // add durability nbt
-                            List<AttributeTemplate> attributeList = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(attribute.toString())).getAttributes();
-                            for (int i = 0; i < attributeList.size(); i++)
-                                if (attributeList.get(i).getAttributeTypeID().equals("tiered:generic.durable")) {
-                                    if (nbtMap == null)
-                                        nbtMap = new HashMap<String, Object>();
-                                    nbtMap.put("durable", (double) Math.round(attributeList.get(i).getEntityAttributeModifier().amount() * 100.0) / 100.0);
-                                    break;
-                                }
-                            // add nbtMap
-                            if (nbtMap != null) {
-                                CustomData data = itemStack.get(DataComponents.CUSTOM_DATA);
-                                CompoundTag nbtCompound = data != null ? data.copyTag() : new CompoundTag();
-                                for (HashMap.Entry<String, Object> entry : nbtMap.entrySet()) {
-                                    String key = entry.getKey();
-                                    Object value = entry.getValue();
-
-                                    // json list will get read as ArrayList class
-                                    // json map will get read as linkedtreemap
-                                    // json integer is read by gson -> always double
-                                    if (value instanceof String)
-                                        nbtCompound.putString(key, (String) value);
-                                    else if (value instanceof Boolean)
-                                        nbtCompound.putBoolean(key, (boolean) value);
-                                    else if (value instanceof Double) {
-                                        if ((double) value % 1.0 < 0.0001D)
-                                            nbtCompound.putInt(key, (int) Math.round((double) value));
-                                        else
-                                            nbtCompound.putDouble(key, Math.round((double) value * 100.0) / 100.0);
-                                    }
-                                }
-                                itemStack.set(DataComponents.CUSTOM_DATA, CustomData.of(nbtCompound));
+                            ModifierUtils.setTier(itemStack, attribute);
+                            int appliedCount = ModifierUtils.applyTierAttributes(itemStack);
+                            if (appliedCount == 0) {
+                                Tierify.LOGGER.warn("Command tier assignment generated zero modifiers for item={} tier={}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), attribute);
                             }
                             source.sendSuccess(() -> Component.translatable("commands.tiered.tier", itemStack.getHoverName().getString(), serverPlayerEntity.getDisplayName()), true);
                         }
