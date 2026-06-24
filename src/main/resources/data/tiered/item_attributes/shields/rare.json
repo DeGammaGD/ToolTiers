@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:shields/rare",
+    "verifiers":  [
+                      {
+                          "tag":  "c:shields"
+                      }
+                  ],
+    "weight":  60,
+    "style":  {
+                  "color":  "blue"
+              },
+    "modifier_pool":  "tiered:shields/rare"
+}
+

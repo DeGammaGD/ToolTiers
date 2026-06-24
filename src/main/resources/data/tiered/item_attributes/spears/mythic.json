@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:spears/mythic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:spears"
+                      }
+                  ],
+    "weight":  0,
+    "style":  {
+                  "color":  "red"
+              },
+    "modifier_pool":  "tiered:spears/mythic"
+}
+

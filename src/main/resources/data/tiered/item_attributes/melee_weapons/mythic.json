@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:melee_weapons/mythic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:swords"
+                      }
+                  ],
+    "weight":  0,
+    "style":  {
+                  "color":  "red"
+              },
+    "modifier_pool":  "tiered:melee_weapons/mythic"
+}
+

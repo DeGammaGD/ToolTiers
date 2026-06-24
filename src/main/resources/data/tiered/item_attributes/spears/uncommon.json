@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:spears/uncommon",
+    "verifiers":  [
+                      {
+                          "tag":  "c:spears"
+                      }
+                  ],
+    "weight":  140,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:spears/uncommon"
+}
+

@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:staves_and_wands/epic",
+    "verifiers":  [
+                      {
+                          "tag":  "wizards:staves"
+                      },
+                      {
+                          "tag":  "wizards:wands"
+                      },
+                      {
+                          "tag":  "paladins:staves"
+                      },
+                      {
+                          "tag":  "paladins:wands"
+                      }
+                  ],
+    "weight":  16,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:staves_and_wands/epic"
+}
+

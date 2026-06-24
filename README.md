@@ -12,27 +12,27 @@ The original mod, **Tiered**, is inspired by [Quality Tools](https://www.cursefo
 
 ### Currently Functional
 
-- **Random Item Tiers**: Tools, armor, and weapons receive random quality tiers
-- **Tier Names**: Display names for tiers (Common, Uncommon, Rare, Epic, Legendary, Mythic)
-- **Attribute Modifiers**: Apply attributes like damage, speed, armor, crit chance, and more
-- **Custom Tooltip Styling**: Tier-specific tooltip borders and colors
-- **Weapon Support**:
-  - Swords
-  - Axes
-  - Bows
-  - Crossbows
-  - Spears (Tridents)
-  - Maces
-  - Shields
-  - Utility tools
-- **Armor and Tools**: Full support for all vanilla armor and tool categories
-- **Data-Driven Customization**: JSON-based item attributes and tier definitions
+- **Fabric Port for Minecraft 26.1.2**: Active Fabric-based continuation of Tiered/TieredZ concepts
+- **Tier Generation System**: Weighted tier selection using verifier rules from datapack definitions
+- **Tiered Item Sources**: Tiered items are produced through normal gameplay flows including crafting, loot, and world-driven acquisition paths
+- **Multiple Attribute System**: Tiered items can roll multiple generated attributes from selected pools
+- **Category-Based Modifier Pools**: Attribute options are defined per category and tier through datapack pools
+- **Custom Tier Attributes**: Supports vanilla and custom attribute entries via JSON
+- **Vanilla Anvil Reforging Behavior**:
+  - Combining compatible item types is supported
+  - Same item type with the same tier can upgrade to the next tier
+  - Different tier combinations follow current higher-tier result rules
+  - Vanilla enchantment behavior is preserved
+- **Legacy Item Compatibility**: Older tier ids are mapped through compatibility aliases so existing items remain valid
+- **Tooltip Styling**: Tier tooltip borders and colors remain fully supported
 
 ### In Development
 
-- **Reforging System**: Under development, currently unavailable
-- **Additional Item Categories**: Expanding support for more items
-- **Enhanced Customization**: Additional configuration options
+- **Expanded Attribute System**: Ongoing extension of attribute pools and specialization by category
+- **Additional Attributes and Balancing**: Continuous tuning of weights, ranges, and tier outcomes
+- **More Item Category Support**: Broader coverage for additional modded and vanilla-adjacent categories
+- **Gameplay/Balance Iteration**: Ongoing balancing and progression improvements
+- **Reforge Polishing**: Quality and ruleset refinement around current anvil-based reforging flow
 
 ## 26.1.2 Port
 
@@ -53,58 +53,57 @@ ToolTiers requires:
 
 ## Customization
 
-ToolTiers uses a **data-driven system** for all item tier definitions and attributes. This allows for easy customization and extension without code changes.
+ToolTiers uses a **datapack-driven system** for tier selection and attribute generation. Core behavior is controlled through JSON resources and can be customized without Java changes.
 
 ### System Architecture
 
-- **Internal Namespace**: Uses mod id `tiered` internally for compatibility and data organization
+- **Internal Namespace**: Uses mod id `tiered` for data and compatibility
 - **Item Attributes**: Stored in `data/tiered/item_attributes/`
-- **Tier Definitions**: JSON-based tier templates with attributes, styles, and weights
-- **Custom Verifiers**: ToolTiers uses its own item verification system to match items against tier requirements
+- **Modifier Pools**: Stored in `data/tiered/modifier_pools/`
+- **Verifier Rules**: `item_attributes` entries define item/category compatibility and eligibility
+- **Tier Availability/Weight**: `item_attributes` entries define tier selection weights
+- **Pool References**: `item_attributes` entries reference the modifier pool used for generated rolls
+- **Generated Attributes**: Actual rolled modifiers come from referenced `modifier_pools`
 
-You can add, modify, and remove tier modifiers by editing the JSON files in `data/tiered/item_attributes/`.
+In short:
 
-Example modifier:
+- `item_attributes` defines **what can roll** for an item and **how likely** each tier is
+- `modifier_pools` defines **which attributes can be generated** once a tier is selected
 
-```json
-{
-  "id": "tiered:hasteful",
-  "verifiers": [
-    {
-      "tag": "c:pickaxes"
-    },
-    {
-      "tag": "c:shovels"
-    },
-    {
-      "tag": "c:axes"
-    }
-  ],
-  "weight": 10,
-  "style": {
-    "color": "GREEN"
-  },
-  "attributes": [
-    {
-      "type": "generic.dig_speed",
-      "modifier": {
-        "name": "tiered:hasteful",
-        "operation": "ADD_MULTIPLIED_BASE",
-        "amount": 0.10
-      },
-      "optional_equipment_slots": [
-        "MAINHAND"
-      ]
-    }
-  ]
-}
-```
+You can create or extend custom tier behavior by adding new JSON entries in these datapack folders.
+
+#### Current Flow
+
+Tier selection:
+
+- `item_attributes` -> verifier check -> weighted tier selection
+
+Attribute generation:
+
+- selected tier -> modifier pool -> attribute roll -> generated attributes stored on item
+
+Generated attributes are rolled once per item and persisted. Reloads reuse stored generated data, and compatibility handling exists for older tiered items.
 
 ### Attributes
 
-ToolTiers provides and uses custom and vanilla-compatible attributes such as dig speed, crit chance, durability, armor, reach, attack range, movement speed, and more.
+ToolTiers currently supports a category-aware generated attribute model.
 
-Types include: `generic.armor`, `generic.armor_toughness`, `generic.dig_speed`, `tiered:generic.durable`, `generic.max_health`, `generic.movement_speed`, `reach-entity-attributes:reach`, `generic.luck`, `generic.attack_damage`, `tiered:generic.crit_chance`, `reach-entity-attributes:attack_range`, `tiered:generic.range_attack_damage`
+Current focus attributes include:
+
+- **Tools**:
+  - Durability (`tiered:generic.durable`)
+  - Dig Speed (`generic.dig_speed`, subject to future naming cleanup)
+- **Armor**:
+  - Armor (`generic.armor`)
+  - Armor Toughness (`generic.armor_toughness`)
+  - Durability (`tiered:generic.durable`)
+  - Movement Speed (`generic.movement_speed`)
+  - Max Health (`generic.max_health`)
+- **Weapons**:
+  - Critical Chance (`tiered:generic.crit_chance`)
+  - Attack-related attributes (for example attack damage and ranged attack modifiers)
+
+The attribute system is actively being expanded with additional specialized attributes and ongoing balance passes.
 
 ### Verifiers
 
@@ -133,14 +132,15 @@ Weight determines how common a tier is. Higher weight means a higher chance to b
 
 ### NBT
 
-Custom NBT values can be added via `nbtValues`. Supported value types are string, boolean, integer, and double.
+Tier data and generated modifier data are stored directly on each tiered item.
 
-```json
-"nbtValues": {
-  "Damage": 100,
-  "key": "value"
-}
-```
+Stored item-side data includes:
+
+- Assigned tier id
+- Generated attribute roll data used to rebuild modifiers consistently
+- Compatibility-aware handling for older tier/item data formats
+
+This allows generated attributes to remain stable across reloads and inventory updates.
 
 ### Tooltip
 
@@ -173,9 +173,14 @@ Example:
 
 ### Reforge
 
-**Status:** Under Development - Reforge functionality is currently unavailable and will be enabled in a future release.
+ToolTiers currently uses **vanilla anvil-based reforging behavior**.
 
-Once complete, Reforge will allow players to reset and reassign item tiers.
+Current rules:
+
+- Two compatible items can be combined in an anvil flow
+- Same item type with the same tier can upgrade toward the next tier
+- Combining different tiers follows the current tier result rules
+- Vanilla anvil enchantment behavior is preserved
 
 ## Status
 
@@ -187,12 +192,11 @@ Once complete, Reforge will allow players to reset and reassign item tiers.
 
 ### Current State
 
-- ✅ Game launches and loads worlds correctly
-- ✅ Core tier system is fully functional
-- ✅ Tier assignment and attribute application working
-- ✅ All supported items receive appropriate tiers
-- ⚠️ Reforge system under development
-- 🔄 Additional features and categories planned
+- ToolTiers is an active Minecraft 26.1.2 port and continuation of Tiered/TieredZ.
+- Core gameplay systems are functional in current builds.
+- Tier generation, assignment, and attribute application are live.
+- Ongoing work is focused on balancing, expanded attribute coverage, and continued iteration.
+- Development is active and continuing.
 
 ## Credits
 

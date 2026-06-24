@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:staves_and_wands/legendary",
+    "verifiers":  [
+                      {
+                          "tag":  "wizards:staves"
+                      },
+                      {
+                          "tag":  "wizards:wands"
+                      },
+                      {
+                          "tag":  "paladins:staves"
+                      },
+                      {
+                          "tag":  "paladins:wands"
+                      }
+                  ],
+    "weight":  6,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:staves_and_wands/legendary"
+}
+

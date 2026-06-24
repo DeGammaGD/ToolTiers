@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:spears/epic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:spears"
+                      }
+                  ],
+    "weight":  32,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:spears/epic"
+}
+

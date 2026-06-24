@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:maces/rare",
+    "verifiers":  [
+                      {
+                          "tag":  "c:maces"
+                      }
+                  ],
+    "weight":  60,
+    "style":  {
+                  "color":  "blue"
+              },
+    "modifier_pool":  "tiered:maces/rare"
+}
+

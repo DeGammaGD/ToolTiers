@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:shields/mythic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:shields"
+                      }
+                  ],
+    "weight":  0,
+    "style":  {
+                  "color":  "red"
+              },
+    "modifier_pool":  "tiered:shields/mythic"
+}
+

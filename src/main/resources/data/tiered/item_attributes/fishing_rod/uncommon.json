@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:fishing_rod/uncommon",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:fishing_rod"
+                      }
+                  ],
+    "weight":  70,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:fishing_rod/uncommon"
+}
+

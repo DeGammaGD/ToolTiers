@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:armor/common",
+    "verifiers":  [
+                      {
+                          "tag":  "c:helmets"
+                      },
+                      {
+                          "tag":  "c:chestplates"
+                      },
+                      {
+                          "tag":  "c:leggings"
+                      },
+                      {
+                          "tag":  "c:boots"
+                      }
+                  ],
+    "weight":  200,
+    "style":  {
+                  "color":  "gray"
+              },
+    "modifier_pool":  "tiered:armor/common"
+}
+

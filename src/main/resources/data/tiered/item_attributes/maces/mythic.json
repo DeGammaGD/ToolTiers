@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:maces/mythic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:maces"
+                      }
+                  ],
+    "weight":  0,
+    "style":  {
+                  "color":  "red"
+              },
+    "modifier_pool":  "tiered:maces/mythic"
+}
+

@@ -1,0 +1,17 @@
+﻿{
+    "id":  "tiered:ranged_weapons/epic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:bows"
+                      },
+                      {
+                          "tag":  "c:crossbows"
+                      }
+                  ],
+    "weight":  32,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:ranged_weapons/epic"
+}
+

@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:elytra/epic",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:elytra"
+                      }
+                  ],
+    "weight":  16,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:elytra/epic"
+}
+

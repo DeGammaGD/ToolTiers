@@ -1,0 +1,53 @@
+{
+    "attributes":  [
+                       {
+                           "type":  "spell_power:haste",
+                           "modifier":  {
+                                            "name":  "tiered:mythic_staffwand_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.10
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "spell_power:critical_damage",
+                           "modifier":  {
+                                            "name":  "tiered:mythic_staffwand_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.10
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "spell_power:critical_chance",
+                           "modifier":  {
+                                            "name":  "tiered:mythic_staffwand_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.15
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "spell_power:critical_chance",
+                           "modifier":  {
+                                            "name":  "tiered:mythic_staffwand_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.15
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       }
+                   ]
+}
+

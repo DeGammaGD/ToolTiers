@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:melee_weapons/legendary",
+    "verifiers":  [
+                      {
+                          "tag":  "c:swords"
+                      }
+                  ],
+    "weight":  12,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:melee_weapons/legendary"
+}
+

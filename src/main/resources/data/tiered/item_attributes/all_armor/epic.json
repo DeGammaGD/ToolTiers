@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:armor/epic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:helmets"
+                      },
+                      {
+                          "tag":  "c:chestplates"
+                      },
+                      {
+                          "tag":  "c:leggings"
+                      },
+                      {
+                          "tag":  "c:boots"
+                      }
+                  ],
+    "weight":  32,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:armor/epic"
+}
+

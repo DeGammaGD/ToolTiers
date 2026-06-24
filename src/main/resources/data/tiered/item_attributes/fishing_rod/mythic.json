@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:fishing_rod/mythic",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:fishing_rod"
+                      }
+                  ],
+    "weight":  0,
+    "style":  {
+                  "color":  "red"
+              },
+    "modifier_pool":  "tiered:fishing_rod/mythic"
+}
+

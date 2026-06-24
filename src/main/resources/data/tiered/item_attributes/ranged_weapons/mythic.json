@@ -1,0 +1,17 @@
+﻿{
+    "id":  "tiered:ranged_weapons/mythic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:bows"
+                      },
+                      {
+                          "tag":  "c:crossbows"
+                      }
+                  ],
+    "weight":  0,
+    "style":  {
+                  "color":  "red"
+              },
+    "modifier_pool":  "tiered:ranged_weapons/mythic"
+}
+

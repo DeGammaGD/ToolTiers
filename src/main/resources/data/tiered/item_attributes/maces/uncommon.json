@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:maces/uncommon",
+    "verifiers":  [
+                      {
+                          "tag":  "c:maces"
+                      }
+                  ],
+    "weight":  140,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:maces/uncommon"
+}
+

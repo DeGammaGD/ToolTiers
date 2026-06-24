@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:melee_weapons/epic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:swords"
+                      }
+                  ],
+    "weight":  32,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:melee_weapons/epic"
+}
+

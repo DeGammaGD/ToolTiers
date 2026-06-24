@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:armor/rare",
+    "verifiers":  [
+                      {
+                          "tag":  "c:helmets"
+                      },
+                      {
+                          "tag":  "c:chestplates"
+                      },
+                      {
+                          "tag":  "c:leggings"
+                      },
+                      {
+                          "tag":  "c:boots"
+                      }
+                  ],
+    "weight":  60,
+    "style":  {
+                  "color":  "blue"
+              },
+    "modifier_pool":  "tiered:armor/rare"
+}
+

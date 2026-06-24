@@ -1,0 +1,17 @@
+﻿{
+    "id":  "tiered:ranged_weapons/legendary",
+    "verifiers":  [
+                      {
+                          "tag":  "c:bows"
+                      },
+                      {
+                          "tag":  "c:crossbows"
+                      }
+                  ],
+    "weight":  12,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:ranged_weapons/legendary"
+}
+

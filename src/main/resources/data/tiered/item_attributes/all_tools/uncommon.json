@@ -1,0 +1,29 @@
+﻿{
+    "id":  "tiered:tools/uncommon",
+    "verifiers":  [
+                      {
+                          "tag":  "c:axes"
+                      },
+                      {
+                          "tag":  "c:pickaxes"
+                      },
+                      {
+                          "tag":  "c:shovels"
+                      },
+                      {
+                          "tag":  "c:hoes"
+                      },
+                      {
+                          "tag":  "c:shears"
+                      },
+                      {
+                          "tag":  "c:flint_and_steel"
+                      }
+                  ],
+    "weight":  140,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:tools/uncommon"
+}
+

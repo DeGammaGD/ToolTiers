@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:maces/legendary",
+    "verifiers":  [
+                      {
+                          "tag":  "c:maces"
+                      }
+                  ],
+    "weight":  12,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:maces/legendary"
+}
+

@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:shields/uncommon",
+    "verifiers":  [
+                      {
+                          "tag":  "c:shields"
+                      }
+                  ],
+    "weight":  140,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:shields/uncommon"
+}
+

@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:staves_and_wands/common",
+    "verifiers":  [
+                      {
+                          "tag":  "wizards:staves"
+                      },
+                      {
+                          "tag":  "wizards:wands"
+                      },
+                      {
+                          "tag":  "paladins:staves"
+                      },
+                      {
+                          "tag":  "paladins:wands"
+                      }
+                  ],
+    "weight":  100,
+    "style":  {
+                  "color":  "gray"
+              },
+    "modifier_pool":  "tiered:staves_and_wands/common"
+}
+

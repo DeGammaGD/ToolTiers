@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:spears/legendary",
+    "verifiers":  [
+                      {
+                          "tag":  "c:spears"
+                      }
+                  ],
+    "weight":  12,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:spears/legendary"
+}
+

@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:shields/legendary",
+    "verifiers":  [
+                      {
+                          "tag":  "c:shields"
+                      }
+                  ],
+    "weight":  12,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:shields/legendary"
+}
+

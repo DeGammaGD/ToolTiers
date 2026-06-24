@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:armor/uncommon",
+    "verifiers":  [
+                      {
+                          "tag":  "c:helmets"
+                      },
+                      {
+                          "tag":  "c:chestplates"
+                      },
+                      {
+                          "tag":  "c:leggings"
+                      },
+                      {
+                          "tag":  "c:boots"
+                      }
+                  ],
+    "weight":  140,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:armor/uncommon"
+}
+

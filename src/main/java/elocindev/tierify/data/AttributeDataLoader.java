@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -21,6 +22,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.TextColor;
 import net.minecraft.resources.Identifier;
+import net.minecraft.server.packs.resources.Resource;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -33,6 +35,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 public class AttributeDataLoader implements SimpleSynchronousResourceReloadListener {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping()
@@ -88,6 +91,7 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
     private static final Logger LOGGER = LogManager.getLogger();
     private static final String ITEM_ATTRIBUTES_ROOT = "item_attributes";
     private static final String MODIFIER_POOLS_ROOT = "modifier_pools";
+    private static final Identifier LEGACY_ALIAS_RESOURCE = Identifier.fromNamespaceAndPath("tiered", "item_attribute_aliases.json");
 
     private Map<Identifier, PotentialAttribute> itemAttributes = new HashMap<>();
 
@@ -124,6 +128,8 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
                 LOGGER.error(PARSING_ERROR_MESSAGE, identifier, exception);
             }
         }
+
+        applyLegacyAliases(resourceManager, readItemAttributes);
 
         itemAttributes = readItemAttributes;
         LOGGER.info("Loaded {} attribute definitions", readItemAttributes.size());
@@ -195,6 +201,62 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
             return Identifier.parse(rawPoolId);
         }
         return Identifier.fromNamespaceAndPath(attributeId.getNamespace(), rawPoolId);
+    }
+
+    private static void applyLegacyAliases(ResourceManager resourceManager,
+                                           Map<Identifier, PotentialAttribute> readItemAttributes) {
+        Optional<Resource> aliasResource = resourceManager.getResource(LEGACY_ALIAS_RESOURCE);
+        if (aliasResource.isEmpty()) {
+            return;
+        }
+
+        int aliasCount = 0;
+        try (InputStream stream = aliasResource.get().open(); InputStreamReader reader = new InputStreamReader(stream)) {
+            JsonElement root = JsonParser.parseReader(reader);
+            if (!root.isJsonObject()) {
+                LOGGER.error("Legacy alias file {} is not a JSON object", LEGACY_ALIAS_RESOURCE);
+                return;
+            }
+
+            JsonObject object = root.getAsJsonObject();
+            if (!object.has("aliases") || !object.get("aliases").isJsonObject()) {
+                LOGGER.error("Legacy alias file {} is missing 'aliases' object", LEGACY_ALIAS_RESOURCE);
+                return;
+            }
+
+            JsonObject aliases = object.getAsJsonObject("aliases");
+            for (Map.Entry<String, JsonElement> entry : aliases.entrySet()) {
+                JsonElement value = entry.getValue();
+                if (!(value instanceof JsonPrimitive primitive) || !primitive.isString()) {
+                    LOGGER.warn("Skipping alias {} in {} because target is not a string", entry.getKey(), LEGACY_ALIAS_RESOURCE);
+                    continue;
+                }
+
+                Identifier aliasId = Identifier.parse(entry.getKey());
+                Identifier canonicalId = Identifier.parse(primitive.getAsString());
+                PotentialAttribute canonical = readItemAttributes.get(canonicalId);
+                if (canonical == null) {
+                    LOGGER.warn("Skipping alias {} -> {} because canonical id is missing", aliasId, canonicalId);
+                    continue;
+                }
+
+                PotentialAttribute aliasAttribute = new PotentialAttribute(
+                        aliasId.toString(),
+                        canonical.getVerifiers(),
+                        0,
+                        canonical.getStyle(),
+                        canonical.getAttributes(),
+                        canonical.getNbtValues()
+                );
+                readItemAttributes.put(aliasId, aliasAttribute);
+                aliasCount++;
+            }
+        } catch (Exception exception) {
+            LOGGER.error("Failed loading legacy aliases from {}", LEGACY_ALIAS_RESOURCE, exception);
+            return;
+        }
+
+        LOGGER.info("Loaded {} legacy item attribute aliases", aliasCount);
     }
 
 }

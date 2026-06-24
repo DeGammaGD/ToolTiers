@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:spears/rare",
+    "verifiers":  [
+                      {
+                          "tag":  "c:spears"
+                      }
+                  ],
+    "weight":  60,
+    "style":  {
+                  "color":  "blue"
+              },
+    "modifier_pool":  "tiered:spears/rare"
+}
+

@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:shields/epic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:shields"
+                      }
+                  ],
+    "weight":  32,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:shields/epic"
+}
+

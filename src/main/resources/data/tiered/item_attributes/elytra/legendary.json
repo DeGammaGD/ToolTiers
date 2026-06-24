@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:elytra/legendary",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:elytra"
+                      }
+                  ],
+    "weight":  6,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:elytra/legendary"
+}
+

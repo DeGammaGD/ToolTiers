@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:fishing_rod/epic",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:fishing_rod"
+                      }
+                  ],
+    "weight":  16,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:fishing_rod/epic"
+}
+

@@ -1,0 +1,104 @@
+{
+    "attributes":  [
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_4",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.dig_speed",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_3",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.035
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.dig_speed",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.035
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.dig_speed",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_4",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.035
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_3",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_4",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       }
+                   ]
+}
+

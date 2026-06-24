@@ -1,0 +1,29 @@
+{
+    "attributes":  [
+                       {
+                           "type":  "generic.luck",
+                           "modifier":  {
+                                            "name":  "tiered:rare_fishing_1",
+                                            "operation":  "ADDITION",
+                                            "amount":  0.5
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_fishing_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       }
+                   ]
+}
+

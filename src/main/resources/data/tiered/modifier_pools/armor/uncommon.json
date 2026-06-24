@@ -1,0 +1,117 @@
+{
+    "attributes":  [
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.0355
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.armor",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_4",
+                                            "operation":  "ADDITION",
+                                            "amount":  -1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_3",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_3",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.max_health",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_4",
+                                            "operation":  "ADDITION",
+                                            "amount":  1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.armor",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_2",
+                                            "operation":  "ADDITION",
+                                            "amount":  -1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.armor",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_1",
+                                            "operation":  "ADDITION",
+                                            "amount":  1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.max_health",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_armor_2",
+                                            "operation":  "ADDITION",
+                                            "amount":  1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       }
+                   ]
+}
+

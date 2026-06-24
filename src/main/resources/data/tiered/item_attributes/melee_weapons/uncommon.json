@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:melee_weapons/uncommon",
+    "verifiers":  [
+                      {
+                          "tag":  "c:swords"
+                      }
+                  ],
+    "weight":  140,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:melee_weapons/uncommon"
+}
+

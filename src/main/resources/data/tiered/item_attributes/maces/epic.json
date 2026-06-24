@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:maces/epic",
+    "verifiers":  [
+                      {
+                          "tag":  "c:maces"
+                      }
+                  ],
+    "weight":  32,
+    "style":  {
+                  "color":  "dark_purple"
+              },
+    "modifier_pool":  "tiered:maces/epic"
+}
+

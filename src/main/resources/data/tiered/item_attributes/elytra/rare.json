@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:elytra/rare",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:elytra"
+                      }
+                  ],
+    "weight":  30,
+    "style":  {
+                  "color":  "blue"
+              },
+    "modifier_pool":  "tiered:elytra/rare"
+}
+

@@ -1,0 +1,49 @@
+{
+    "attributes":  [
+                       {
+                           "type":  "generic.max_health",
+                           "modifier":  {
+                                            "name":  "tiered:epic_elytra_1",
+                                            "operation":  "ADDITION",
+                                            "amount":  2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:epic_elytra_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:epic_elytra_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:epic_elytra_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       }
+                   ]
+}
+

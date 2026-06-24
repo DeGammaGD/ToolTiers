@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:fishing_rod/legendary",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:fishing_rod"
+                      }
+                  ],
+    "weight":  6,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:fishing_rod/legendary"
+}
+

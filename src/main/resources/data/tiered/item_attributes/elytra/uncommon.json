@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:elytra/uncommon",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:elytra"
+                      }
+                  ],
+    "weight":  70,
+    "style":  {
+                  "color":  "dark_green"
+              },
+    "modifier_pool":  "tiered:elytra/uncommon"
+}
+

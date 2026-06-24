@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:staves_and_wands/rare",
+    "verifiers":  [
+                      {
+                          "tag":  "wizards:staves"
+                      },
+                      {
+                          "tag":  "wizards:wands"
+                      },
+                      {
+                          "tag":  "paladins:staves"
+                      },
+                      {
+                          "tag":  "paladins:wands"
+                      }
+                  ],
+    "weight":  30,
+    "style":  {
+                  "color":  "blue"
+              },
+    "modifier_pool":  "tiered:staves_and_wands/rare"
+}
+

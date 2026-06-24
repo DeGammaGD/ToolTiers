@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:elytra/mythic",
+    "verifiers":  [
+                      {
+                          "id":  "minecraft:elytra"
+                      }
+                  ],
+    "weight":  0,
+    "style":  {
+                  "color":  "red"
+              },
+    "modifier_pool":  "tiered:elytra/mythic"
+}
+

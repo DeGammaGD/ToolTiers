@@ -21,9 +21,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +34,33 @@ import elocindev.tierify.Tierify;
 import elocindev.tierify.compat.ItemBordersCompat;
 
 public class ModifierUtils {
+
+    private static final String GENERATED_ATTRIBUTES_KEY = "TieredGeneratedAttributes";
+    private static final String GENERATED_COUNT_KEY = "count";
+    private static final String ENTRY_PREFIX = "entry_";
+
+    private static final class GeneratedAttributeRoll {
+        private final String attributeTypeId;
+        private final String modifierId;
+        private final AttributeModifier.Operation operation;
+        private final double amount;
+        private final EquipmentSlot[] requiredSlots;
+        private final EquipmentSlot[] optionalSlots;
+
+        private GeneratedAttributeRoll(String attributeTypeId,
+                                       String modifierId,
+                                       AttributeModifier.Operation operation,
+                                       double amount,
+                                       EquipmentSlot[] requiredSlots,
+                                       EquipmentSlot[] optionalSlots) {
+            this.attributeTypeId = attributeTypeId;
+            this.modifierId = modifierId;
+            this.operation = operation;
+            this.amount = amount;
+            this.requiredSlots = requiredSlots;
+            this.optionalSlots = optionalSlots;
+        }
+    }
 
     private static boolean isSpearDebugItem(Item item) {
         Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
@@ -168,6 +198,349 @@ public class ModifierUtils {
         return usable;
     }
 
+    private static String resolveTierQuality(Identifier tierId) {
+        String path = tierId.getPath().toLowerCase(Locale.ROOT);
+        if (path.contains("uncommon")) {
+            return "uncommon";
+        }
+        if (path.contains("legendary")) {
+            return "legendary";
+        }
+        if (path.contains("mythic")) {
+            return "mythic";
+        }
+        if (path.contains("common")) {
+            return "common";
+        }
+        if (path.contains("rare")) {
+            return "rare";
+        }
+        if (path.contains("epic")) {
+            return "epic";
+        }
+        return "common";
+    }
+
+    private static int[] getTierAttributeBounds(Identifier tierId) {
+        return switch (resolveTierQuality(tierId)) {
+            case "uncommon" -> new int[] {1, 2};
+            case "rare" -> new int[] {2, 3};
+            case "epic" -> new int[] {3, 3};
+            case "legendary" -> new int[] {3, 4};
+            case "mythic" -> new int[] {4, 4};
+            default -> new int[] {1, 1};
+        };
+    }
+
+    private static double getTierQualityCenter(Identifier tierId) {
+        return switch (resolveTierQuality(tierId)) {
+            case "uncommon" -> 0.45D;
+            case "rare" -> 0.60D;
+            case "epic" -> 0.72D;
+            case "legendary" -> 0.84D;
+            case "mythic" -> 0.92D;
+            default -> 0.30D;
+        };
+    }
+
+    private static double clamp01(double value) {
+        if (value < 0.0D) {
+            return 0.0D;
+        }
+        if (value > 1.0D) {
+            return 1.0D;
+        }
+        return value;
+    }
+
+    private static double rollAmountForTier(double minAmount, double maxAmount, Identifier tierId) {
+        if (Math.abs(maxAmount - minAmount) < 0.0000001D) {
+            return minAmount;
+        }
+
+        double center = getTierQualityCenter(tierId);
+        double base = ThreadLocalRandom.current().nextDouble();
+        double jitter = (ThreadLocalRandom.current().nextDouble() - 0.5D) * 0.2D;
+        double quality = clamp01((base * 0.65D) + (center * 0.35D) + jitter);
+        return minAmount + (maxAmount - minAmount) * quality;
+    }
+
+    private static String getModifierBaseId(AttributeTemplate template, Identifier tierId) {
+        if (template != null && template.getEntityAttributeModifier() != null && template.getEntityAttributeModifier().id() != null) {
+            return template.getEntityAttributeModifier().id().toString();
+        }
+        return tierId + "_" + System.nanoTime();
+    }
+
+    private static EquipmentSlot[] copySlots(EquipmentSlot[] slots) {
+        if (slots == null) {
+            return null;
+        }
+        EquipmentSlot[] copy = new EquipmentSlot[slots.length];
+        System.arraycopy(slots, 0, copy, 0, slots.length);
+        return copy;
+    }
+
+    private static boolean rollAppliesToSlot(GeneratedAttributeRoll roll, EquipmentSlot slot) {
+        if (roll == null) {
+            return false;
+        }
+
+        if (roll.requiredSlots != null) {
+            for (EquipmentSlot requiredSlot : roll.requiredSlots) {
+                if (requiredSlot == slot) {
+                    return true;
+                }
+            }
+        }
+
+        if (roll.optionalSlots != null) {
+            for (EquipmentSlot optionalSlot : roll.optionalSlots) {
+                if (optionalSlot == slot) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private static List<GeneratedAttributeRoll> generateTierAttributeRolls(ItemStack stack,
+                                                                           Identifier tierId,
+                                                                           PotentialAttribute assignedAttribute) {
+        List<GeneratedAttributeRoll> generated = new ArrayList<>();
+        if (assignedAttribute == null || assignedAttribute.getAttributes() == null || assignedAttribute.getAttributes().isEmpty()) {
+            return generated;
+        }
+
+        Map<String, List<AttributeTemplate>> templatesByType = new LinkedHashMap<>();
+        for (AttributeTemplate template : assignedAttribute.getAttributes()) {
+            if (template == null || template.getEntityAttributeModifier() == null || !isValidAttributeTypeId(template.getAttributeTypeID())) {
+                continue;
+            }
+
+            boolean usableForItem = false;
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                if (!Tierify.isPreferredEquipmentSlot(stack, slot)) {
+                    continue;
+                }
+
+                if (templateAppliesToSlot(template, slot)) {
+                    usableForItem = true;
+                    break;
+                }
+            }
+
+            if (!usableForItem) {
+                continue;
+            }
+
+            templatesByType.computeIfAbsent(template.getAttributeTypeID(), k -> new ArrayList<>()).add(template);
+        }
+
+        if (templatesByType.isEmpty()) {
+            return generated;
+        }
+
+        int[] bounds = getTierAttributeBounds(tierId);
+        int minCount = Math.max(1, bounds[0]);
+        int maxCount = Math.max(minCount, bounds[1]);
+
+        int available = templatesByType.size();
+        minCount = Math.min(minCount, available);
+        maxCount = Math.min(maxCount, available);
+        int targetCount = ThreadLocalRandom.current().nextInt(minCount, maxCount + 1);
+
+        List<String> types = new ArrayList<>(templatesByType.keySet());
+        Collections.shuffle(types);
+
+        for (int i = 0; i < targetCount; i++) {
+            String type = types.get(i);
+            List<AttributeTemplate> group = templatesByType.get(type);
+            if (group == null || group.isEmpty()) {
+                continue;
+            }
+
+            AttributeTemplate representative = group.get(ThreadLocalRandom.current().nextInt(group.size()));
+            double minAmount = representative.getEntityAttributeModifier().amount();
+            double maxAmount = minAmount;
+            for (AttributeTemplate candidate : group) {
+                double amount = candidate.getEntityAttributeModifier().amount();
+                if (amount < minAmount) {
+                    minAmount = amount;
+                }
+                if (amount > maxAmount) {
+                    maxAmount = amount;
+                }
+            }
+
+            double rolledAmount = rollAmountForTier(minAmount, maxAmount, tierId);
+            generated.add(new GeneratedAttributeRoll(
+                    type,
+                    getModifierBaseId(representative, tierId),
+                    representative.getEntityAttributeModifier().operation(),
+                    rolledAmount,
+                    copySlots(representative.getRequiredEquipmentSlots()),
+                    copySlots(representative.getOptionalEquipmentSlots())
+            ));
+        }
+
+        return generated;
+    }
+
+    private static void writeGeneratedRollsToNbt(CompoundTag root, List<GeneratedAttributeRoll> generatedRolls) {
+        root.remove(GENERATED_ATTRIBUTES_KEY);
+        if (generatedRolls == null || generatedRolls.isEmpty()) {
+            return;
+        }
+
+        CompoundTag generatedTag = new CompoundTag();
+        generatedTag.putInt(GENERATED_COUNT_KEY, generatedRolls.size());
+
+        for (int i = 0; i < generatedRolls.size(); i++) {
+            GeneratedAttributeRoll roll = generatedRolls.get(i);
+            CompoundTag entry = new CompoundTag();
+            entry.putString("type", roll.attributeTypeId);
+            entry.putString("modifier_id", roll.modifierId);
+            entry.putString("operation", roll.operation.name());
+            entry.putDouble("amount", roll.amount);
+
+            if (roll.requiredSlots != null && roll.requiredSlots.length > 0) {
+                StringBuilder requiredBuilder = new StringBuilder();
+                for (int s = 0; s < roll.requiredSlots.length; s++) {
+                    if (s > 0) {
+                        requiredBuilder.append(',');
+                    }
+                    requiredBuilder.append(roll.requiredSlots[s].name());
+                }
+                entry.putString("required_slots", requiredBuilder.toString());
+            }
+
+            if (roll.optionalSlots != null && roll.optionalSlots.length > 0) {
+                StringBuilder optionalBuilder = new StringBuilder();
+                for (int s = 0; s < roll.optionalSlots.length; s++) {
+                    if (s > 0) {
+                        optionalBuilder.append(',');
+                    }
+                    optionalBuilder.append(roll.optionalSlots[s].name());
+                }
+                entry.putString("optional_slots", optionalBuilder.toString());
+            }
+
+            generatedTag.put(ENTRY_PREFIX + i, entry);
+        }
+
+        root.put(GENERATED_ATTRIBUTES_KEY, generatedTag);
+    }
+
+    private static EquipmentSlot[] parseSlotsCsv(String value) {
+        if (value == null || value.isBlank()) {
+            return null;
+        }
+
+        String[] raw = value.split(",");
+        List<EquipmentSlot> parsed = new ArrayList<>();
+        for (String token : raw) {
+            if (token == null || token.isBlank()) {
+                continue;
+            }
+            try {
+                parsed.add(EquipmentSlot.valueOf(token.trim()));
+            } catch (IllegalArgumentException ignored) {
+                // ignore invalid slot token
+            }
+        }
+
+        if (parsed.isEmpty()) {
+            return null;
+        }
+
+        return parsed.toArray(new EquipmentSlot[0]);
+    }
+
+    private static List<GeneratedAttributeRoll> readGeneratedRollsFromNbt(CompoundTag root) {
+        List<GeneratedAttributeRoll> generated = new ArrayList<>();
+        if (!root.contains(GENERATED_ATTRIBUTES_KEY)) {
+            return generated;
+        }
+
+        CompoundTag generatedTag = root.getCompound(GENERATED_ATTRIBUTES_KEY).orElse(new CompoundTag());
+        int count = generatedTag.getInt(GENERATED_COUNT_KEY).orElse(0);
+        for (int i = 0; i < count; i++) {
+            CompoundTag entry = generatedTag.getCompound(ENTRY_PREFIX + i).orElse(null);
+            if (entry == null) {
+                continue;
+            }
+
+            String type = entry.getString("type").orElse("");
+            String modifierId = entry.getString("modifier_id").orElse("");
+            String operationRaw = entry.getString("operation").orElse("");
+            double amount = entry.getDouble("amount").orElse(0.0D);
+
+            if (type.isBlank() || modifierId.isBlank() || operationRaw.isBlank()) {
+                continue;
+            }
+
+            AttributeModifier.Operation operation;
+            try {
+                operation = AttributeModifier.Operation.valueOf(operationRaw);
+            } catch (IllegalArgumentException ignored) {
+                continue;
+            }
+
+            EquipmentSlot[] required = parseSlotsCsv(entry.getString("required_slots").orElse(""));
+            EquipmentSlot[] optional = parseSlotsCsv(entry.getString("optional_slots").orElse(""));
+            generated.add(new GeneratedAttributeRoll(type, modifierId, operation, amount, required, optional));
+        }
+
+        return generated;
+    }
+
+    private static boolean isMasteryAttributeType(String attributeTypeId) {
+        return attributeTypeId != null && attributeTypeId.toLowerCase(Locale.ROOT).contains("mastery");
+    }
+
+    private static double getMasteryMultiplierForSlot(List<GeneratedAttributeRoll> generatedRolls, EquipmentSlot slot) {
+        if (generatedRolls == null || generatedRolls.isEmpty()) {
+            return 0.0D;
+        }
+
+        double mastery = 0.0D;
+        for (GeneratedAttributeRoll roll : generatedRolls) {
+            if (roll == null || !isMasteryAttributeType(roll.attributeTypeId)) {
+                continue;
+            }
+
+            if (!rollAppliesToSlot(roll, slot)) {
+                continue;
+            }
+
+            mastery += roll.amount;
+        }
+
+        return mastery;
+    }
+
+    private static double resolveDurableAmount(List<GeneratedAttributeRoll> generatedRolls, PotentialAttribute assignedAttribute) {
+        if (generatedRolls != null) {
+            for (GeneratedAttributeRoll roll : generatedRolls) {
+                if (roll != null && "tiered:generic.durable".equals(roll.attributeTypeId)) {
+                    return (double) Math.round(roll.amount * 100.0D) / 100.0D;
+                }
+            }
+        }
+
+        if (assignedAttribute != null && assignedAttribute.getAttributes() != null) {
+            for (AttributeTemplate template : assignedAttribute.getAttributes()) {
+                if (template != null && "tiered:generic.durable".equals(template.getAttributeTypeID()) && template.getEntityAttributeModifier() != null) {
+                    return (double) Math.round(template.getEntityAttributeModifier().amount() * 100.0D) / 100.0D;
+                }
+            }
+        }
+
+        return 0.0D;
+    }
+
     /**
      * Returns the ID of a random attribute that is valid for the given {@link Item} in {@link Identifier} form.
      * <p>
@@ -294,6 +667,7 @@ public class ModifierUtils {
     }
 
     private static void clearTierNbtKeys(CompoundTag root, @Nullable Identifier tierId) {
+        root.remove(GENERATED_ATTRIBUTES_KEY);
         if (tierId == null) {
             return;
         }
@@ -323,20 +697,19 @@ public class ModifierUtils {
         }
     }
 
-    private static void applyTierNbtValues(CompoundTag root, PotentialAttribute assignedAttribute, Identifier tierId) {
+    private static void applyTierNbtValues(CompoundTag root,
+                                           PotentialAttribute assignedAttribute,
+                                           Identifier tierId,
+                                           List<GeneratedAttributeRoll> generatedRolls) {
         HashMap<String, Object> nbtMap = assignedAttribute.getNbtValues();
         Tierify.LOGGER.info("Attribute json for {} -> {}", tierId, nbtMap);
 
-        List<AttributeTemplate> attributeList = assignedAttribute.getAttributes();
-        for (int i = 0; i < attributeList.size(); i++) {
-            String attributeTypeId = attributeList.get(i).getAttributeTypeID();
-            if ("tiered:generic.durable".equals(attributeTypeId)) {
-                if (nbtMap == null) {
-                    nbtMap = new HashMap<>();
-                }
-                nbtMap.put("durable", (double) Math.round(attributeList.get(i).getEntityAttributeModifier().amount() * 100.0) / 100.0);
-                break;
+        double durableAmount = resolveDurableAmount(generatedRolls, assignedAttribute);
+        if (Math.abs(durableAmount) > 0.0000001D) {
+            if (nbtMap == null) {
+                nbtMap = new HashMap<>();
             }
+            nbtMap.put("durable", durableAmount);
         }
 
         if (nbtMap == null) {
@@ -401,7 +774,14 @@ public class ModifierUtils {
 
         CompoundTag root = getCustomData(stack);
         clearTierNbtKeys(root, tierId);
-        applyTierNbtValues(root, assignedAttribute, tierId);
+
+        List<GeneratedAttributeRoll> generatedRolls = readGeneratedRollsFromNbt(root);
+        if (generatedRolls.isEmpty()) {
+            generatedRolls = generateTierAttributeRolls(stack, tierId, assignedAttribute);
+        }
+
+        writeGeneratedRollsToNbt(root, generatedRolls);
+        applyTierNbtValues(root, assignedAttribute, tierId, generatedRolls);
         setCustomData(stack, root);
         int appliedCount = rebuildAttributeModifiersComponent(stack);
         if (appliedCount == 0) {
@@ -475,6 +855,7 @@ public class ModifierUtils {
             }
             root.remove(Tierify.NBT_SUBTAG_KEY);
             root.remove(Tierify.NBT_SUBTAG_MARKER_KEY);
+            root.remove(GENERATED_ATTRIBUTES_KEY);
             setCustomData(itemStack, root);
             rebuildAttributeModifiersComponent(itemStack);
         }
@@ -498,6 +879,64 @@ public class ModifierUtils {
         Identifier tierId = getAttributeID(itemStack);
         if (tierId == null) {
             Tierify.LOGGER.info("No tier data found while building modifiers for {} in {}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), slot.getName());
+            return modifiers;
+        }
+
+        CompoundTag root = getCustomData(itemStack);
+        List<GeneratedAttributeRoll> generatedRolls = readGeneratedRollsFromNbt(root);
+        if (!generatedRolls.isEmpty()) {
+            int slotMismatchCount = 0;
+            int missingAttributeTypeCount = 0;
+            int malformedTemplateCount = 0;
+            double masteryMultiplier = getMasteryMultiplierForSlot(generatedRolls, slot);
+
+            for (GeneratedAttributeRoll roll : generatedRolls) {
+                if (roll == null) {
+                    malformedTemplateCount++;
+                    continue;
+                }
+
+                if (!rollAppliesToSlot(roll, slot)) {
+                    slotMismatchCount++;
+                    continue;
+                }
+
+                if (!isValidAttributeTypeId(roll.attributeTypeId)) {
+                    missingAttributeTypeCount++;
+                    continue;
+                }
+
+                Identifier baseModifierId;
+                try {
+                    baseModifierId = Identifier.parse(roll.modifierId);
+                } catch (Exception ignored) {
+                    malformedTemplateCount++;
+                    continue;
+                }
+
+                Identifier modifierId = Identifier.fromNamespaceAndPath(baseModifierId.getNamespace(), baseModifierId.getPath() + "_" + slot.getName());
+                double amount = roll.amount;
+                if (masteryMultiplier != 0.0D && !isMasteryAttributeType(roll.attributeTypeId)) {
+                    amount = amount * (1.0D + masteryMultiplier);
+                }
+                AttributeModifier cloneModifier = new AttributeModifier(modifierId, amount, roll.operation);
+                var key = BuiltInRegistries.ATTRIBUTE.get(Identifier.parse(roll.attributeTypeId));
+                if (key.isEmpty()) {
+                    missingAttributeTypeCount++;
+                    continue;
+                }
+
+                modifiers.put(key.get(), cloneModifier);
+            }
+
+            Tierify.LOGGER.info("Generated modifiers (rolled) for {} in {} -> {} (appliedCount={}, malformed={}, slotMismatch={}, missingAttributeType={})",
+                    BuiltInRegistries.ITEM.getKey(itemStack.getItem()),
+                    slot.getName(),
+                    modifiers,
+                    modifiers.size(),
+                    malformedTemplateCount,
+                    slotMismatchCount,
+                    missingAttributeTypeCount);
             return modifiers;
         }
 

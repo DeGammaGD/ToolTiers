@@ -1,0 +1,17 @@
+﻿{
+    "id":  "tiered:ranged_weapons/rare",
+    "verifiers":  [
+                      {
+                          "tag":  "c:bows"
+                      },
+                      {
+                          "tag":  "c:crossbows"
+                      }
+                  ],
+    "weight":  60,
+    "style":  {
+                  "color":  "blue"
+              },
+    "modifier_pool":  "tiered:ranged_weapons/rare"
+}
+

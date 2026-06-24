@@ -1,0 +1,23 @@
+﻿{
+    "id":  "tiered:armor/legendary",
+    "verifiers":  [
+                      {
+                          "tag":  "c:helmets"
+                      },
+                      {
+                          "tag":  "c:chestplates"
+                      },
+                      {
+                          "tag":  "c:leggings"
+                      },
+                      {
+                          "tag":  "c:boots"
+                      }
+                  ],
+    "weight":  12,
+    "style":  {
+                  "color":  "gold"
+              },
+    "modifier_pool":  "tiered:armor/legendary"
+}
+

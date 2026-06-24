@@ -1,6 +1,10 @@
 package elocindev.tierify.mixin.client;
 
 import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import draylar.tiered.api.PotentialAttribute;
 import elocindev.tierify.Tierify;
@@ -26,6 +30,43 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Environment(EnvType.CLIENT)
 @Mixin(ItemStack.class)
 public abstract class ItemStackClientMixin {
+
+    private static final Pattern PERCENT_NUMBER_PATTERN = Pattern.compile("([+-]?\\d+(?:\\.\\d+)?)%");
+
+    private static String formatPercentNumbers(String text) {
+        Matcher matcher = PERCENT_NUMBER_PATTERN.matcher(text);
+        StringBuffer output = new StringBuffer();
+
+        while (matcher.find()) {
+            String rawNumber = matcher.group(1);
+            String replacement = rawNumber;
+
+            try {
+                BigDecimal rounded = new BigDecimal(rawNumber).setScale(1, RoundingMode.HALF_UP).stripTrailingZeros();
+                replacement = rounded.toPlainString();
+            } catch (NumberFormatException ignored) {
+            }
+
+            matcher.appendReplacement(output, Matcher.quoteReplacement(replacement + "%"));
+        }
+
+        matcher.appendTail(output);
+        return output.toString();
+    }
+
+    private static Component formatTooltipComponent(Component component) {
+        String raw = component.getString();
+        if (raw.indexOf('%') < 0) {
+            return component;
+        }
+
+        String formatted = formatPercentNumbers(raw);
+        if (formatted.equals(raw)) {
+            return component;
+        }
+
+        return Component.literal(formatted).setStyle(component.getStyle());
+    }
 
     @Inject(method = "getHoverName", at = @At("RETURN"), cancellable = true, require = 0)
     private void getNameMixin(CallbackInfoReturnable<Component> info) {
@@ -57,6 +98,10 @@ public abstract class ItemStackClientMixin {
     @Inject(method = "getTooltipLines", at = @At("RETURN"), cancellable = true, require = 0)
     private void getTooltipMixin(Item.TooltipContext context, Player player, TooltipFlag type, CallbackInfoReturnable<List<Component>> info) {
         List<Component> tooltip = info.getReturnValue();
+        for (int i = 0; i < tooltip.size(); i++) {
+            tooltip.set(i, formatTooltipComponent(tooltip.get(i)));
+        }
+
         CustomData component = ((ItemStack) (Object) this).get(DataComponents.CUSTOM_DATA);
         CompoundTag root = component != null ? component.copyTag() : new CompoundTag();
 

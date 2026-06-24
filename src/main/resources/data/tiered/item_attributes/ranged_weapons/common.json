@@ -1,0 +1,17 @@
+﻿{
+    "id":  "tiered:ranged_weapons/common",
+    "verifiers":  [
+                      {
+                          "tag":  "c:bows"
+                      },
+                      {
+                          "tag":  "c:crossbows"
+                      }
+                  ],
+    "weight":  200,
+    "style":  {
+                  "color":  "gray"
+              },
+    "modifier_pool":  "tiered:ranged_weapons/common"
+}
+

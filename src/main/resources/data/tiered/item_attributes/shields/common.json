@@ -1,0 +1,14 @@
+﻿{
+    "id":  "tiered:shields/common",
+    "verifiers":  [
+                      {
+                          "tag":  "c:shields"
+                      }
+                  ],
+    "weight":  200,
+    "style":  {
+                  "color":  "gray"
+              },
+    "modifier_pool":  "tiered:shields/common"
+}
+

@@ -1,0 +1,149 @@
+{
+    "attributes":  [
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_3",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_4",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.armor",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_4",
+                                            "operation":  "ADDITION",
+                                            "amount":  2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.armor",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_3",
+                                            "operation":  "ADDITION",
+                                            "amount":  2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.armor",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_1",
+                                            "operation":  "ADDITION",
+                                            "amount":  2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_3",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.3
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.max_health",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_2",
+                                            "operation":  "ADDITION",
+                                            "amount":  4
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.movement_speed",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.max_health",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_4",
+                                            "operation":  "ADDITION",
+                                            "amount":  4
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "generic.max_health",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_1",
+                                            "operation":  "ADDITION",
+                                            "amount":  4
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.3
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durable",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_shield_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.3
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND",
+                                                            "OFFHAND"
+                                                        ]
+                       }
+                   ]
+}
+
