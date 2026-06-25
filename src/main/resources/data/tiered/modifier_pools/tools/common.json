@@ -1,86 +1,31 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "generic.movement_speed",
-                           "modifier":  {
-                                            "name":  "tiered:common_tool_4",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.movement_speed",
-                           "modifier":  {
-                                            "name":  "tiered:common_tool_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.dig_speed",
+                           "type":  "minecraft:block_break_speed",
                            "modifier":  {
                                             "name":  "tiered:common_tool_3",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.035
+                                            "amount":  -0.2
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.dig_speed",
+                           "type":  "minecraft:block_break_speed",
                            "modifier":  {
                                             "name":  "tiered:common_tool_2",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.035
+                                            "amount":  -0.15
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.dig_speed",
+                           "type":  "minecraft:block_break_speed",
                            "modifier":  {
                                             "name":  "tiered:common_tool_4",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.035
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:common_tool_2",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:common_tool_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.movement_speed",
-                           "modifier":  {
-                                            "name":  "tiered:common_tool_3",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  -0.1
                                         },
@@ -89,11 +34,165 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.durability",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_2",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durability",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_1",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.15
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
                                             "name":  "tiered:common_tool_4",
                                             "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.fortune",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_5",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.fortune",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_6",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.15
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.fortune",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_7",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:block_interaction_range",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_8",
+                                            "operation":  "ADD_VALUE",
+                                            "amount":  -1.0
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:block_interaction_range",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_9",
+                                            "operation":  "ADD_VALUE",
+                                            "amount":  -0.75
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:block_interaction_range",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_10",
+                                            "operation":  "ADD_VALUE",
+                                            "amount":  -0.5
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.mastery",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_11",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.mastery",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_12",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.08
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.mastery",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_13",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  -0.05
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.fortune",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_fortune",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:block_interaction_range",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_reach",
+                                            "operation":  "ADD_VALUE",
+                                            "amount":  -0.4
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.mastery",
+                           "modifier":  {
+                                            "name":  "tiered:common_tool_mastery",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.08
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -101,4 +200,3 @@
                        }
                    ]
 }
-

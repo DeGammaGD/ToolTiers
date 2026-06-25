@@ -25,10 +25,9 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = { "createAttributes", "createPlayerAttributes" }, at = @At("RETURN"), require = 0)
     private static void createPlayerAttributesMixin(CallbackInfoReturnable<AttributeSupplier.Builder> info) {
-        info.getReturnValue().add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(CustomEntityAttributes.CRIT_CHANCE));
-        info.getReturnValue().add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(CustomEntityAttributes.DIG_SPEED));
-        info.getReturnValue().add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(CustomEntityAttributes.DURABLE));
-        info.getReturnValue().add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(CustomEntityAttributes.RANGE_ATTACK_DAMAGE));
+        for (var attribute : CustomEntityAttributes.PLAYER_ATTRIBUTES) {
+            info.getReturnValue().add(BuiltInRegistries.ATTRIBUTE.wrapAsHolder(attribute));
+        }
     }
 
     @ModifyVariable(method = "getDestroySpeed", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffectUtil;hasDigSpeed(Lnet/minecraft/world/entity/LivingEntity;)Z"), index = 2, require = 0)

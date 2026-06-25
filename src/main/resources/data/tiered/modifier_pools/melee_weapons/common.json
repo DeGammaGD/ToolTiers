@@ -1,132 +1,77 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "tiered:generic.crit_chance",
+                           "type":  "minecraft:attack_damage",
                            "modifier":  {
-                                            "name":  "tiered:common_mace_1",
+                                            "name":  "tiered:common_melee_weapons_attack_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
+                                            "amount":  -0.3
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.critical_chance",
                            "modifier":  {
-                                            "name":  "tiered:common_mace_3",
-                                            "operation":  "ADDITION",
-                                            "amount":  -2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:common_mace_3",
+                                            "name":  "tiered:common_melee_weapons_critical_chance",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  0.05
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.crit_chance",
+                           "type":  "tiered:generic.critical_damage",
                            "modifier":  {
-                                            "name":  "tiered:common_mace_3",
+                                            "name":  "tiered:common_melee_weapons_critical_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
+                                            "amount":  0.1
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.attack_damage",
+                           "type":  "tiered:generic.looting",
                            "modifier":  {
-                                            "name":  "tiered:common_mace_4",
+                                            "name":  "tiered:common_melee_weapons_looting",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.3
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.attack_damage",
+                           "type":  "tiered:generic.sweeping_range",
                            "modifier":  {
-                                            "name":  "tiered:common_mace_2",
+                                            "name":  "tiered:common_melee_weapons_sweeping_range",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.3
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
-                                            "name":  "tiered:common_mace_4",
+                                            "name":  "tiered:common_melee_weapons_durability",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.2
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.mastery",
                            "modifier":  {
-                                            "name":  "tiered:common_mace_4",
-                                            "operation":  "ADDITION",
-                                            "amount":  -2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.crit_chance",
-                           "modifier":  {
-                                            "name":  "tiered:common_mace_2",
+                                            "name":  "tiered:common_melee_weapons_mastery",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:common_mace_2",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.luck",
-                           "modifier":  {
-                                            "name":  "tiered:common_mace_1",
-                                            "operation":  "ADDITION",
-                                            "amount":  -2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.attack_damage",
-                           "modifier":  {
-                                            "name":  "tiered:common_mace_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.1
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -134,4 +79,3 @@
                        }
                    ]
 }
-

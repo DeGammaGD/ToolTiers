@@ -1,53 +1,31 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "tiered:generic.crit_chance",
+                           "type":  "tiered:generic.density",
                            "modifier":  {
-                                            "name":  "tiered:legendary_mace_3",
+                                            "name":  "tiered:legendary_maces_density",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.15
+                                            "amount":  0.4
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.attack_damage",
+                           "type":  "tiered:generic.breach",
                            "modifier":  {
-                                            "name":  "tiered:legendary_mace_2",
+                                            "name":  "tiered:legendary_maces_breach",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.2
+                                            "amount":  0.4
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "minecraft:attack_damage",
                            "modifier":  {
-                                            "name":  "tiered:legendary_mace_3",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.3
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_mace_2",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.3
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.attack_damage",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_mace_4",
+                                            "name":  "tiered:legendary_maces_attack_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  0.2
                                         },
@@ -56,20 +34,31 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.critical_chance",
                            "modifier":  {
-                                            "name":  "tiered:legendary_mace_1",
-                                            "operation":  "ADDITION",
-                                            "amount":  2
+                                            "name":  "tiered:legendary_maces_critical_chance",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.4
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.attack_damage",
+                           "type":  "tiered:generic.critical_damage",
                            "modifier":  {
-                                            "name":  "tiered:legendary_mace_1",
+                                            "name":  "tiered:legendary_maces_critical_damage",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.58
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "MAINHAND"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:attack_speed",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_maces_handling",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  0.2
                                         },
@@ -78,55 +67,22 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
-                                            "name":  "tiered:legendary_mace_4",
-                                            "operation":  "ADDITION",
-                                            "amount":  2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.crit_chance",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_mace_2",
+                                            "name":  "tiered:legendary_maces_durability",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.15
+                                            "amount":  0.35
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.mastery",
                            "modifier":  {
-                                            "name":  "tiered:legendary_mace_3",
-                                            "operation":  "ADDITION",
-                                            "amount":  2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_mace_4",
+                                            "name":  "tiered:legendary_maces_mastery",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.3
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.crit_chance",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_mace_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.15
+                                            "amount":  0.22
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -134,4 +90,3 @@
                        }
                    ]
 }
-

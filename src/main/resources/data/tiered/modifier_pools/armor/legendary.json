@@ -1,11 +1,11 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
-                                            "name":  "tiered:legendary_armor_3",
+                                            "name":  "tiered:legendary_armor_durability",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.05
+                                            "amount":  0.35
                                         },
                            "optional_equipment_slots":  [
                                                             "FEET",
@@ -15,37 +15,9 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "minecraft:armor",
                            "modifier":  {
-                                            "name":  "tiered:legendary_armor_4",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.3
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "FEET",
-                                                            "LEGS",
-                                                            "CHEST",
-                                                            "HEAD"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.armor_toughness",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_armor_4",
-                                            "operation":  "ADDITION",
-                                            "amount":  1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "FEET",
-                                                            "LEGS",
-                                                            "CHEST",
-                                                            "HEAD"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_armor_2",
+                                            "name":  "tiered:legendary_armor_armor",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  0.3
                                         },
@@ -57,9 +29,37 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.armor",
+                           "type":  "minecraft:armor_toughness",
                            "modifier":  {
-                                            "name":  "tiered:legendary_armor_3",
+                                            "name":  "tiered:legendary_armor_armor_toughness",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.25
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.protection_family",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_armor_protection_family",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.35
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:armor_toughness",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_armor_toughness",
                                             "operation":  "ADDITION",
                                             "amount":  2
                                         },
@@ -71,9 +71,23 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.armor",
+                           "type":  "minecraft:movement_speed",
                            "modifier":  {
-                                            "name":  "tiered:legendary_armor_2",
+                                            "name":  "tiered:legendary_armor_mobility",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.35
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "FEET",
+                                                            "LEGS",
+                                                            "CHEST",
+                                                            "HEAD"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:max_health",
+                           "modifier":  {
+                                            "name":  "tiered:legendary_armor_health",
                                             "operation":  "ADDITION",
                                             "amount":  2
                                         },
@@ -85,39 +99,11 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.armor_toughness",
+                           "type":  "tiered:generic.mastery",
                            "modifier":  {
-                                            "name":  "tiered:legendary_armor_1",
-                                            "operation":  "ADDITION",
-                                            "amount":  1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "FEET",
-                                                            "LEGS",
-                                                            "CHEST",
-                                                            "HEAD"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.armor",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_armor_1",
-                                            "operation":  "ADDITION",
-                                            "amount":  2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "FEET",
-                                                            "LEGS",
-                                                            "CHEST",
-                                                            "HEAD"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.armor_toughness",
-                           "modifier":  {
-                                            "name":  "tiered:legendary_armor_2",
-                                            "operation":  "ADDITION",
-                                            "amount":  2
+                                            "name":  "tiered:legendary_armor_mastery",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  0.22
                                         },
                            "optional_equipment_slots":  [
                                                             "FEET",
@@ -128,4 +114,3 @@
                        }
                    ]
 }
-

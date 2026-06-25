@@ -191,19 +191,6 @@
                     "tiered:uncommon_spear_1":  "tiered:spears/uncommon",
                     "tiered:uncommon_spear_2":  "tiered:spears/uncommon",
                     "tiered:uncommon_spear_3":  "tiered:spears/uncommon",
-                    "tiered:uncommon_spear_4":  "tiered:spears/uncommon",
-                    "tiered:common_staffwand_1":  "tiered:staves_and_wands/common",
-                    "tiered:common_staffwand_2":  "tiered:staves_and_wands/common",
-                    "tiered:epic_staffwand_1":  "tiered:staves_and_wands/epic",
-                    "tiered:epic_staffwand_2":  "tiered:staves_and_wands/epic",
-                    "tiered:legendary_staffwand_1":  "tiered:staves_and_wands/legendary",
-                    "tiered:legendary_staffwand_2":  "tiered:staves_and_wands/legendary",
-                    "tiered:mythic_staffwand_1":  "tiered:staves_and_wands/mythic",
-                    "tiered:mythic_staffwand_2":  "tiered:staves_and_wands/mythic",
-                    "tiered:rare_staffwand_1":  "tiered:staves_and_wands/rare",
-                    "tiered:rare_staffwand_2":  "tiered:staves_and_wands/rare",
-                    "tiered:uncommon_staffwand_1":  "tiered:staves_and_wands/uncommon",
-                    "tiered:uncommon_staffwand_2":  "tiered:staves_and_wands/uncommon"
+                    "tiered:uncommon_spear_4":  "tiered:spears/uncommon"
                 }
 }
-

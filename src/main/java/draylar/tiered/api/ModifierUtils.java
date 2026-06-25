@@ -281,6 +281,44 @@ public class ModifierUtils {
         return copy;
     }
 
+    private static String resolveGroupedAttributeType(String attributeTypeId) {
+        if (!CustomEntityAttributes.isProtectionFamilyAttributeId(attributeTypeId)) {
+            return attributeTypeId;
+        }
+
+        String[] family = CustomEntityAttributes.PROTECTION_FAMILY_MEMBERS;
+        if (family.length == 0) {
+            return attributeTypeId;
+        }
+
+        return family[ThreadLocalRandom.current().nextInt(family.length)];
+    }
+
+    private static List<GeneratedAttributeRoll> normalizeGroupedRolls(List<GeneratedAttributeRoll> sourceRolls) {
+        if (sourceRolls == null || sourceRolls.isEmpty()) {
+            return sourceRolls;
+        }
+
+        List<GeneratedAttributeRoll> normalized = new ArrayList<>(sourceRolls.size());
+        for (GeneratedAttributeRoll roll : sourceRolls) {
+            if (roll == null) {
+                continue;
+            }
+
+            String resolvedTypeId = resolveGroupedAttributeType(roll.attributeTypeId);
+            normalized.add(new GeneratedAttributeRoll(
+                    resolvedTypeId,
+                    roll.modifierId,
+                    roll.operation,
+                    roll.amount,
+                    copySlots(roll.requiredSlots),
+                    copySlots(roll.optionalSlots)
+            ));
+        }
+
+        return normalized;
+    }
+
     private static boolean rollAppliesToSlot(GeneratedAttributeRoll roll, EquipmentSlot slot) {
         if (roll == null) {
             return false;
@@ -375,8 +413,8 @@ public class ModifierUtils {
             }
 
             double rolledAmount = rollAmountForTier(minAmount, maxAmount, tierId);
-            generated.add(new GeneratedAttributeRoll(
-                    type,
+                generated.add(new GeneratedAttributeRoll(
+                    resolveGroupedAttributeType(type),
                     getModifierBaseId(representative, tierId),
                     representative.getEntityAttributeModifier().operation(),
                     rolledAmount,
@@ -524,7 +562,7 @@ public class ModifierUtils {
     private static double resolveDurableAmount(List<GeneratedAttributeRoll> generatedRolls, PotentialAttribute assignedAttribute) {
         if (generatedRolls != null) {
             for (GeneratedAttributeRoll roll : generatedRolls) {
-                if (roll != null && "tiered:generic.durable".equals(roll.attributeTypeId)) {
+                if (roll != null && CustomEntityAttributes.isDurabilityAttributeId(roll.attributeTypeId)) {
                     return (double) Math.round(roll.amount * 100.0D) / 100.0D;
                 }
             }
@@ -532,7 +570,7 @@ public class ModifierUtils {
 
         if (assignedAttribute != null && assignedAttribute.getAttributes() != null) {
             for (AttributeTemplate template : assignedAttribute.getAttributes()) {
-                if (template != null && "tiered:generic.durable".equals(template.getAttributeTypeID()) && template.getEntityAttributeModifier() != null) {
+                if (template != null && CustomEntityAttributes.isDurabilityAttributeId(template.getAttributeTypeID()) && template.getEntityAttributeModifier() != null) {
                     return (double) Math.round(template.getEntityAttributeModifier().amount() * 100.0D) / 100.0D;
                 }
             }
@@ -690,7 +728,7 @@ public class ModifierUtils {
             if (template == null) {
                 continue;
             }
-            if ("tiered:generic.durable".equals(template.getAttributeTypeID())) {
+            if (CustomEntityAttributes.isDurabilityAttributeId(template.getAttributeTypeID())) {
                 root.remove("durable");
                 break;
             }
@@ -778,6 +816,8 @@ public class ModifierUtils {
         List<GeneratedAttributeRoll> generatedRolls = readGeneratedRollsFromNbt(root);
         if (generatedRolls.isEmpty()) {
             generatedRolls = generateTierAttributeRolls(stack, tierId, assignedAttribute);
+        } else {
+            generatedRolls = normalizeGroupedRolls(generatedRolls);
         }
 
         writeGeneratedRollsToNbt(root, generatedRolls);
@@ -839,7 +879,7 @@ public class ModifierUtils {
                 List<AttributeTemplate> attributeList = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier).getAttributes();
                 for (int i = 0; i < attributeList.size(); i++) {
                     String attributeTypeId = attributeList.get(i).getAttributeTypeID();
-                    if ("tiered:generic.durable".equals(attributeTypeId)) {
+                    if (CustomEntityAttributes.isDurabilityAttributeId(attributeTypeId)) {
                         nbtKeys.add("durable");
                         break;
                     }

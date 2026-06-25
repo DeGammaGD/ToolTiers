@@ -1,7 +1,7 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "minecraft:movement_speed",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_3",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -13,7 +13,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "minecraft:movement_speed",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_4",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -25,7 +25,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.armor",
+                           "type":  "minecraft:armor",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_4",
                                             "operation":  "ADDITION",
@@ -37,7 +37,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.armor",
+                           "type":  "minecraft:armor",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_3",
                                             "operation":  "ADDITION",
@@ -49,7 +49,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.armor",
+                           "type":  "minecraft:armor",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_1",
                                             "operation":  "ADDITION",
@@ -61,7 +61,7 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_3",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -73,7 +73,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.max_health",
+                           "type":  "minecraft:max_health",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_2",
                                             "operation":  "ADDITION",
@@ -85,7 +85,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "minecraft:movement_speed",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_2",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -97,7 +97,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.max_health",
+                           "type":  "minecraft:max_health",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_4",
                                             "operation":  "ADDITION",
@@ -109,7 +109,7 @@
                                                         ]
                        },
                        {
-                           "type":  "generic.max_health",
+                           "type":  "minecraft:max_health",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_1",
                                             "operation":  "ADDITION",
@@ -121,7 +121,7 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_1",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -133,7 +133,7 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
                                             "name":  "tiered:legendary_shield_2",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -146,4 +146,6 @@
                        }
                    ]
 }
+
+
 

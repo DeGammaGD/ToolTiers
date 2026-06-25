@@ -1,7 +1,7 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
                                             "name":  "tiered:legendary_fishing_2",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -38,4 +38,5 @@
                        }
                    ]
 }
+
 

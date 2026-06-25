@@ -1,33 +1,66 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "tiered:generic.glide_speed",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_elytra_2",
+                                            "name":  "tiered:uncommon_elytra_glide_speed",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.12
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.boost_efficiency",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_elytra_boost_efficiency",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.2
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.durability",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_elytra_durability",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "minecraft:max_health",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_elytra_health",
+                                            "operation":  "ADD_VALUE",
+                                            "amount":  -1
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.protection",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_elytra_protection",
+                                            "operation":  "ADD_MULTIPLIED_BASE",
+                                            "amount":  -0.12
+                                        },
+                           "optional_equipment_slots":  [
+                                                            "CHEST"
+                                                        ]
+                       },
+                       {
+                           "type":  "tiered:generic.mastery",
+                           "modifier":  {
+                                            "name":  "tiered:uncommon_elytra_mastery",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "CHEST"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_elytra_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.0355
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "CHEST"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_elytra_2",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.1
                                         },
                            "optional_equipment_slots":  [
                                                             "CHEST"
@@ -35,4 +68,3 @@
                        }
                    ]
 }
-

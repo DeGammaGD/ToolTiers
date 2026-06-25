@@ -1,132 +1,88 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "tiered:generic.looting",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_2",
+                                            "name":  "tiered:common_ranged_weapons_looting",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.3
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.power",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_3",
+                                            "name":  "tiered:common_ranged_weapons_power",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.075
+                                            "amount":  -0.3
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.critical_chance",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_1",
+                                            "name":  "tiered:common_ranged_weapons_critical_chance",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  0.05
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "tiered:generic.critical_damage",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_3",
+                                            "name":  "tiered:common_ranged_weapons_critical_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  0.1
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.crit_chance",
+                           "type":  "tiered:generic.quick_draw",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_2",
+                                            "name":  "tiered:common_ranged_weapons_quick_draw",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.3
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.range_attack_damage",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_4",
+                                            "name":  "tiered:common_ranged_weapons_durability",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.2
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.movement_speed",
+                           "type":  "tiered:generic.lucky_shot",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_4",
+                                            "name":  "tiered:common_ranged_weapons_lucky_shot",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.035
+                                            "amount":  0.05
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.crit_chance",
+                           "type":  "tiered:generic.mastery",
                            "modifier":  {
-                                            "name":  "tiered:common_ranged_3",
+                                            "name":  "tiered:common_ranged_weapons_mastery",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.075
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.crit_chance",
-                           "modifier":  {
-                                            "name":  "tiered:common_ranged_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.range_attack_damage",
-                           "modifier":  {
-                                            "name":  "tiered:common_ranged_2",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:common_ranged_4",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.range_attack_damage",
-                           "modifier":  {
-                                            "name":  "tiered:common_ranged_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.1
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -134,4 +90,3 @@
                        }
                    ]
 }
-

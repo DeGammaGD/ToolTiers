@@ -1,132 +1,88 @@
-{
+﻿{
     "attributes":  [
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.reach",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_3",
-                                            "operation":  "ADDITION",
-                                            "amount":  -1
+                                            "name":  "tiered:uncommon_spears_reach",
+                                            "operation":  "ADD_VALUE",
+                                            "amount":  -0.5
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.lunge",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_1",
-                                            "operation":  "ADDITION",
-                                            "amount":  -1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "generic.attack_damage",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_mace_4",
+                                            "name":  "tiered:uncommon_spears_lunge",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
+                                            "amount":  -0.2
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "minecraft:attack_speed",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_2",
+                                            "name":  "tiered:uncommon_spears_handling",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
+                                            "amount":  -0.2
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.luck",
+                           "type":  "tiered:generic.charge_damage",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_4",
-                                            "operation":  "ADDITION",
-                                            "amount":  -1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.crit_chance",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_mace_2",
+                                            "name":  "tiered:uncommon_spears_charge_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.2
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.durable",
+                           "type":  "tiered:generic.critical_chance",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_3",
+                                            "name":  "tiered:uncommon_spears_critical_chance",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
+                                            "amount":  0.12
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.crit_chance",
+                           "type":  "tiered:generic.critical_damage",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_3",
+                                            "name":  "tiered:uncommon_spears_critical_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  0.2
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.attack_damage",
+                           "type":  "tiered:generic.durability",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_2",
+                                            "name":  "tiered:uncommon_spears_durability",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
+                                            "amount":  -0.1
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
                        },
                        {
-                           "type":  "generic.attack_damage",
+                           "type":  "tiered:generic.mastery",
                            "modifier":  {
-                                            "name":  "tiered:uncommon_mace_1",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.crit_chance",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_mace_1",
+                                            "name":  "tiered:uncommon_spears_mastery",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.durable",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_mace_4",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.15
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -134,4 +90,3 @@
                        }
                    ]
 }
-
