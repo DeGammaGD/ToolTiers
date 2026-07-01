@@ -8,6 +8,7 @@
                                             "amount":  -0.5
                                         },
                            "optional_equipment_slots":  [
+                                               "exclusive_group":  "mace_impact",
                                                             "MAINHAND"
                                                         ]
                        },
@@ -19,6 +20,7 @@
                                             "amount":  0.12
                                         },
                            "optional_equipment_slots":  [
+                                               "exclusive_group":  "mace_impact",
                                                             "MAINHAND"
                                                         ]
                        },

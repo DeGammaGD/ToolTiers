@@ -13,6 +13,7 @@
                        },
                        {
                            "type":  "tiered:generic.density",
+                           "exclusive_group":  "mace_impact",
                            "modifier":  {
                                             "name":  "tiered:legendary_maces_density",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -24,6 +25,7 @@
                        },
                        {
                            "type":  "tiered:generic.breach",
+                           "exclusive_group":  "mace_impact",
                            "modifier":  {
                                             "name":  "tiered:legendary_maces_breach",
                                             "operation":  "ADD_MULTIPLIED_BASE",

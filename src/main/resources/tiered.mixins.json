@@ -11,6 +11,7 @@
     "InventoryMenuMixin",
     "ItemFrameEntityMixin",
     "PlayerEntityMixin",
+    "ItemCombinerMenuMixin",
     "AnvilScreenHandlerMixin",
     "LootTableMixin",
     "MobEntityMixin",

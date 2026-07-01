@@ -34,17 +34,6 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.charge_damage",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_spears_charge_damage",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
                            "type":  "tiered:generic.critical_chance",
                            "modifier":  {
                                             "name":  "tiered:uncommon_spears_critical_chance",

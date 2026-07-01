@@ -57,7 +57,6 @@ public class CustomEntityAttributes {
     public static final Attribute BREACH = register("generic.breach", new RangedAttribute("generic.breach", 0.0D, 0.0D, 1024.0D).setSyncable(true));
     public static final Attribute HANDLING = register("generic.handling", new RangedAttribute("generic.handling", 0.0D, 0.0D, 1024.0D).setSyncable(true));
     public static final Attribute LUNGE = register("generic.lunge", new RangedAttribute("generic.lunge", 0.0D, 0.0D, 1024.0D).setSyncable(true));
-    public static final Attribute CHARGE_DAMAGE = register("generic.charge_damage", new RangedAttribute("generic.charge_damage", 0.0D, 0.0D, 1024.0D).setSyncable(true));
     public static final Attribute POWER = register("generic.power", new RangedAttribute("generic.power", 0.0D, 0.0D, 1024.0D).setSyncable(true));
     public static final Attribute QUICK_DRAW = register("generic.quick_draw", new RangedAttribute("generic.quick_draw", 0.0D, 0.0D, 1024.0D).setSyncable(true));
     public static final Attribute LUCKY_SHOT = register("generic.lucky_shot", new RangedAttribute("generic.lucky_shot", 0.0D, 0.0D, 1024.0D).setSyncable(true));
