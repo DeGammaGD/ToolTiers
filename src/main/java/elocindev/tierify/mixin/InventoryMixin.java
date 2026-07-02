@@ -1,6 +1,6 @@
 package elocindev.tierify.mixin;
 
-import draylar.tiered.api.ModifierUtils;
+import elocindev.tierify.tier.TierManager;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +22,6 @@ public class InventoryMixin {
             return;
         }
 
-        ModifierUtils.applyTierIfNeeded(stack);
+        TierManager.applyTierIfNeeded(stack);
     }
 }

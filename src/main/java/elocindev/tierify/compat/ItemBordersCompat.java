@@ -3,7 +3,6 @@ package elocindev.tierify.compat;
 import elocindev.tierify.Tierify;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.CustomData;
@@ -31,27 +30,27 @@ public class ItemBordersCompat {
     }
 
     /*
-     * Might return null if the identifier is not valid
+     * Returns the hex color string for a tier identifier by extracting the quality from the identifier
+     * path (e.g. "tiered:melee_weapons/rare" → "rare"). Falls back to the style color if set, or null.
      */
     public static String getColorForIdentifier(Identifier identifier) {
-        String tier = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(identifier).getID();
-        if (tier == null) return null;
-        
-        switch(Component.translatable(tier + ".label").getString().toLowerCase()) {
-            case "common":
-                return "0xc7c7c7";
-            case "uncommon":
-                return "0x76c462";
-            case "rare":
-                return "0x6293c4";
-            case "epic":
-                return "0xa762c4";
-            case "legendary":
-                return "0xcf9e44";
-            case "mythic":
-                return "0xb53f3f";
-        }
+        var attribute = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(identifier);
+        if (attribute == null) return null;
 
-        return String.valueOf(Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(Identifier.parse(identifier.toString())).getStyle().getColor().getValue());
+        // Extract quality from the identifier path directly — avoids a client-side translation lookup
+        // on the server write path and works even when language files are not loaded.
+        String path = identifier.getPath().toLowerCase(java.util.Locale.ROOT);
+        if (path.contains("mythic"))     return "0xb53f3f";
+        if (path.contains("legendary"))  return "0xcf9e44";
+        if (path.contains("epic"))       return "0xa762c4";
+        if (path.contains("rare"))       return "0x6293c4";
+        if (path.contains("uncommon"))   return "0x76c462";
+        if (path.contains("common"))     return "0xc7c7c7";
+
+        var style = attribute.getStyle();
+        if (style != null && style.getColor() != null) {
+            return String.valueOf(style.getColor().getValue());
+        }
+        return null;
     }
 }

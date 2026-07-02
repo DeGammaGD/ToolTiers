@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import draylar.tiered.api.BorderTemplate;
+import elocindev.tierify.api.BorderTemplate;
 import elocindev.tierify.TierifyClient;
 import net.fabricmc.fabric.api.resource.SimpleSynchronousResourceReloadListener;
 import net.minecraft.resources.Identifier;

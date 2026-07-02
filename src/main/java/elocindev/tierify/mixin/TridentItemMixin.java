@@ -1,7 +1,7 @@
 package elocindev.tierify.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import draylar.tiered.api.CustomEntityAttributes;
+import elocindev.tierify.api.CustomEntityAttributes;
 import elocindev.tierify.util.AttributeHelper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;

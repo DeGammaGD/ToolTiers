@@ -1,0 +1,13 @@
+{
+  "id": "tiered:totems/uncommon",
+  "verifiers": [
+    {
+      "id": "minecraft:totem_of_undying"
+    }
+  ],
+  "weight": 140,
+  "style": {
+    "color": "dark_green"
+  },
+  "attributes": []
+}

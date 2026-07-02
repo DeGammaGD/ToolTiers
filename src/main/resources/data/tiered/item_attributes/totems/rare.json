@@ -1,0 +1,13 @@
+{
+  "id": "tiered:totems/rare",
+  "verifiers": [
+    {
+      "id": "minecraft:totem_of_undying"
+    }
+  ],
+  "weight": 70,
+  "style": {
+    "color": "blue"
+  },
+  "attributes": []
+}

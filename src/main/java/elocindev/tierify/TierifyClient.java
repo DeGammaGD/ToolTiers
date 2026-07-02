@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import draylar.tiered.api.BorderTemplate;
-import draylar.tiered.api.PotentialAttribute;
+import elocindev.tierify.api.BorderTemplate;
+import elocindev.tierify.api.PotentialAttribute;
 import elocindev.tierify.data.AttributeDataLoader;
 import elocindev.tierify.data.TooltipBorderLoader;
 

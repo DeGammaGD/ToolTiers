@@ -1,7 +1,7 @@
 package elocindev.tierify.mixin.client;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import draylar.tiered.api.CustomEntityAttributes;
+import elocindev.tierify.api.CustomEntityAttributes;
 import elocindev.tierify.util.AttributeHelper;
 import net.minecraft.client.renderer.item.properties.numeric.UseDuration;
 import net.minecraft.world.entity.LivingEntity;

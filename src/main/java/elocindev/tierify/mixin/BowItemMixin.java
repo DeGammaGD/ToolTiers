@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 
-import draylar.tiered.api.CustomEntityAttributes;
+import elocindev.tierify.api.CustomEntityAttributes;
 import elocindev.tierify.util.AttributeHelper;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.BowItem;

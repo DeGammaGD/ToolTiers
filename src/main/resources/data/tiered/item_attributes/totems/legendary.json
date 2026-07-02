@@ -1,0 +1,13 @@
+{
+  "id": "tiered:totems/legendary",
+  "verifiers": [
+    {
+      "id": "minecraft:totem_of_undying"
+    }
+  ],
+  "weight": 12,
+  "style": {
+    "color": "gold"
+  },
+  "attributes": []
+}

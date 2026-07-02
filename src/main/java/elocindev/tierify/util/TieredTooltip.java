@@ -2,10 +2,12 @@ package elocindev.tierify.util;
 
 import java.util.List;
 
+import org.jetbrains.annotations.Nullable;
 import org.joml.Vector2ic;
 
-import draylar.tiered.api.BorderTemplate;
+import elocindev.tierify.api.BorderTemplate;
 import elocindev.tierify.Tierify;
+import elocindev.tierify.TierifyClient;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.gui.Font;
@@ -37,6 +39,22 @@ public class TieredTooltip {
             default:
                 return modifier;
         }
+    }
+
+    /**
+     * Returns the first {@link BorderTemplate} whose decider matches the given tier id or the raw tier NBT string,
+     * or {@code null} if no template matches. Shared by the item and container tooltip render hooks so both use a
+     * single border-matching path.
+     */
+    @Nullable
+    public static BorderTemplate findMatchingBorderTemplate(String tierId, String nbtString) {
+        for (int i = 0; i < TierifyClient.BORDER_TEMPLATES.size(); i++) {
+            BorderTemplate template = TierifyClient.BORDER_TEMPLATES.get(i);
+            if (template.containsDecider(tierId) || template.containsDecider(nbtString)) {
+                return template;
+            }
+        }
+        return null;
     }
 
     public static void renderTieredTooltipFromComponents(GuiGraphicsExtractor context, Font textRenderer, List<ClientTooltipComponent> components, int x, int y, ClientTooltipPositioner positioner,

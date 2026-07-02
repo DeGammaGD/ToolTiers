@@ -13,6 +13,4 @@ public class CommonConfig implements ConfigData {
     public boolean entityItemModifier = true;
     @Comment("Crafted items get modifiers")
     public boolean craftingModifier = true;
-    @Comment("Merchant items get modifiers")
-    public boolean merchantModifier = true;
 }

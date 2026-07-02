@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import draylar.tiered.api.ModifierUtils;
+import elocindev.tierify.tier.TierManager;
 import elocindev.tierify.Tierify;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.minecraft.commands.CommandSourceStack;
@@ -63,7 +63,7 @@ public class CommandInit {
             if (tier == -1) {
                 CustomData customData = itemStack.get(DataComponents.CUSTOM_DATA);
                 if (customData != null && customData.copyTag().contains(Tierify.NBT_SUBTAG_KEY)) {
-                    ModifierUtils.removeItemStackAttribute(itemStack);
+                    TierManager.removeTier(itemStack);
 
                     source.sendSuccess(() -> Component.translatable("commands.tiered.untier", itemStack.getHoverName().getString(), serverPlayerEntity.getDisplayName()), true);
                 } else {
@@ -96,12 +96,12 @@ public class CommandInit {
                         continue;
                     } else {
 
-                        ModifierUtils.removeItemStackAttribute(itemStack);
+                        TierManager.removeTier(itemStack);
 
                         Identifier attribute = potentialTier.get(serverPlayerEntity.level().getRandom().nextInt(potentialTier.size()));
                         if (attribute != null) {
-                            ModifierUtils.setTier(itemStack, attribute);
-                            int appliedCount = ModifierUtils.applyTierAttributes(itemStack);
+                            TierManager.setTier(itemStack, attribute);
+                            int appliedCount = TierManager.repairTier(itemStack);
                             if (appliedCount == 0) {
                                 Tierify.LOGGER.warn("Command tier assignment generated zero modifiers for item={} tier={}", BuiltInRegistries.ITEM.getKey(itemStack.getItem()), attribute);
                             }

@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import elocindev.tierify.TierifyClient;
 import elocindev.tierify.Tierify;
 import elocindev.tierify.util.TieredTooltip;
+import elocindev.tierify.api.BorderTemplate;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
@@ -21,7 +21,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.gui.screens.inventory.tooltip.DefaultTooltipPositioner;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -43,20 +42,16 @@ public class DrawContextMixin {
 
             String tierId = tieredTag.get().getString(Tierify.NBT_SUBTAG_DATA_KEY).orElse("");
             String nbtString = tieredTag.get().toString();
-            boolean rendered = false;
-            for (int i = 0; i < TierifyClient.BORDER_TEMPLATES.size(); i++) {
-                if (TierifyClient.BORDER_TEMPLATES.get(i).containsDecider(tierId) || TierifyClient.BORDER_TEMPLATES.get(i).containsDecider(nbtString)) {
-                    List<Component> text = Screen.getTooltipFromItem(Minecraft.getInstance(), stack);
+            BorderTemplate matchedTemplate = TieredTooltip.findMatchingBorderTemplate(tierId, nbtString);
+            if (matchedTemplate != null) {
+                List<Component> text = Screen.getTooltipFromItem(Minecraft.getInstance(), stack);
 
-                    List<ClientTooltipComponent> list = text.stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).collect(Collectors.toList());
-                    stack.getTooltipImage().ifPresent(data -> list.add(1, ClientTooltipComponent.create(data)));
+                List<ClientTooltipComponent> list = text.stream().map(Component::getVisualOrderText).map(ClientTooltipComponent::create).collect(Collectors.toList());
+                stack.getTooltipImage().ifPresent(data -> list.add(1, ClientTooltipComponent.create(data)));
 
-                    TieredTooltip.renderTieredTooltipFromComponents((GuiGraphicsExtractor) (Object) this, textRenderer, list, x, y, DefaultTooltipPositioner.INSTANCE, TierifyClient.BORDER_TEMPLATES.get(i));
-                    rendered = true;
+                TieredTooltip.renderTieredTooltipFromComponents((GuiGraphicsExtractor) (Object) this, textRenderer, list, x, y, DefaultTooltipPositioner.INSTANCE, matchedTemplate);
 
-                    info.cancel();
-                    break;
-                }
+                info.cancel();
             }
         }
     }

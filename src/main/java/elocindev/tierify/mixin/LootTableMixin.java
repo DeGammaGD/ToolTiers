@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-import draylar.tiered.api.CustomEntityAttributes;
-import draylar.tiered.api.ModifierUtils;
+import elocindev.tierify.api.CustomEntityAttributes;
+import elocindev.tierify.tier.TierManager;
 import elocindev.tierify.Tierify;
 import elocindev.tierify.util.AttributeHelper;
 import net.minecraft.util.RandomSource;
@@ -40,8 +40,7 @@ public class LootTableMixin {
 
         return stack -> {
             if (!stack.isEmpty() && !context.getLevel().isClientSide() && applyTier) {
-                ModifierUtils.applyTierIfNeeded(stack);
-                ModifierUtils.logTierDebug("loot_generation", stack);
+                TierManager.applyTierIfNeeded(stack);
             }
 
             if (dropMultiplier > 0.0D && !stack.isEmpty() && stack.isStackable()) {

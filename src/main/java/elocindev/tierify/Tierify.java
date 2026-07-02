@@ -30,12 +30,15 @@ import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.component.CustomData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import elocindev.tierify.tier.TierManager;
 
-import draylar.tiered.api.*;
+import elocindev.tierify.api.*;
 import elocindev.tierify.command.CommandInit;
+import elocindev.tierify.compat.NetworkingCompat;
 import elocindev.tierify.config.ClientConfig;
 import elocindev.tierify.config.CommonConfig;
 import elocindev.tierify.data.AttributeDataLoader;
+import elocindev.tierify.tier.TierStorage;
 
 import java.util.*;
 
@@ -51,11 +54,6 @@ public class Tierify implements ModInitializer {
      * This field is registered to the server's data manager in {@link ServerResourceManagerMixin}
      */
     public static final AttributeDataLoader ATTRIBUTE_DATA_LOADER = new AttributeDataLoader();
-
-    public static final UUID[] MODIFIERS = new UUID[] { UUID.fromString("baf8e074-f7f9-4549-ba1f-e21f82684b8c"), UUID.fromString("9b3416de-98d1-407f-bc6b-e673c2ab5252"),
-            UUID.fromString("1e3ceca6-aa30-4165-9715-20bb63c11348"), UUID.fromString("c99bfa17-4886-4cbb-86c2-ebf9369616d5"), UUID.fromString("19e4dc8d-3892-4ffe-a558-f96c68491144"),
-            UUID.fromString("b1641cff-84ed-4b63-85f8-2634005adc9b"), UUID.fromString("92f546e9-0d00-4159-8c8f-0499e49f5811"), UUID.fromString("e25c7fa8-13b0-4ea0-8db7-e26b78f36c90"),
-            UUID.fromString("2f9dcfce-bd03-4181-86b7-91c88f71e67c") };
 
     public static final Logger LOGGER = LogManager.getLogger();
 
@@ -83,7 +81,6 @@ public class Tierify implements ModInitializer {
 
     public static final String NBT_SUBTAG_KEY = "Tiered";
     public static final String NBT_SUBTAG_DATA_KEY = "Tier";
-    public static final String NBT_SUBTAG_TEMPLATE_DATA_KEY = "Template";
     public static final String NBT_SUBTAG_MARKER_KEY = "TieredAssigned";
 
     @Override
@@ -96,12 +93,11 @@ public class Tierify implements ModInitializer {
         CLIENT_CONFIG = AutoConfig.getConfigHolder(ClientConfig.class).getConfig();
 
         TieredItemTags.init();
-        CustomEntityAttributes.init();
         CommandInit.init();
         registerAttributeSyncer();
         ResourceManagerHelper.get(PackType.SERVER_DATA).registerReloadListener(Tierify.ATTRIBUTE_DATA_LOADER);
 
-        PayloadTypeRegistry.clientboundPlay().register(ATTRIBUTE_SYNC_PAYLOAD_ID, ATTRIBUTE_SYNC_PAYLOAD_CODEC);
+        NetworkingCompat.registerPayloads();
 
         ServerLifecycleEvents.END_DATA_PACK_RELOAD.register((server, serverResourceManager, success) -> {
             if (success) {
@@ -157,12 +153,12 @@ public class Tierify implements ModInitializer {
                 continue;
             }
 
-            ModifierUtils.applyTierIfNeeded(itemStack);
+            TierManager.applyTierIfNeeded(itemStack);
 
-            Identifier tierId = ModifierUtils.getAttributeID(itemStack);
+            Identifier tierId = TierManager.getTier(itemStack);
             if (tierId != null) {
-                int appliedCount = ModifierUtils.applyTierAttributes(itemStack);
-                if (appliedCount == 0) {
+                int appliedCount = TierManager.repairTier(itemStack);
+                if (appliedCount == 0 && TierStorage.hasGeneratedAttributes(tierId)) {
                     LOGGER.warn("updateItemStackNbt kept tier {} on {} but generated zero modifiers", tierId, BuiltInRegistries.ITEM.getKey(itemStack.getItem()));
                 }
                 playerInventory.setItem(u, itemStack);

@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 
-import draylar.tiered.api.CustomEntityAttributes;
+import elocindev.tierify.api.CustomEntityAttributes;
 import elocindev.tierify.Tierify;
 import elocindev.tierify.util.AttributeHelper;
 import elocindev.tierify.util.CombatContextHelper;

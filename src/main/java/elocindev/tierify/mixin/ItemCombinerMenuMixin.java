@@ -1,6 +1,6 @@
 package elocindev.tierify.mixin;
 
-import elocindev.tierify.util.AnvilTierUpgradeHelper;
+import elocindev.tierify.anvil.TierifyAnvilRecipeManager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AnvilMenu;
 import net.minecraft.world.inventory.ItemCombinerMenu;
@@ -24,6 +24,6 @@ public class ItemCombinerMenuMixin {
         }
 
         ItemStack resultStack = menu.getSlot(2).getItem();
-        AnvilTierUpgradeHelper.applyTierUpgradeResultIfNeeded(player, menu, resultStack);
+        TierifyAnvilRecipeManager.syncRecipeResultIfNeeded(player, menu, resultStack);
     }
 }

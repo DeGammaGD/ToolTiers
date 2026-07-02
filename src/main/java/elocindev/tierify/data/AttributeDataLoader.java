@@ -12,7 +12,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonArray;
 
-import draylar.tiered.api.PotentialAttribute;
+import elocindev.tierify.api.PotentialAttribute;
 import elocindev.tierify.gson.EntityAttributeModifierDeserializer;
 import elocindev.tierify.gson.EntityAttributeModifierSerializer;
 import elocindev.tierify.gson.EquipmentSlotDeserializer;

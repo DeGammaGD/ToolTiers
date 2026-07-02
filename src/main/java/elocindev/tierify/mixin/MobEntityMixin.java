@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import draylar.tiered.api.ModifierUtils;
+import elocindev.tierify.tier.TierManager;
 import elocindev.tierify.Tierify;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.server.level.ServerLevel;
@@ -33,7 +33,7 @@ public class MobEntityMixin {
                 if (itemStack.isEmpty()) {
                     continue;
                 }
-                ModifierUtils.applyTierIfNeeded(itemStack);
+                TierManager.applyTierIfNeeded(itemStack);
             }
         }
     }
@@ -56,8 +56,7 @@ public class MobEntityMixin {
         Mob mob = (Mob) (Object) this;
         AABB searchBox = mob.getBoundingBox().inflate(2.0D);
         for (ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, searchBox, dropped -> !dropped.getItem().isEmpty())) {
-            ModifierUtils.applyTierIfNeeded(itemEntity.getItem());
-            ModifierUtils.logTierDebug("mob_drops", itemEntity.getItem());
+            TierManager.applyTierIfNeeded(itemEntity.getItem());
         }
     }
 

@@ -1,7 +1,7 @@
 package elocindev.tierify.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import draylar.tiered.api.CustomEntityAttributes;
+import elocindev.tierify.api.CustomEntityAttributes;
 import elocindev.tierify.Tierify;
 import elocindev.tierify.util.AttributeHelper;
 import elocindev.tierify.util.CombatContextHelper;
@@ -63,6 +63,10 @@ public class PlayerEntityMixin {
     private void tierify$syncGlideSpeed(CallbackInfo ci) {
         Player self = (Player) (Object) this;
         AttributeInstance instance = self.getAttribute(Attributes.FLYING_SPEED);
+        // Fast-exit: if not gliding and no modifier is applied, skip the full attribute read.
+        if (instance != null && !self.isFallFlying() && instance.getModifier(TIERIFY_GLIDE_SPEED_ID) == null) {
+            return;
+        }
         if (instance != null) {
             double glideSpeed = AttributeHelper.getItemAttributeAmount(self.getItemBySlot(EquipmentSlot.CHEST),
                     CustomEntityAttributes.GLIDE_SPEED);

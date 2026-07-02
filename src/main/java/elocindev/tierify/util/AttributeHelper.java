@@ -1,6 +1,6 @@
 package elocindev.tierify.util;
 
-import draylar.tiered.api.CustomEntityAttributes;
+import elocindev.tierify.api.CustomEntityAttributes;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -190,19 +190,11 @@ public class AttributeHelper {
         return bonus;
     }
 
-    public static float getCriticalDamageBonus(Player playerEntity) {
-        return getCriticalDamageModifier(playerEntity);
-    }
-
     public static boolean shouldMeleeCrit(Player playerEntity) {
         // Custom melee crit chance roll. Vanilla crit state is tracked separately and handled by the
         // attack pipeline context to avoid stacking custom and vanilla crit multipliers.
         float criticalChance = getCriticalChance(playerEntity);
         return criticalChance > 0.0f && playerEntity.getRandom().nextFloat() < criticalChance;
-    }
-
-    public static boolean shouldMeeleCrit(Player playerEntity) {
-        return shouldMeleeCrit(playerEntity);
     }
 
     public static float getExtraRangeDamage(Player playerEntity, float oldDamage) {

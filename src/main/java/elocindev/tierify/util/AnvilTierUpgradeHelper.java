@@ -1,6 +1,7 @@
 package elocindev.tierify.util;
 
-import draylar.tiered.api.ModifierUtils;
+import elocindev.tierify.tier.TierSelector;
+import elocindev.tierify.tier.TierManager;
 import elocindev.tierify.Tierify;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.Identifier;
@@ -17,6 +18,10 @@ import java.util.Map;
 
 public final class AnvilTierUpgradeHelper {
 
+    private static final Identifier TOTEM_OF_UNDYING_ID = Identifier.fromNamespaceAndPath("minecraft", "totem_of_undying");
+    private static final Identifier NETHER_STAR_ID = Identifier.fromNamespaceAndPath("minecraft", "nether_star");
+    private static final Identifier ECHO_SHARD_ID = Identifier.fromNamespaceAndPath("minecraft", "echo_shard");
+
     private AnvilTierUpgradeHelper() {
     }
 
@@ -27,12 +32,48 @@ public final class AnvilTierUpgradeHelper {
         if (left.isEmpty() || right.isEmpty() || resultStack.isEmpty()) {
             return;
         }
+        if (isTotemReforgeOperationValid(left, right)) {
+            Identifier leftTier = TierManager.getTier(left);
+            Identifier rightTier = TierManager.getTier(right);
+            if (leftTier == null || rightTier == null) {
+                return;
+            }
+
+            Identifier targetTier = buildTierVariant(leftTier, getTierQuality(rightTier));
+            if (targetTier == null) {
+                return;
+            }
+
+            finalizeReforgeResult(player, menu, resultStack, targetTier);
+            return;
+        }
+
+        if (isNetherStarMythicReforgeOperationValid(left, right)) {
+            Identifier leftTier = TierManager.getTier(left);
+            if (leftTier == null) {
+                return;
+            }
+
+            finalizeReforgeResult(player, menu, resultStack, buildTierVariant(leftTier, "mythic"));
+            return;
+        }
+
+        if (isEchoShardRerollOperationValid(left, right)) {
+            Identifier leftTier = TierManager.getTier(left);
+            if (leftTier == null) {
+                return;
+            }
+
+            finalizeRerollResult(player, menu, resultStack, leftTier);
+            return;
+        }
+
         if (left.getItem() != right.getItem() || resultStack.getItem() != left.getItem()) {
             return;
         }
 
-        Identifier leftTier = ModifierUtils.getAttributeID(left);
-        Identifier rightTier = ModifierUtils.getAttributeID(right);
+        Identifier leftTier = TierManager.getTier(left);
+        Identifier rightTier = TierManager.getTier(right);
         if (leftTier == null || rightTier == null) {
             return;
         }
@@ -45,18 +86,81 @@ public final class AnvilTierUpgradeHelper {
             return;
         }
 
-        ModifierUtils.setTier(resultStack, targetTier);
-        ModifierUtils.applyTierAttributes(resultStack);
-        ModifierUtils.rebuildAttributeModifiersComponent(resultStack);
+        finalizeReforgeResult(player, menu, resultStack, targetTier);
+    }
 
-        menu.getSlot(2).set(resultStack);
-        menu.getSlot(2).setChanged();
-        player.getInventory().setChanged();
-        menu.broadcastChanges();
-        if (player instanceof ServerPlayer serverPlayer) {
-            serverPlayer.containerMenu.broadcastChanges();
-            serverPlayer.inventoryMenu.broadcastChanges();
+    public static boolean isTotemReforgeOperationValid(ItemStack left, ItemStack right) {
+        if (left.isEmpty() || right.isEmpty()) {
+            return false;
         }
+        if (!TOTEM_OF_UNDYING_ID.equals(BuiltInRegistries.ITEM.getKey(right.getItem()))) {
+            return false;
+        }
+
+        return TierManager.getTier(left) != null && TierManager.getTier(right) != null;
+    }
+
+    public static boolean isNetherStarMythicReforgeOperationValid(ItemStack left, ItemStack right) {
+        if (left.isEmpty() || right.isEmpty()) {
+            return false;
+        }
+        if (!NETHER_STAR_ID.equals(BuiltInRegistries.ITEM.getKey(right.getItem()))) {
+            return false;
+        }
+
+        Identifier leftTier = TierManager.getTier(left);
+        if (leftTier == null) {
+            return false;
+        }
+
+        TierRank leftRank = rankForTierId(leftTier);
+        return leftRank == TierRank.LEGENDARY;
+    }
+
+    public static boolean isEchoShardRerollOperationValid(ItemStack left, ItemStack right) {
+        if (left.isEmpty() || right.isEmpty()) {
+            return false;
+        }
+        if (!ECHO_SHARD_ID.equals(BuiltInRegistries.ITEM.getKey(right.getItem()))) {
+            return false;
+        }
+
+        return TierManager.getTier(left) != null;
+    }
+
+    public static Identifier buildTierVariant(Identifier sourceTier, String quality) {
+        if (sourceTier == null || quality == null || quality.isBlank()) {
+            return null;
+        }
+
+        String path = sourceTier.getPath();
+        int lastSlash = path.lastIndexOf('/');
+        if (lastSlash < 0) {
+            return null;
+        }
+
+        String category = path.substring(0, lastSlash);
+        return Identifier.fromNamespaceAndPath(sourceTier.getNamespace(), category + "/" + quality.toLowerCase());
+    }
+
+    public static String getTierQuality(Identifier tierId) {
+        if (tierId == null) {
+            return null;
+        }
+
+        TierRank rank = rankForTierId(tierId);
+        if (rank == null) {
+            return null;
+        }
+
+        return switch (rank) {
+            case COMMON -> "common";
+            case UNCOMMON -> "uncommon";
+            case RARE -> "rare";
+            case EPIC -> "epic";
+            case LEGENDARY -> "legendary";
+            case MYTHIC -> "mythic";
+        };
     }
 
     public static Identifier pickResultTier(Item item, Identifier leftTier, Identifier rightTier) {
@@ -99,12 +203,32 @@ public final class AnvilTierUpgradeHelper {
         if (left.isEmpty() || right.isEmpty()) {
             return false;
         }
+        if (isTotemReforgeOperationValid(left, right)) {
+            return true;
+        }
         if (left.getItem() != right.getItem()) {
             return false;
         }
 
-        Identifier leftTier = ModifierUtils.getAttributeID(left);
-        Identifier rightTier = ModifierUtils.getAttributeID(right);
+        Identifier leftTier = TierManager.getTier(left);
+        Identifier rightTier = TierManager.getTier(right);
+        if (leftTier == null || rightTier == null) {
+            return false;
+        }
+
+        return hasUpgradeableTarget(left.getItem(), leftTier, rightTier);
+    }
+
+    public static boolean isStandardReforgeOperationValid(ItemStack left, ItemStack right) {
+        if (left.isEmpty() || right.isEmpty()) {
+            return false;
+        }
+        if (left.getItem() != right.getItem()) {
+            return false;
+        }
+
+        Identifier leftTier = TierManager.getTier(left);
+        Identifier rightTier = TierManager.getTier(right);
         if (leftTier == null || rightTier == null) {
             return false;
         }
@@ -218,10 +342,45 @@ public final class AnvilTierUpgradeHelper {
     }
 
     private static TierRank nextRank(TierRank rank) {
+        if (rank == TierRank.LEGENDARY) {
+            return TierRank.LEGENDARY;
+        }
         if (rank == TierRank.MYTHIC) {
             return TierRank.MYTHIC;
         }
         return TierRank.values()[rank.ordinal() + 1];
+    }
+
+    private static void finalizeReforgeResult(Player player, AnvilMenu menu, ItemStack resultStack, Identifier targetTier) {
+        TierManager.removeTier(resultStack);
+        TierManager.setTier(resultStack, targetTier);
+        TierManager.repairTier(resultStack);
+        TierManager.rebuildAttributes(resultStack);
+
+        menu.getSlot(2).set(resultStack);
+        menu.getSlot(2).setChanged();
+        player.getInventory().setChanged();
+        menu.broadcastChanges();
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.containerMenu.broadcastChanges();
+            serverPlayer.inventoryMenu.broadcastChanges();
+        }
+    }
+
+    private static void finalizeRerollResult(Player player, AnvilMenu menu, ItemStack resultStack, Identifier tierId) {
+        TierManager.removeTier(resultStack);
+        TierManager.setTier(resultStack, tierId);
+        TierManager.repairTier(resultStack);
+        TierManager.rebuildAttributes(resultStack);
+
+        menu.getSlot(2).set(resultStack);
+        menu.getSlot(2).setChanged();
+        player.getInventory().setChanged();
+        menu.broadcastChanges();
+        if (player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.containerMenu.broadcastChanges();
+            serverPlayer.inventoryMenu.broadcastChanges();
+        }
     }
 
     private enum TierRank {

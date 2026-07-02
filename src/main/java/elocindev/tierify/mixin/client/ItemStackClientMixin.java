@@ -6,8 +6,8 @@ import java.math.RoundingMode;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import draylar.tiered.api.CustomEntityAttributes;
-import draylar.tiered.api.PotentialAttribute;
+import elocindev.tierify.api.CustomEntityAttributes;
+import elocindev.tierify.api.PotentialAttribute;
 import elocindev.tierify.Tierify;
 import elocindev.tierify.util.TieredTooltip;
 import net.fabricmc.api.EnvType;

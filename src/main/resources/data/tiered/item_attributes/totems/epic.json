@@ -1,0 +1,13 @@
+{
+  "id": "tiered:totems/epic",
+  "verifiers": [
+    {
+      "id": "minecraft:totem_of_undying"
+    }
+  ],
+  "weight": 25,
+  "style": {
+    "color": "light_purple"
+  },
+  "attributes": []
+}
