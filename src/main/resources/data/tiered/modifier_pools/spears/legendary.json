@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "tiered:generic.spear_reach",
@@ -38,7 +38,7 @@
                            "modifier":  {
                                             "name":  "tiered:legendary_spears_critical_chance",
                                             "operation":  "ADD_VALUE",
-                                            "amount":  0.4
+                                            "amount":  0.328
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -49,7 +49,7 @@
                            "modifier":  {
                                             "name":  "tiered:legendary_spears_critical_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.58
+                                            "amount":  0.476
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"

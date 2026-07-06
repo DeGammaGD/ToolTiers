@@ -8,6 +8,7 @@
     "generic.fortune":  "Fortune",
     "generic.mining_efficiency":  "Haste",
     "generic.reach":  "Reach",
+    "generic.block_interaction_range":  "Block Reach",
     "generic.spear_reach":  "Spear Reach",
     "attribute.name.minecraft.mining_efficiency":  "Haste",
     "attribute.name.minecraft.block_interaction_range":  "Block Reach",

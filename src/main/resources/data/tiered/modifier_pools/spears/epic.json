@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "tiered:generic.spear_reach",
@@ -38,7 +38,7 @@
                            "modifier":  {
                                             "name":  "tiered:epic_spears_critical_chance",
                                             "operation":  "ADD_VALUE",
-                                            "amount":  0.3
+                                            "amount":  0.246
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -49,7 +49,7 @@
                            "modifier":  {
                                             "name":  "tiered:epic_spears_critical_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.45
+                                            "amount":  0.369
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"

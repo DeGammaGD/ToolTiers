@@ -1,53 +1,9 @@
-﻿{
+{
     "attributes":  [
-                       {
-                           "type":  "minecraft:attack_damage",
-                           "modifier":  {
-                                            "name":  "tiered:common_melee_weapons_attack_damage",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.3
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.critical_chance",
-                           "modifier":  {
-                                            "name":  "tiered:common_melee_weapons_critical_chance",
-                                            "operation":  "ADD_VALUE",
-                                            "amount":  0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.critical_damage",
-                           "modifier":  {
-                                            "name":  "tiered:common_melee_weapons_critical_damage",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
                        {
                            "type":  "tiered:generic.looting",
                            "modifier":  {
                                             "name":  "tiered:common_melee_weapons_looting",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.3
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.sweeping_range",
-                           "modifier":  {
-                                            "name":  "tiered:common_melee_weapons_sweeping_range",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  -0.3
                                         },
@@ -65,17 +21,64 @@
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
-                       },
-                       {
-                           "type":  "tiered:generic.mastery",
-                           "modifier":  {
-                                            "name":  "tiered:common_melee_weapons_mastery",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
                        }
-                   ]
+                   ],
+    "disabled_attributes":  [
+                                {
+                                    "type":  "minecraft:attack_damage",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_melee_weapons_attack_damage",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.3
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.critical_chance",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_melee_weapons_critical_chance",
+                                                     "operation":  "ADD_VALUE",
+                                                     "amount":  0.05
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.critical_damage",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_melee_weapons_critical_damage",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  0.1
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.sweeping_range",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_melee_weapons_sweeping_range",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.3
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.mastery",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_melee_weapons_mastery",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.1
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                }
+                            ],
+    "disabled_note":  "Temporarily disabled by balance pass (common/uncommon/rare)."
 }

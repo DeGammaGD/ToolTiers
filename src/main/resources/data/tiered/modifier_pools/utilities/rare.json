@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "tiered:generic.durability",
@@ -6,18 +6,6 @@
                                             "name":  "tiered:rare_utilities_durability",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  0.08
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND",
-                                                            "OFFHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.mastery",
-                           "modifier":  {
-                                            "name":  "tiered:rare_utilities_mastery",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.06
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND",
@@ -36,5 +24,20 @@
                                                             "OFFHAND"
                                                         ]
                        }
-                   ]
+                   ],
+    "disabled_attributes":  [
+                                {
+                                    "type":  "tiered:generic.mastery",
+                                    "modifier":  {
+                                                     "name":  "tiered:rare_utilities_mastery",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  0.06
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND",
+                                                                     "OFFHAND"
+                                                                 ]
+                                }
+                            ],
+    "disabled_note":  "Temporarily disabled by balance pass (common/uncommon/rare)."
 }

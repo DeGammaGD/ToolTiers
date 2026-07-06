@@ -69,9 +69,9 @@ class TierArchitectureRegressionTest {
     void modifierRebuildDeterminismDiminishingReturns() {
         Map<String, Integer> counters = new HashMap<>();
 
-        double first = ModifierRollGenerator.applyMovementSpeedDiminishingReturns("minecraft:movement_speed", 1.0D, counters);
-        double second = ModifierRollGenerator.applyMovementSpeedDiminishingReturns("minecraft:movement_speed", 1.0D, counters);
-        double third = ModifierRollGenerator.applyMovementSpeedDiminishingReturns("minecraft:movement_speed", 1.0D, counters);
+        double first = AttributeBalancingHelper.applyTierifyMovementSpeedDiminishingReturns("minecraft:movement_speed", 1.0D, counters);
+        double second = AttributeBalancingHelper.applyTierifyMovementSpeedDiminishingReturns("minecraft:movement_speed", 1.0D, counters);
+        double third = AttributeBalancingHelper.applyTierifyMovementSpeedDiminishingReturns("minecraft:movement_speed", 1.0D, counters);
 
         assertEquals(1.0D, first);
         assertEquals(0.5D, second);

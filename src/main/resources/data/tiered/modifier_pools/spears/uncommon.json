@@ -1,16 +1,5 @@
-﻿{
+{
     "attributes":  [
-                       {
-                           "type":  "tiered:generic.spear_reach",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_spears_reach",
-                                            "operation":  "ADD_VALUE",
-                                            "amount":  -0.5
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
                        {
                            "type":  "tiered:generic.lunge",
                            "modifier":  {
@@ -34,28 +23,6 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.critical_chance",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_spears_critical_chance",
-                                            "operation":  "ADD_VALUE",
-                                            "amount":  0.12
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.critical_damage",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_spears_critical_damage",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.2
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
                            "type":  "tiered:generic.durability",
                            "modifier":  {
                                             "name":  "tiered:uncommon_spears_durability",
@@ -65,17 +32,53 @@
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
-                       },
-                       {
-                           "type":  "tiered:generic.mastery",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_spears_mastery",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
                        }
-                   ]
+                   ],
+    "disabled_attributes":  [
+                                {
+                                    "type":  "tiered:generic.spear_reach",
+                                    "modifier":  {
+                                                     "name":  "tiered:uncommon_spears_reach",
+                                                     "operation":  "ADD_VALUE",
+                                                     "amount":  -0.5
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.critical_chance",
+                                    "modifier":  {
+                                                     "name":  "tiered:uncommon_spears_critical_chance",
+                                                     "operation":  "ADD_VALUE",
+                                                     "amount":  0.098
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.critical_damage",
+                                    "modifier":  {
+                                                     "name":  "tiered:uncommon_spears_critical_damage",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  0.164
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.mastery",
+                                    "modifier":  {
+                                                     "name":  "tiered:uncommon_spears_mastery",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.05
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                }
+                            ],
+    "disabled_note":  "Temporarily disabled by balance pass (common/uncommon/rare)."
 }

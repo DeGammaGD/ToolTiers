@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "tiered:generic.reach",
@@ -8,24 +8,24 @@
                                             "amount":  0.5
                                         },
                            "optional_equipment_slots":  [
-                                               "exclusive_group":  "mace_impact",
                                                             "MAINHAND"
                                                         ]
                        },
                        {
                            "type":  "tiered:generic.density",
+                           "exclusive_group":  "mace_impact",
                            "modifier":  {
                                             "name":  "tiered:epic_maces_density",
                                             "operation":  "ADD_MULTIPLIED_BASE",
                                             "amount":  0.3
                                         },
                            "optional_equipment_slots":  [
-                                               "exclusive_group":  "mace_impact",
                                                             "MAINHAND"
                                                         ]
                        },
                        {
                            "type":  "tiered:generic.breach",
+                           "exclusive_group":  "mace_impact",
                            "modifier":  {
                                             "name":  "tiered:epic_maces_breach",
                                             "operation":  "ADD_MULTIPLIED_BASE",
@@ -40,7 +40,7 @@
                            "modifier":  {
                                             "name":  "tiered:epic_maces_attack_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.08
+                                            "amount":  0.066
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -51,7 +51,7 @@
                            "modifier":  {
                                             "name":  "tiered:epic_maces_critical_chance",
                                             "operation":  "ADD_VALUE",
-                                            "amount":  0.3
+                                            "amount":  0.246
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -62,7 +62,7 @@
                            "modifier":  {
                                             "name":  "tiered:epic_maces_critical_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.45
+                                            "amount":  0.369
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"

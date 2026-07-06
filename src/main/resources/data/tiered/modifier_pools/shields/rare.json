@@ -1,11 +1,11 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "minecraft:movement_speed",
                            "modifier":  {
                                             "name":  "tiered:rare_shield_4",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.041
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND",
@@ -17,7 +17,7 @@
                            "modifier":  {
                                             "name":  "tiered:rare_shield_3",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.041
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND",
@@ -41,7 +41,7 @@
                            "modifier":  {
                                             "name":  "tiered:rare_shield_2",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
+                                            "amount":  -0.041
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND",
@@ -146,6 +146,3 @@
                        }
                    ]
 }
-
-
-

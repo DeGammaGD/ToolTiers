@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "minecraft:max_health",
@@ -29,7 +29,7 @@
                            "modifier":  {
                                             "name":  "tiered:mythic_shield_3",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.1
+                                            "amount":  0.082
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND",
@@ -41,7 +41,7 @@
                            "modifier":  {
                                             "name":  "tiered:mythic_shield_4",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.1
+                                            "amount":  0.082
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND",
@@ -65,7 +65,7 @@
                            "modifier":  {
                                             "name":  "tiered:mythic_shield_2",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.1
+                                            "amount":  0.082
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND",
@@ -146,6 +146,3 @@
                        }
                    ]
 }
-
-
-

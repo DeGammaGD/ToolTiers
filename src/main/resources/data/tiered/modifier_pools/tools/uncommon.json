@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "tiered:generic.mining_efficiency",
@@ -45,17 +45,6 @@
                                                         ]
                        },
                        {
-                           "type":  "tiered:generic.fortune",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_tool_fortune",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
                            "type":  "minecraft:block_interaction_range",
                            "modifier":  {
                                             "name":  "tiered:uncommon_tool_reach",
@@ -65,18 +54,31 @@
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
-                       },
-                       {
-                           "type":  "tiered:generic.mastery",
-                           "modifier":  {
-                                            "name":  "tiered:uncommon_tool_mastery",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.03
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
                        }
-                   ]
+                   ],
+    "disabled_attributes":  [
+                                {
+                                    "type":  "tiered:generic.fortune",
+                                    "modifier":  {
+                                                     "name":  "tiered:uncommon_tool_fortune",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.05
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.mastery",
+                                    "modifier":  {
+                                                     "name":  "tiered:uncommon_tool_mastery",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.03
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                }
+                            ],
+    "disabled_note":  "Temporarily disabled by balance pass (common/uncommon/rare)."
 }
-

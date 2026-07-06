@@ -1,73 +1,5 @@
-﻿{
+{
     "attributes":  [
-                       {
-                           "type":  "tiered:generic.reach",
-                           "modifier":  {
-                                            "name":  "tiered:common_maces_reach",
-                                            "operation":  "ADD_VALUE",
-                                            "amount":  -1
-                                        },
-                           "optional_equipment_slots":  [
-                                               "exclusive_group":  "mace_impact",
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.density",
-                           "modifier":  {
-                                            "name":  "tiered:common_maces_density",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                               "exclusive_group":  "mace_impact",
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.breach",
-                           "modifier":  {
-                                            "name":  "tiered:common_maces_breach",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "minecraft:attack_damage",
-                           "modifier":  {
-                                            "name":  "tiered:common_maces_attack_damage",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.3
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.critical_chance",
-                           "modifier":  {
-                                            "name":  "tiered:common_maces_critical_chance",
-                                            "operation":  "ADD_VALUE",
-                                            "amount":  0.05
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
-                       {
-                           "type":  "tiered:generic.critical_damage",
-                           "modifier":  {
-                                            "name":  "tiered:common_maces_critical_damage",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
-                       },
                        {
                            "type":  "minecraft:attack_speed",
                            "modifier":  {
@@ -89,17 +21,88 @@
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
                                                         ]
-                       },
-                       {
-                           "type":  "tiered:generic.mastery",
-                           "modifier":  {
-                                            "name":  "tiered:common_maces_mastery",
-                                            "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  -0.1
-                                        },
-                           "optional_equipment_slots":  [
-                                                            "MAINHAND"
-                                                        ]
                        }
-                   ]
+                   ],
+    "disabled_attributes":  [
+                                {
+                                    "type":  "tiered:generic.reach",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_maces_reach",
+                                                     "operation":  "ADD_VALUE",
+                                                     "amount":  -1
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.density",
+                                    "exclusive_group":  "mace_impact",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_maces_density",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  0.05
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.breach",
+                                    "exclusive_group":  "mace_impact",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_maces_breach",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  0.05
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "minecraft:attack_damage",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_maces_attack_damage",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.246
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.critical_chance",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_maces_critical_chance",
+                                                     "operation":  "ADD_VALUE",
+                                                     "amount":  0.041
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.critical_damage",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_maces_critical_damage",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  0.082
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                },
+                                {
+                                    "type":  "tiered:generic.mastery",
+                                    "modifier":  {
+                                                     "name":  "tiered:common_maces_mastery",
+                                                     "operation":  "ADD_MULTIPLIED_BASE",
+                                                     "amount":  -0.1
+                                                 },
+                                    "optional_equipment_slots":  [
+                                                                     "MAINHAND"
+                                                                 ]
+                                }
+                            ],
+    "disabled_note":  "Temporarily disabled by balance pass (common/uncommon/rare)."
 }

@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "tiered:generic.durability",
@@ -47,7 +47,7 @@
                            "modifier":  {
                                             "name":  "tiered:epic_armor_mobility",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.2
+                                            "amount":  0.164
                                         },
                            "optional_equipment_slots":  [
                                                             "FEET",

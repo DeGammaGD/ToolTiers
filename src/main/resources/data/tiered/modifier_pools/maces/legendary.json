@@ -1,4 +1,4 @@
-﻿{
+{
     "attributes":  [
                        {
                            "type":  "tiered:generic.reach",
@@ -40,7 +40,7 @@
                            "modifier":  {
                                             "name":  "tiered:legendary_maces_attack_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.2
+                                            "amount":  0.164
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -51,7 +51,7 @@
                            "modifier":  {
                                             "name":  "tiered:legendary_maces_critical_chance",
                                             "operation":  "ADD_VALUE",
-                                            "amount":  0.4
+                                            "amount":  0.328
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"
@@ -62,7 +62,7 @@
                            "modifier":  {
                                             "name":  "tiered:legendary_maces_critical_damage",
                                             "operation":  "ADD_MULTIPLIED_BASE",
-                                            "amount":  0.58
+                                            "amount":  0.476
                                         },
                            "optional_equipment_slots":  [
                                                             "MAINHAND"

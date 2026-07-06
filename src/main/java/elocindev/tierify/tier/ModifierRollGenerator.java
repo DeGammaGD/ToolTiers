@@ -27,7 +27,6 @@ public final class ModifierRollGenerator {
     static final String GENERATED_ATTRIBUTES_KEY = "TieredGeneratedAttributes";
     static final String GENERATED_COUNT_KEY = "count";
     static final String ENTRY_PREFIX = "entry_";
-    private static final String MOVEMENT_SPEED_ATTRIBUTE_ID = "minecraft:movement_speed";
 
     private ModifierRollGenerator() {
     }
@@ -439,19 +438,6 @@ public final class ModifierRollGenerator {
         }
 
         return mastery;
-    }
-
-    public static double applyMovementSpeedDiminishingReturns(String attributeTypeId,
-                                                               double amount,
-                                                               Map<String, Integer> diminishingCounters) {
-        if (!MOVEMENT_SPEED_ATTRIBUTE_ID.equals(attributeTypeId)) {
-            return amount;
-        }
-
-        int stackIndex = diminishingCounters.getOrDefault(MOVEMENT_SPEED_ATTRIBUTE_ID, 0) + 1;
-        diminishingCounters.put(MOVEMENT_SPEED_ATTRIBUTE_ID, stackIndex);
-        double multiplier = Math.pow(0.5D, stackIndex - 1);
-        return amount * multiplier;
     }
 
     public static double resolveDurableAmount(List<GeneratedAttributeRoll> generatedRolls, PotentialAttribute assignedAttribute) {

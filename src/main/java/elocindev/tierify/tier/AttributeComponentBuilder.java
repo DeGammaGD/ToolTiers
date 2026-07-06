@@ -93,7 +93,7 @@ public final class AttributeComponentBuilder {
                 if (masteryMultiplier != 0.0D && !ModifierRollGenerator.isMasteryAttributeType(roll.attributeTypeId)) {
                     amount = amount + masteryMultiplier;
                 }
-                amount = ModifierRollGenerator.applyMovementSpeedDiminishingReturns(roll.attributeTypeId, amount, diminishingCounters);
+                amount = AttributeBalancingHelper.applyTierifyMovementSpeedDiminishingReturns(roll.attributeTypeId, amount, diminishingCounters);
                 AttributeModifier cloneModifier = new AttributeModifier(modifierId, amount, roll.operation);
                 var key = BuiltInRegistries.ATTRIBUTE.get(Identifier.parse(roll.attributeTypeId));
                 if (key.isEmpty()) {
@@ -128,7 +128,7 @@ public final class AttributeComponentBuilder {
             AttributeModifier baseModifier = template.getEntityAttributeModifier();
             Identifier baseModifierId = baseModifier.id();
             Identifier modifierId = Identifier.fromNamespaceAndPath(baseModifierId.getNamespace(), baseModifierId.getPath() + "_" + slot.getName());
-            double amount = ModifierRollGenerator.applyMovementSpeedDiminishingReturns(template.getAttributeTypeID(), baseModifier.amount(), diminishingCounters);
+            double amount = AttributeBalancingHelper.applyTierifyMovementSpeedDiminishingReturns(template.getAttributeTypeID(), baseModifier.amount(), diminishingCounters);
             AttributeModifier cloneModifier = new AttributeModifier(modifierId, amount, baseModifier.operation());
 
             var key = BuiltInRegistries.ATTRIBUTE.get(Identifier.parse(template.getAttributeTypeID()));
