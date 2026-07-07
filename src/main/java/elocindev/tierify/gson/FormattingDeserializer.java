@@ -5,12 +5,17 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Type;
+import java.util.Locale;
 import net.minecraft.ChatFormatting;
 
 public class FormattingDeserializer implements JsonDeserializer<ChatFormatting> {
 
     @Override
     public ChatFormatting deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        return ChatFormatting.getByName(json.getAsString().toUpperCase());
+        try {
+            return ChatFormatting.valueOf(json.getAsString().toUpperCase(Locale.ROOT).replace('-', '_'));
+        } catch (IllegalArgumentException ignored) {
+            return null;
+        }
     }
 }

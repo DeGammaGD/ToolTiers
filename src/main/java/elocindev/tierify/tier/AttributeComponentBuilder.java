@@ -91,7 +91,7 @@ public final class AttributeComponentBuilder {
                 Identifier modifierId = Identifier.fromNamespaceAndPath(baseModifierId.getNamespace(), baseModifierId.getPath() + "_" + slot.getName());
                 double amount = roll.amount;
                 if (masteryMultiplier != 0.0D && !ModifierRollGenerator.isMasteryAttributeType(roll.attributeTypeId)) {
-                    amount = amount + masteryMultiplier;
+                    amount = amount * (1.0D + masteryMultiplier);
                 }
                 amount = AttributeBalancingHelper.applyTierifyMovementSpeedDiminishingReturns(roll.attributeTypeId, amount, diminishingCounters);
                 AttributeModifier cloneModifier = new AttributeModifier(modifierId, amount, roll.operation);

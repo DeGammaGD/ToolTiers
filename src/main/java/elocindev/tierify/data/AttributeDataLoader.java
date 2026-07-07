@@ -71,7 +71,11 @@ public class AttributeDataLoader implements SimpleSynchronousResourceReloadListe
                                     style = style.withColor(parsed.get());
                                 }
                             } else {
-                                ChatFormatting formatting = ChatFormatting.getByName(color.toUpperCase(Locale.ROOT));
+                                ChatFormatting formatting = null;
+                                try {
+                                    formatting = ChatFormatting.valueOf(color.toUpperCase(Locale.ROOT).replace('-', '_'));
+                                } catch (IllegalArgumentException ignored) {
+                                }
                                 if (formatting != null) {
                                     style = style.withColor(TextColor.fromLegacyFormat(formatting));
                                 }

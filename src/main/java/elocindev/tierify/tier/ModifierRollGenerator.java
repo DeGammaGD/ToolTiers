@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -437,7 +436,7 @@ public final class ModifierRollGenerator {
             mastery += roll.amount;
         }
 
-        return mastery;
+        return Math.min(mastery, 0.40D);
     }
 
     public static double resolveDurableAmount(List<GeneratedAttributeRoll> generatedRolls, PotentialAttribute assignedAttribute) {

@@ -18,7 +18,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -173,7 +173,7 @@ public class EnchantmentHelperMixin {
             return;
         }
 
-        LightningBolt bolt = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
+            LightningBolt bolt = new LightningBolt(EntityTypes.LIGHTNING_BOLT, level);
         bolt.snapTo(victim.getX(), victim.getY(), victim.getZ());
         if (source.getEntity() instanceof ServerPlayer player) {
             bolt.setCause(player);

@@ -1,6 +1,5 @@
 package elocindev.tierify.util;
 
-import elocindev.tierify.tier.TierSelector;
 import elocindev.tierify.tier.TierManager;
 import elocindev.tierify.Tierify;
 import net.minecraft.core.registries.BuiltInRegistries;

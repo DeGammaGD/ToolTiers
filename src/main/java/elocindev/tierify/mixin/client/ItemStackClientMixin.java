@@ -275,22 +275,6 @@ public abstract class ItemStackClientMixin {
             }
         }
 
-        CustomData component = ((ItemStack) (Object) this).get(DataComponents.CUSTOM_DATA);
-        CompoundTag root = component != null ? component.copyTag() : new CompoundTag();
-
-        if (component != null && root.contains(Tierify.NBT_SUBTAG_KEY)) {
-            CompoundTag tiered = root.getCompound(Tierify.NBT_SUBTAG_KEY).orElse(null);
-            if (tiered == null) {
-                return;
-            }
-            Identifier tier = Identifier.parse(tiered.getString(Tierify.NBT_SUBTAG_DATA_KEY).orElse(""));
-            PotentialAttribute potentialAttribute = Tierify.ATTRIBUTE_DATA_LOADER.getItemAttributes().get(tier);
-
-            if (potentialAttribute != null) {
-                tooltip.add(Component.literal("Tier: ").append(Component.translatable(potentialAttribute.getID() + ".label").setStyle(potentialAttribute.getStyle())));
-            }
-        }
-
         info.setReturnValue(tooltip);
     }
 }
