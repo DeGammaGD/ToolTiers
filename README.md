@@ -1,218 +1,156 @@
-# ToolTiers
+## ToolTiers
+ToolTiers brings RPG-style item quality to Minecraft 26.2 on Fabric.
 
-ToolTiers is a Minecraft 26.1.2 Fabric port and continuation of the **Tiered** concept, with roots in the community-driven **Tierify** project. This mod adds randomized quality tiers to tools, weapons, and armor with attribute-based progression and customization.
+Every tool, weapon, armor piece, and utility item can roll a tier like Common, Rare, Legendary, or Mythic. Better tiers can give stronger bonuses, while lower tiers can come with tradeoffs. The result is a progression loop where gear feels less static and loot feels more exciting.
 
-ToolTiers continues the development of tier-based item progression with modern Minecraft version support (26.1.2) and an improved data-driven architecture.
+ToolTiers is a continuation of the Tiered lineage, updated for modern Minecraft with active balancing and expansion.
 
-The original mod, **Tiered**, is inspired by [Quality Tools](https://www.curseforge.com/minecraft/mc-mods/quality-tools).
+The original concept is inspired by Quality Tools.
 
-<img src="resources/legendary_chestplate.png" width="400">
+<img src="resources/Legendary_Mace.png" width="420">
 
-## Features
+## What You Get In-Game
+Randomized gear quality on many item types, not just one category
+Meaningful stat variation that changes combat, mining, ranged play, mobility, and survivability
+Tiered items from normal gameplay loops like crafting, loot, and mob equipment drops
+Custom item name styling and tier-themed tooltip visuals
+A reforge system that gives you multiple ways to improve or reroll your item
 
-### Currently Functional
+## Reforge System
+You can reforge your items in anvil in four main ways:
 
-- **Fabric Port for Minecraft 26.1.2**: Active Fabric-based continuation of Tiered/TieredZ concepts
-- **Tier Generation System**: Weighted tier selection using verifier rules from datapack definitions
-- **Tiered Item Sources**: Tiered items are produced through normal gameplay flows including crafting, loot, and world-driven acquisition paths
-- **Multiple Attribute System**: Tiered items can roll multiple generated attributes from selected pools
-- **Category-Based Modifier Pools**: Attribute options are defined per category and tier through datapack pools
-- **Custom Tier Attributes**: Supports vanilla and custom attribute entries via JSON
-- **Vanilla Anvil Reforging Behavior**:
-  - Combining compatible item types is supported
-  - Same item type with the same tier can upgrade to the next tier
-  - Different tier combinations follow current higher-tier result rules
-  - Vanilla enchantment behavior is preserved
-- **Legacy Item Compatibility**: Older tier ids are mapped through compatibility aliases so existing items remain valid
-- **Tooltip Styling**: Tier tooltip borders and colors remain fully supported
+# 1. Standard Reforge
+Combine two compatible tiered items of the same type.
+If both are the same tier, you can upgrade toward the next tier.
 
-### In Development
+<img src="resources/Reforging.png" width="520">
 
-- **Expanded Attribute System**: Ongoing extension of attribute pools and specialization by category
-- **Additional Attributes and Balancing**: Continuous tuning of weights, ranges, and tier outcomes
-- **More Item Category Support**: Broader coverage for additional modded and vanilla-adjacent categories
-- **Gameplay/Balance Iteration**: Ongoing balancing and progression improvements
-- **Reforge Polishing**: Quality and ruleset refinement around current anvil-based reforging flow
+# 2. Totem Reforge
+Totems of Undying also have tiers.
+You can use it as a reforge catalyst.
+The totem tier quality is transferred to the item.
 
-## 26.1.2 Port
+<img src="resources/Totem_Reforge.png" width="520">
 
-- Updated from older Minecraft versions
-- Migrated mappings and API changes (Mojmap)
-- Removed outdated dependencies
-- Stabilized Fabric runtime
-- Modernized item registration and mixins
+# 3. Mythic Upgrade
+Use a Nether Star to reforge Legendary items into Mythic tier.
+
+<img src="resources/Mythic_Update.png" width="520">
+
+# 4. Attribute Reroll
+Use an Echo Shard to reroll attributes while keeping the item tier.
+
+<img src="resources/Atribute_ReRoll.png" width="520">
+
 
 ## Installation
+Required:
 
-ToolTiers requires:
+Fabric Loader
+Fabric API
+Cloth Config
+Optional:
 
-- [Fabric Loader](https://fabricmc.net/)
-- [Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api)
-- [Cloth Config](https://www.curseforge.com/minecraft/mc-mods/cloth-config)
-- [Mod Menu](https://www.curseforge.com/minecraft/mc-mods/modmenu) (optional)
+Mod Menu
 
 ## Customization
+ToolTiers is datapack-driven.
 
-ToolTiers uses a **datapack-driven system** for tier selection and attribute generation. Core behavior is controlled through JSON resources and can be customized without Java changes.
+# Primary data roots:
 
-### System Architecture
-
-- **Internal Namespace**: Uses mod id `tiered` for data and compatibility
-- **Item Attributes**: Stored in `data/tiered/item_attributes/`
-- **Modifier Pools**: Stored in `data/tiered/modifier_pools/`
-- **Verifier Rules**: `item_attributes` entries define item/category compatibility and eligibility
-- **Tier Availability/Weight**: `item_attributes` entries define tier selection weights
-- **Pool References**: `item_attributes` entries reference the modifier pool used for generated rolls
-- **Generated Attributes**: Actual rolled modifiers come from referenced `modifier_pools`
-
-In short:
-
-- `item_attributes` defines **what can roll** for an item and **how likely** each tier is
-- `modifier_pools` defines **which attributes can be generated** once a tier is selected
-
-You can create or extend custom tier behavior by adding new JSON entries in these datapack folders.
-
-#### Current Flow
-
-Tier selection:
-
-- `item_attributes` -> verifier check -> weighted tier selection
-
-Attribute generation:
-
-- selected tier -> modifier pool -> attribute roll -> generated attributes stored on item
-
-Generated attributes are rolled once per item and persisted. Reloads reuse stored generated data, and compatibility handling exists for older tiered items.
-
-### Attributes
-
-ToolTiers currently supports a category-aware generated attribute model.
-
-Current focus attributes include:
-
-- **Tools**:
-  - Durability (`tiered:generic.durable`)
-  - Dig Speed (`generic.dig_speed`, subject to future naming cleanup)
-- **Armor**:
-  - Armor (`generic.armor`)
-  - Armor Toughness (`generic.armor_toughness`)
-  - Durability (`tiered:generic.durable`)
-  - Movement Speed (`generic.movement_speed`)
-  - Max Health (`generic.max_health`)
-- **Weapons**:
-  - Critical Chance (`tiered:generic.crit_chance`)
-  - Attack-related attributes (for example attack damage and ranged attack modifiers)
-
-The attribute system is actively being expanded with additional specialized attributes and ongoing balance passes.
-
-### Verifiers
-
-ToolTiers uses a custom verifier system to determine whether items are eligible for specific tier attributes.
-
-**Item ID Example:**
-
-```json
-"id": "minecraft:apple"
-```
-
-**Tag Example (Convention Tags):**
-
-```json
-"tag": "c:helmets"
-```
-
-**Fallback Matching:**
-
-ToolTiers includes intelligent fallback matching for common item patterns (e.g., items ending with `_pickaxe`, `_sword`, `_spear`) to ensure comprehensive coverage.
-
-
-### Weight
-
-Weight determines how common a tier is. Higher weight means a higher chance to be applied.
-
-### NBT
-
-Tier data and generated modifier data are stored directly on each tiered item.
-
-Stored item-side data includes:
-
-- Assigned tier id
-- Generated attribute roll data used to rebuild modifiers consistently
-- Compatibility-aware handling for older tier/item data formats
-
-This allows generated attributes to remain stable across reloads and inventory updates.
-
-### Tooltip
-
-Custom tooltip borders can be defined via resource packs.
-
-- Border textures go in `assets/tiered/textures/gui`.
-- Tooltip json files go in `assets/tiered/tooltips`.
-- `background_gradient` can be configured.
-- For color alpha format reference, see [this guide](https://gist.github.com/lopspower/03fb1cc0ac9f32ef38f4).
-- See default tooltip data in `src/main/resources/assets/tiered/tooltips`.
-
-Example:
-
-```json
-{
-  "tooltips": [
-    {
-      "index": 0,
-      "start_border_gradient": "FFBABABA",
-      "end_border_gradient": "FF565656",
-      "texture": "tiered_borders",
-      "decider": [
-        "set_the_id_here",
-        "tiered:common_armor"
-      ]
-    }
-  ]
-}
-```
-
-### Reforge
-
-ToolTiers currently uses **vanilla anvil-based reforging behavior**.
-
-Current rules:
-
-- Two compatible items can be combined in an anvil flow
-- Same item type with the same tier can upgrade toward the next tier
-- Combining different tiers follows the current tier result rules
-- Vanilla anvil enchantment behavior is preserved
-
-## Status
-
-**Version:** 1.2.0  
-**Minecraft:** 26.1.2  
-**Loader:** Fabric  
-**Mappings:** Mojmap  
-**State:** Work in Progress
-
-### Current State
-
-- ToolTiers is an active Minecraft 26.1.2 port and continuation of Tiered/TieredZ.
-- Core gameplay systems are functional in current builds.
-- Tier generation, assignment, and attribute application are live.
-- Ongoing work is focused on balancing, expanded attribute coverage, and continued iteration.
-- Development is active and continuing.
+data/tiered/item_attributes
+data/tiered/modifier_pools
+data/tiered/item_attribute_aliases.json
+assets/tiered/tooltips
 
 ## Credits
-
-ToolTiers is built on the work of dedicated community developers:
-
-- **Draylar1** - Original creator of [Tiered](https://github.com/Draylar/tiered), the foundational mod that inspired this project
-- **Globox_Z** - Creator of [TieredZ](https://github.com/Globox1997/TieredZ), an early fork continuing Tiered development
-- **Ameisin** - Creator of [Tierify_1.21.1](https://github.com/Ameisin/Tierify_1.21.1), a community port that maintained the mod during version transitions
-- **nvb-uy** - Community maintainer of Tierify, bridging from TieredZ to modern versions
-
-ToolTiers continues this legacy with **Minecraft 26.1.2 support** and focuses on maintaining a clean, data-driven architecture for future extensibility.
-
+Draylar1 (Tiered)
+Globox_Z (TieredZ)
+Ameisin (Tierify 1.21.1 port)
+nvb-uy (Tierify maintenance)
+DeGammaGD (ToolTiers continuation and migration)
 ## License
+Source code is licensed under MIT in this repository.
+Some non-code assets may remain All Rights Reserved where explicitly stated.
 
-ToolTiers source code in this repository is licensed under MIT.
+And here is a technical companion document you can place as a separate project doc:
 
-Original Tiered and TieredZ creators retain authorship credit for their upstream work. ToolTiers continuation, migration, and maintenance contributions are by DeGammaGD.
+## ToolTiers Technical Notes(for nerds)
+Runtime Baseline
+Minecraft 26.2
+Fabric Loader 0.19.3
+Fabric API 0.154.1+26.2
+Java 25
+Cloth Config 26.2.155
+Mod Menu 20.0.0-beta.4
+Tier Data Pipeline
+Item attribute definitions load from item_attributes.
+Modifier pool references are resolved from modifier_pools.
+Verifiers decide eligibility by item id, tags, and fallback patterns.
+Weighted selection picks a tier id.
+Generated rolls are stored on item custom data.
+Attribute modifiers are rebuilt from stored generated rolls when needed.
 
-Non-code assets may be All Rights Reserved where explicitly stated.
+# Important behavior:
+Existing generated rolls persist on the item.
+Reloads and repair paths rebuild from stored roll data.
+Legacy tier ids are bridged through alias mappings.
+Data Layout
+Tier definitions: data/tiered/item_attributes
+Attribute pools: data/tiered/modifier_pools
+Compatibility aliases: data/tiered/item_attribute_aliases.json
+Tooltip templates: assets/tiered/tooltips/tooltip_borders.json
+Lang labels: assets/tiered/lang/en_us.json
+
+# Current Category Coverage
+armor
+tools
+melee_weapons
+ranged_weapons
+maces
+spears
+tridents
+shields
+elytra
+fishing_rod
+totems
+utilities
+utilities_shears
+
+# Tier assignment currently occurs in:
+Crafting result handling
+Loot table output handling
+Mob equipment and nearby dropped item handling
+Inventory item set paths
+Item frame insertion path
+Server-side inventory repair/update passes after datapack reload and player join
+Reforge Architecture
+
+# Anvil behavior is managed by a recipe manager with four registered recipe types:
+Standard reforge recipe
+Totem reforge recipe
+Nether star mythic upgrade recipe
+Echo shard reroll recipe
+Preview intentionally hides generated modifiers until result pickup, then attributes are rebuilt before transfer.
+
+# Attribute Systems Wired in Code
+Examples currently connected to gameplay:
+
+Critical chance and critical damage
+Durability scaling
+Protection family percent mitigation
+Mining efficiency scaling
+Fortune and looting drop multipliers
+Reach and spear reach handling
+Sweeping range scaling
+Ranged power and quick draw
+Lucky shot arrow effects
+Riptide power and channeling chance
+Breach, density, lunge
+Elytra glide speed and boost efficiency
+
+# Notes for Pack Authors
+Tier ids should match lang label keys for user-facing names.
+Modifier pools can be shared or category-specific.
+Legacy alias entries should be retained when migrating ids.
+Invalid JSON in modifier pools can silently drop expected roll options for that category.
